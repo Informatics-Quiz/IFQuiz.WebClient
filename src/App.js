@@ -1,23 +1,44 @@
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// eslint-disable-next-line 
+import Navbar from './Components/Navbar1/Navbar';
+// eslint-disable-next-line 
+import Welcome from './Pages/Welcome/Welcome';
+// eslint-disable-next-line 
+import Login from './Pages/Login/Login';
+// eslint-disable-next-line 
+import Signup from './Pages/Signup/Signup';
+// eslint-disable-next-line 
+import Register from './Pages/Register/Register';
+// eslint-disable-next-line 
+import LoginEmail from './Pages/LoginEmail/LoginEmail';
+// eslint-disable-next-line 
+import Navbar2 from './Components/Navbar2/Navbar2';
+// eslint-disable-next-line 
+import CreateQuiz from './Pages/CreateQuiz/CreateQuiz';
+// eslint-disable-next-line 
+import Home from './Pages/Home/Home';
+// eslint-disable-next-line 
+import EditUserProfile from './Pages/EditUserProfile/EditUserProfile';
+
+import { Route, Routes } from 'react-router-dom';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Welcome />} />
+        <Route path='/Login' element={<Login />} />
+        <Route path='/Signup' element={<Signup />} />
+        <Route path='/Register' element={<Register />} />
+        <Route path='/LoginEmail' element={<LoginEmail />} />
+        <Route path='/CreateQuiz' element={< CreateQuiz />} />
+        <Route path='/Home' element={< Home />} />
+        <Route path='/EditUserProfile' element={<EditUserProfile />} />
+      </Routes>
     </div>
   );
 }

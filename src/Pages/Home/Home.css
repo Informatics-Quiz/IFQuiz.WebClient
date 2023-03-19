@@ -1,0 +1,174 @@
+.ContainerHome {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #010409;
+}
+
+.split {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.home-1 {
+    width: 30%;
+    height: 100%;
+    width: 20%;
+    background-color: #010409;
+
+}
+
+.col1 {
+    background-color: #010409;
+    width: 100%;
+    height: 15%;
+    margin-top: 22.5px;
+}
+
+.col11 {
+    background-color: #0D1117;
+    width: 90%;
+    height: 80%;
+    border-radius: 10px;
+
+    display: flex;
+}
+
+.col111 {
+    width: 35%;
+    height: 100%;
+    /* background-color: red; */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col111-img {
+    width: 65.5%;
+    height: 67.5%;
+    background-color: white;
+    border-radius: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.col112 {
+    width: 65%;
+    height: 100%;
+
+    padding: 1.75%;
+    /* background-color: blue; */
+}
+
+
+.col2 {
+    background-color: #010409;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.col22 {
+    background-color: #0D1117;
+    width: 90%;
+    height: 90%;
+    border-radius: 10px;
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    padding: 3%;
+
+    overflow: hidden;
+}
+
+
+.col22 input {
+    font-size: 17.5px;
+    border: 1px solid #585E65;
+    border-radius: 5px;
+    background-color: #0D1117;
+    color: #FFF;
+    height: 50px;
+    padding: 2.5%;
+}
+
+.col22 button {
+    font-size: 18.5px;
+    margin-top: 20px;
+    background-color: #238636;
+    border-radius: 5px;
+    height: 35px;
+}
+
+.col3 {
+    background-color: #010409;
+    width: 100%;
+    height: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.col33 {
+    background-color: #0D1117;
+    width: 90%;
+    height: 80%;
+    border-radius: 10px;
+    font-size: 25.5px;
+    display: flex;
+    flex-direction: column;
+    padding: 3%;
+}
+
+.col33 button {
+    font-size: 20px;
+    background-color: #238636;
+    border-radius: 5px;
+}
+
+.home-2 {
+    height: 100%;
+    width: 80%;
+    background-color: #010409;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media screen and (max-width: 1435px) {
+    .home-1 {
+        display: none;
+    }
+
+    .home-2 {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:1615px) {
+    .col112 button {
+        width: 85px;
+        font-size: 11px;
+    }
+
+    a {
+        width: 80px;
+        font-size: 11px;
+    }
+
+}

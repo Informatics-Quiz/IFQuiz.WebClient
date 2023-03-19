@@ -1,0 +1,92 @@
+.ContainerRegister {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #010409;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-1 {
+    width: 60vw;
+    height: 70vh;
+    background-color: #0D1117;
+    border-radius: 10px;
+}
+
+#btn2 {
+    display: none;
+}
+
+@media screen and (max-width: 425px) {
+    .content-1 {
+        width: 60vw;
+        height: 85vh;
+        background-color: #0D1117;
+        border-radius: 10px;
+    }
+
+    #section1-text1 {
+        font-size: 12.5px;
+    }
+
+    .section-1x input {
+        height: 24px;
+    }
+
+    #fontresp {
+        font-size: 12.5px;
+    }
+
+    #btn1 {
+        display: none;
+    }
+
+    #btn2 {
+        display: block;
+        position: absolute;
+        top: 97%;
+        width: 170px;
+        height: 25px;
+    }
+}
+
+.section-1x {
+    width: 100%;
+    height: 60%;
+    padding: 5%;
+}
+
+.row input {
+    border: 1px solid rgba(135, 135, 135, 0.5);
+    border-radius: 4px;
+    background-color: #0D1117;
+    margin-bottom: 20px;
+
+    color: white;
+}
+
+.section-1x button {
+    background-color: #238636;
+    color: white;
+    padding: 0;
+    border: none;
+    border-radius: 5px;
+    height: 27.5px;
+    font-size: 15px;
+}
+
+#eror {
+    font-size: 12.5px;
+}
+
+.modal-content {
+    background-color: #0D1117;
+}
+
+.btn-close {
+    background-color: 'white';
+}
