@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Register.css'
-import axios from 'axios'
 import Modal from 'react-bootstrap/Modal'
 import { registerAuthUser } from '../../Services/auth'
 import { useNavigate } from 'react-router-dom'

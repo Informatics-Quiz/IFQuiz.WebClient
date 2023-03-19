@@ -9,14 +9,21 @@ import { setUser } from '../../Reducers/userRedeucer'
 import { useNavigate } from 'react-router-dom'
 import client from '../../Client'
 import axios from 'axios'
+import updateUserProfile from '../../Services/user'
 
 const EditUserProfile = () => {
 	const user = useSelector((state) => state.user.authUser)
-	const [image, setImage] = useState('')
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [show, setShow] = useState(false)
 	const [show2, setShow2] = useState(false)
+
+	const [userProfileState, setUserProfileState] = useState({
+		fullname: user.fullname,
+		status: user.status,
+		backgroundMusic: user.backgroundMusic,
+		soundEffect: user.soundEffect,
+	})
 
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
@@ -30,40 +37,49 @@ const EditUserProfile = () => {
 	}
 
 	useEffect(() => {
-		getProfileImage()
+		// getProfileImage()
 	}, [])
 
-	async function getProfileImage() {
-		let headersList = {
-			Accept: '*/*',
-			Authorization: `Bearer ${user.token}`,
-		}
+	// async function getProfileImage() {
+	// 	let headersList = {
+	// 		Accept: '*/*',
+	// 		Authorization: `Bearer ${user.token}`,
+	// 	}
 
-		let reqOptions = {
-			url: 'http://localhost:3000/file/get/profile-image',
-			method: 'GET',
-			headers: headersList,
-		}
+	// 	let reqOptions = {
+	// 		url: 'http://localhost:3000/file/get/profile-image',
+	// 		method: 'GET',
+	// 		headers: headersList,
+	// 	}
 
-		let response = await axios.request(reqOptions)
-		var reader = new FileReader()
-		reader.onload = function (event) {
-			// The file's text will be printed here
-			console.log(event)
+	// 	let response = await axios.request(reqOptions)
+	// 	console.log(response.data)
+	// }
+
+	const handleChangeProfileState = (e) => {
+		const { name, value } = e.target
+		setUserProfileState({ ...userProfileState, [name]: value })
+	}
+
+	const handleChangeProfileStateCheckbox = (e) => {
+		const { name } = e.target
+		setUserProfileState({ ...userProfileState, [name]: !userProfileState[name] })
+	}
+
+	async function handleClickUpdateProfile() {
+		console.log(userProfileState)
+		if (!user.token) return
+		try {
+			const res = await updateUserProfile(user.token, userProfileState)
+			console.log(res)
+		} catch (error) {
+			console.error(error)
 		}
-		reader.readAsDataURL(response.data)
-		// if (!user) return
-		// const res = await client.get('/file/get/profile-image', {
-		// 	headers: {
-		// 		Authorization: `Bearer ${user.token}`,
-		// 	},
-		// })
-		// console.log(res.data)
 	}
 
 	return (
 		<div className="Container-Edit d-flex flex-column align-items-center">
-			{JSON.stringify(user)}
+			{JSON.stringify(userProfileState)}
 			<div
 				className="main-1 d-flex flex-column p-2"
 				style={{
@@ -78,11 +94,21 @@ const EditUserProfile = () => {
 					<FaUserEdit style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					ProfileSetting
 				</p>
-				<ProfileImage userProfileImage={image} />
+				<ProfileImage userProfileImage={null} />
 				<p style={{ marginTop: '2.5px' }}>Display Name</p>
-				<input placeholder={user.fullname} style={{ padding: '5px', marginBottom: '10px' }}></input>
+				<input
+					name="fullname"
+					placeholder={user.fullname}
+					style={{ padding: '5px', marginBottom: '10px' }}
+					onChange={handleChangeProfileState}
+				></input>
 				<p style={{ marginBottom: '10px' }}>Status</p>
-				<input placeholder={user.status} style={{ padding: '5px', marginBottom: '5px' }}></input>
+				<input
+					name="status"
+					placeholder={user.status}
+					style={{ padding: '5px', marginBottom: '5px' }}
+					onChange={handleChangeProfileState}
+				></input>
 			</div>
 			<div
 				className="main-2 p-2"
@@ -102,10 +128,13 @@ const EditUserProfile = () => {
 					<p style={{ marginTop: '2.5px' }}>Background Music</p>
 					<div class="form-check form-switch">
 						<input
+							name="backgroundMusic"
 							class="form-check-input"
 							type="checkbox"
 							role="switch"
 							id="flexSwitchCheckDefault"
+							checked={userProfileState.backgroundMusic}
+							onChange={handleChangeProfileStateCheckbox}
 							style={{ backgroundColor: '#238636', border: 'none' }}
 						></input>
 					</div>
@@ -114,10 +143,13 @@ const EditUserProfile = () => {
 					<p style={{ marginTop: '2.5px' }}>Sound Effect</p>
 					<div class="form-check form-switch">
 						<input
+							name="soundEffect"
 							class="form-check-input"
 							type="checkbox"
 							role="switch"
 							id="flexSwitchCheckDefault"
+							checked={userProfileState.soundEffect}
+							onChange={handleChangeProfileStateCheckbox}
 							style={{ backgroundColor: '#238636', border: 'none' }}
 						></input>
 					</div>
@@ -161,6 +193,7 @@ const EditUserProfile = () => {
 					borderRadius: '5px',
 					fontSize: '17.5px',
 				}}
+				onClick={handleClickUpdateProfile}
 			>
 				Save
 			</button>
