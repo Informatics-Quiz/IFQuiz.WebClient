@@ -93,13 +93,21 @@ const Register = () => {
 								<p className="mt-1" style={{ marginBottom: '10px' }}>
 									Password
 								</p>
-								<input style={{ width: '100%' }} onChange={(e) => setPassword(e.target.value)}></input>
+								<input
+									type="password"
+									style={{ width: '100%' }}
+									onChange={(e) => setPassword(e.target.value)}
+								></input>
 							</div>
 							<div className="col-sm-12 col-md-7 col-lg-7 col-xl-4">
 								<p className="mt-1" style={{ marginBottom: '10px' }}>
 									Confirm Password
 								</p>
-								<input style={{ width: '100%' }} onChange={(e) => setPassword2(e.target.value)}></input>
+								<input
+									type="password"
+									style={{ width: '100%' }}
+									onChange={(e) => setPassword2(e.target.value)}
+								></input>
 							</div>
 							<div
 								className="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-5 justify-content-center align-items-center mt"

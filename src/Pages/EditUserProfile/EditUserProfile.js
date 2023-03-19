@@ -7,7 +7,6 @@ import ProfileImage from '../../Components/ProfileImage'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../Reducers/userRedeucer'
 import { useNavigate } from 'react-router-dom'
-import client from '../../Client'
 import axios from 'axios'
 import updateUserProfile from '../../Services/user'
 
@@ -17,6 +16,7 @@ const EditUserProfile = () => {
 	const navigate = useNavigate()
 	const [show, setShow] = useState(false)
 	const [show2, setShow2] = useState(false)
+	const [profileImage, setProfileImage] = useState('')
 
 	const [userProfileState, setUserProfileState] = useState({
 		fullname: user.fullname,
@@ -37,24 +37,27 @@ const EditUserProfile = () => {
 	}
 
 	useEffect(() => {
-		// getProfileImage()
+		getProfileImage()
 	}, [])
 
-	// async function getProfileImage() {
-	// 	let headersList = {
-	// 		Accept: '*/*',
-	// 		Authorization: `Bearer ${user.token}`,
-	// 	}
+	async function getProfileImage() {
+		let headersList = {
+			Accept: '*/*',
+			Authorization: `Bearer ${user.token}`,
+		}
 
-	// 	let reqOptions = {
-	// 		url: 'http://localhost:3000/file/get/profile-image',
-	// 		method: 'GET',
-	// 		headers: headersList,
-	// 	}
+		let reqOptions = {
+			responseType: 'arraybuffer',
+			url: 'http://localhost:3000/file/get/profile-image',
+			method: 'GET',
+			headers: headersList,
+		}
 
-	// 	let response = await axios.request(reqOptions)
-	// 	console.log(response.data)
-	// }
+		let response = await axios.request(reqOptions)
+		const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+		const url = URL.createObjectURL(blob)
+		setProfileImage(url)
+	}
 
 	const handleChangeProfileState = (e) => {
 		const { name, value } = e.target
@@ -67,11 +70,19 @@ const EditUserProfile = () => {
 	}
 
 	async function handleClickUpdateProfile() {
-		console.log(userProfileState)
 		if (!user.token) return
 		try {
 			const res = await updateUserProfile(user.token, userProfileState)
-			console.log(res)
+			const { data } = res
+			const userProfile = {
+				fullname: data.fullname,
+				email: data.email,
+				status: data.status,
+				backgroundMusic: data.backgroundMusic,
+				soundEffect: data.soundEffect,
+			}
+			dispatch(setUser({ ...user, ...userProfile }))
+			navigate('/Home')
 		} catch (error) {
 			console.error(error)
 		}
@@ -79,7 +90,7 @@ const EditUserProfile = () => {
 
 	return (
 		<div className="Container-Edit d-flex flex-column align-items-center">
-			{JSON.stringify(userProfileState)}
+			{JSON.stringify(user)}
 			<div
 				className="main-1 d-flex flex-column p-2"
 				style={{
@@ -94,7 +105,7 @@ const EditUserProfile = () => {
 					<FaUserEdit style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					ProfileSetting
 				</p>
-				<ProfileImage userProfileImage={null} />
+				<ProfileImage userProfileImage={profileImage} />
 				<p style={{ marginTop: '2.5px' }}>Display Name</p>
 				<input
 					name="fullname"
@@ -124,12 +135,12 @@ const EditUserProfile = () => {
 					<FaUserEdit style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					Quiz Setting
 				</p>
-				<div class="d-flex justify-content-between">
+				<div className="d-flex justify-content-between">
 					<p style={{ marginTop: '2.5px' }}>Background Music</p>
-					<div class="form-check form-switch">
+					<div className="form-check form-switch">
 						<input
 							name="backgroundMusic"
-							class="form-check-input"
+							className="form-check-input"
 							type="checkbox"
 							role="switch"
 							id="flexSwitchCheckDefault"
@@ -139,12 +150,12 @@ const EditUserProfile = () => {
 						></input>
 					</div>
 				</div>
-				<div class="d-flex justify-content-between">
+				<div className="d-flex justify-content-between">
 					<p style={{ marginTop: '2.5px' }}>Sound Effect</p>
-					<div class="form-check form-switch">
+					<div className="form-check form-switch">
 						<input
 							name="soundEffect"
-							class="form-check-input"
+							className="form-check-input"
 							type="checkbox"
 							role="switch"
 							id="flexSwitchCheckDefault"
@@ -170,11 +181,11 @@ const EditUserProfile = () => {
 					<FaLock style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					Account Setting
 				</p>
-				<div class="d-flex justify-content-between">
+				<div className="d-flex justify-content-between">
 					<p style={{ marginTop: '2.5px' }}>Change Password</p>
 					<FaArrowRight onClick={handleShow} />
 				</div>
-				<div class="d-flex justify-content-between">
+				<div className="d-flex justify-content-between">
 					<p style={{ marginTop: '2.5px' }}>Delete Account</p>
 					<FaArrowRight onClick={handleShow2} />
 				</div>
@@ -205,10 +216,10 @@ const EditUserProfile = () => {
 						<FaKey /> Change Password
 					</Modal.Title>
 				</Modal.Header>
-				<div class="p-2">
+				<div className="p-2">
 					<p style={{ marginBottom: '7px', marginRight: '7.5px', marginTop: '10px' }}>Enter New Password</p>
 					<input
-						class="input-change"
+						className="input-change"
 						type={'password'}
 						style={{ padding: '5px', marginBottom: '10px', width: '100%' }}
 					></input>
@@ -216,7 +227,7 @@ const EditUserProfile = () => {
 						Re-Enter New Password
 					</p>
 					<input
-						class="input-change"
+						className="input-change"
 						type={'password'}
 						style={{ padding: '5px', marginBottom: '10px', width: '100%' }}
 					></input>
@@ -257,7 +268,7 @@ const EditUserProfile = () => {
 						<FaKey /> Delete Account
 					</Modal.Title>
 				</Modal.Header>
-				<div class="p-2">
+				<div className="p-2">
 					<p style={{ marginBottom: '7px', marginRight: '7.5px', marginTop: '10px' }}>
 						Are you sure you want to delete your account? All your data will be deleted.
 					</p>

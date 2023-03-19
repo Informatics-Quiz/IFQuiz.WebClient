@@ -1,56 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { uploadUserProfile } from '../../Services/upload'
 
 export default function ProfileImage({ userProfileImage }) {
-	const [images, setImages] = useState([])
-	const [imageURLs, setImageURLs] = useState([])
+	const [renderImage, setRenderImage] = useState(null)
+	const user = useSelector((state) => state.user.authUser)
 
-	useEffect(() => {
-		if (images.length < 1) return
-		const newImageUrls = []
-		images.forEach((image) => newImageUrls.push(URL.createObjectURL(image)))
-		setImageURLs(newImageUrls)
-	}, [images])
-
-	function onImageChange(e) {
-		setImages([...e.target.files])
-	}
-
-	async function handleClickUpload() {
-		console.log(images[0])
+	async function onImageChange(e) {
+		const file = e.target.files[0]
 		const formData = new FormData()
-		formData.append('image', images[0])
-		console.log(formData)
+		formData.append('profile-image', file)
+		try {
+			const res = await uploadUserProfile(user.token, formData)
+			console.log(res)
+			if (res.status === 201) {
+				const renderImage = URL.createObjectURL(file)
+				setRenderImage(renderImage)
+			}
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
 	return (
 		<div className="profile">
-			<div className="bc_img">
-				<img
-					className="circle-img align-self-center object-fit-contain"
-					style={{ height: '142.5px', width: '142.5px' }}
-					width="200"
-					height="200"
-					src={userProfileImage}
-					alt={`profile-`}
-				/>
-				{/* {imageURLs ? (
-					imageURLs.map((imageSrc, idx) => (
-						<img
-							className="circle-img align-self-center object-fit-contain"
-							style={{ height: '142.5px', width: '142.5px' }}
-							key={idx}
-							width="200"
-							height="200"
-							src={imageSrc}
-							alt={`profile-${idx}`}
-						/>
-					))
-				) : (
-					<div className="circle-img align-self-center" style={{ height: '142.5px', width: '142.5px' }}></div>
-				)} */}
-			</div>
+			<img
+				className="circle-img align-self-center object-fit-contain"
+				width="140"
+				height="140"
+				src={renderImage || userProfileImage}
+				alt={`profile`}
+			/>
+			<div className="bc_img"></div>
 			<input type="file" accept="image/*" onChange={onImageChange} className="choose" />
-			<button onClick={handleClickUpload}>Upload</button>
 		</div>
 	)
 }
