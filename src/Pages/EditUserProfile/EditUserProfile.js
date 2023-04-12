@@ -8,15 +8,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../Reducers/userRedeucer'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import updateUserProfile from '../../Services/user'
+import { updateUserProfile, updateUserPassword, deleteUserAccount } from '../../Services/user'
 
 const EditUserProfile = () => {
+
 	const user = useSelector((state) => state.user.authUser)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
 	const [show, setShow] = useState(false)
 	const [show2, setShow2] = useState(false)
+	const [show3, setShow3] = useState(false)
+
+
 	const [profileImage, setProfileImage] = useState('')
+
+	const [message, setMessage] = useState('')
+
+	const [newPassword, setNewPassword] = useState({
+		password: null
+	})
 
 	const [userProfileState, setUserProfileState] = useState({
 		fullname: user.fullname,
@@ -30,6 +41,13 @@ const EditUserProfile = () => {
 
 	const handleClose2 = () => setShow2(false)
 	const handleShow2 = () => setShow2(true)
+
+	const handleClose3 = () => {
+		setShow3(false)
+		dispatch(setUser(null))
+		navigate('/')
+	}
+	const handleShow3 = () => setShow3(true)
 
 	const handleClickLogout = () => {
 		dispatch(setUser(null))
@@ -64,6 +82,13 @@ const EditUserProfile = () => {
 		setUserProfileState({ ...userProfileState, [name]: value })
 	}
 
+	const handleChangePassword = (e) => {
+		const { name, value } = e.target
+		setNewPassword({
+			password: value
+		})
+	}
+
 	const handleChangeProfileStateCheckbox = (e) => {
 		const { name } = e.target
 		setUserProfileState({ ...userProfileState, [name]: !userProfileState[name] })
@@ -88,9 +113,40 @@ const EditUserProfile = () => {
 		}
 	}
 
+	async function handleTriggerDeleteAccount() {
+		if (!user.token) return
+		try {
+			const res = await deleteUserAccount(user.token)
+			const { data } = res
+
+			setMessage(data.message) // POP UP THIS "data.message"
+			handleShow3()
+
+
+
+		} catch (error) {
+			setMessage(error.response.data.message) // POP UP THIS "error.response.data.message"
+			handleShow3()
+		}
+	}
+
+	async function handleClickUpdatePassword() {
+		if (!user.token) return
+		try {
+			const res = await updateUserPassword(user.token, newPassword)
+			const { data } = res
+			handleClose()
+			setMessage(data.message)
+			handleShow3()
+		} catch (error) {
+			setMessage(error.response.data.message) // POP UP THIS "error.response.data.message"
+			handleShow3()
+		}
+	}
+
 	return (
 		<div className="Container-Edit d-flex flex-column align-items-center">
-			{JSON.stringify(user)}
+			{/* {JSON.stringify(user)} */}
 			<div
 				className="main-1 d-flex flex-column p-2"
 				style={{
@@ -220,16 +276,18 @@ const EditUserProfile = () => {
 					<p style={{ marginBottom: '7px', marginRight: '7.5px', marginTop: '10px' }}>Enter New Password</p>
 					<input
 						className="input-change"
-						type={'password'}
+						type={'text'}
 						style={{ padding: '5px', marginBottom: '10px', width: '100%' }}
+						onChange={handleChangePassword}
 					></input>
 					<p style={{ marginBottom: '7px', marginRight: '7.5px', marginTop: '10px' }}>
 						Re-Enter New Password
 					</p>
 					<input
 						className="input-change"
-						type={'password'}
+						type={'text'}
 						style={{ padding: '5px', marginBottom: '10px', width: '100%' }}
+						onChange={handleChangePassword}
 					></input>
 				</div>
 
@@ -247,7 +305,7 @@ const EditUserProfile = () => {
 						Cancel
 					</Button>
 					<Button
-						onClick={handleClose}
+						onClick={handleClickUpdatePassword}
 						style={{
 							width: '105px',
 							height: '41px',
@@ -288,7 +346,7 @@ const EditUserProfile = () => {
 						Cancel
 					</Button>
 					<Button
-						onClick={handleClose2}
+						onClick={handleTriggerDeleteAccount}
 						style={{
 							width: '160px',
 							height: '41px',
@@ -301,6 +359,21 @@ const EditUserProfile = () => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
+
+			<Modal show={show3} onHide={handleClose3}>
+				<Modal.Header style={{ color: 'white' }}>
+					<Modal.Title>Message</Modal.Title>
+					<button
+						type="button"
+						className="btn-close btn-close-white"
+						aria-label="Close"
+						onClick={handleClose3}
+					></button>
+				</Modal.Header>
+				<Modal.Body style={{ color: 'white', border: '0px' }}>{message}</Modal.Body>
+				<Modal.Footer style={{ color: 'white', border: '0px' }}></Modal.Footer>
+			</Modal>
+
 		</div>
 	)
 }

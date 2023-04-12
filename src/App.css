@@ -3,9 +3,8 @@
   padding: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
   color: white;
-  scroll-behavior: smooth;
+  overflow: hidden;
 }
 
 .modal-content {

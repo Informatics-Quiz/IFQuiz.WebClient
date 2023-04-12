@@ -1,5 +1,5 @@
 import './Home.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import User from '../../Images/user.png'
 import { useSelector } from 'react-redux'
 import { FaEdit } from 'react-icons/fa'
@@ -17,6 +17,7 @@ const Home = () => {
 	const [show, setShow] = useState(false)
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
+	const [profileImage, setProfileImage] = useState('')
 
 	const [editstatus, setEidtStatus] = useState('')
 
@@ -44,6 +45,33 @@ const Home = () => {
 			})
 	}
 
+	useEffect(() => {
+		getProfileImage()
+	}, [])
+
+	async function getProfileImage() {
+		let headersList = {
+			Accept: '*/*',
+			Authorization: `Bearer ${user.authUser.token}`,
+		}
+
+		let reqOptions = {
+			responseType: 'arraybuffer',
+			url: 'http://localhost:3000/file/get/profile-image',
+			method: 'GET',
+			headers: headersList,
+		}
+
+		let response = await axios.request(reqOptions)
+		const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+		const url = URL.createObjectURL(blob)
+		setProfileImage(url)
+	}
+
+	function errorProfileImage(event){
+		setProfileImage(User)
+	}
+
 	return (
 		<div className="ContainerHome">
 			<div className="split">
@@ -52,7 +80,7 @@ const Home = () => {
 						<div className="col11">
 							<div className="col111">
 								<div className="col111-img">
-									<img src={User} width={'90%'} height={'82.5%'} alt="profile"></img>
+									<img src={profileImage} onError={errorProfileImage} width={'90%'} height={'82.5%'} alt="profile"></img>
 								</div>
 							</div>
 							<div className="col112">

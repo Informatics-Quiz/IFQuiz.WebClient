@@ -27,7 +27,6 @@ const Register = () => {
 			handleShow()
 			return
 		}
-
 		const bodyRequest = {
 			email: email,
 			password: password,
@@ -47,17 +46,12 @@ const Register = () => {
 		<div className="ContainerRegister">
 			<div className="content-1">
 				<div className="section-1x">
-					<div className="row" style={{ padding: 5 }}>
-						<div className="col">
-							<div className="row">
-								<div className="col-sm-12">
-									<p id="section1-text1">Continue with Email</p>
-								</div>
-							</div>
-
-							{
-								<div className="row mt-0">
-									<div className="col-sm-6 col-md-8 col-xl-5 d-flex flex-column">
+					<div className="row" style={{ padding: '5' }}>
+						<div className="col" style={{ backgroundColor: '#0D1117' }}>
+							<div className="col-sm-12">
+								<p id="section1-text1" >Continue with Email</p>
+								<div className="row mt-0" style={{ backgroundColor: '#0D1117' }}>
+									<div className="col-sm-6 col-md-8 col-xl-5 d-flex flex-column" >
 										<p id="section1-text1">Enter email address</p>
 										<input onChange={(e) => setEmail(e.target.value)}></input>
 										<Link
@@ -77,9 +71,10 @@ const Register = () => {
 										</Link>
 									</div>
 								</div>
-							}
+							</div>
+
 						</div>
-						<div className="col">
+						<div className="col" style={{ backgroundColor: '#0D1117' }}>
 							<p id="fontresp">Please fill in your account details</p>
 							<div className="col-sm-6  col-md-7 col-lg-7 col-xl-4">
 								<p>firstname</p>
@@ -160,6 +155,7 @@ const Register = () => {
 				<Modal.Body style={{ color: 'white', border: '0px' }}>{errorMessage}</Modal.Body>
 				<Modal.Footer style={{ color: 'white', border: '0px' }}></Modal.Footer>
 			</Modal>
+
 		</div>
 	)
 }
