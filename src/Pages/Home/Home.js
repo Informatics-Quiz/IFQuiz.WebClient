@@ -1,163 +1,129 @@
 import './Home.css'
 import { useState, useEffect } from 'react'
-import User from '../../Images/user.png'
 import { useSelector } from 'react-redux'
-import { FaEdit } from 'react-icons/fa'
-import Modal from 'react-bootstrap/Modal'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setStatus } from '../../Reducers/userRedeucer'
+import ModalStatus from '../../Components/ModalStatus'
+import QuizCard from '../../Components/QuizCard'
 
 const Home = () => {
 	const user = useSelector((state) => state.user)
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const [show, setShow] = useState(false)
+	const [profileImage, setProfileImage] = useState('')
+	const [editstatus, setEditStatus] = useState('')
+	const [quizzes, setQuizzes] = useState([])
+
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
-	const [profileImage, setProfileImage] = useState('')
 
-	const [editstatus, setEidtStatus] = useState('')
+	function handleClickNavigateToEditUserProfile() {
+		navigate('/EditUserProfile')
+	}
 
-	function editStatusFunc() {
-		console.log('editStatus()')
+	async function handleEditStatus() {
 		const authToken = user.authUser.token
-		axios
-			.patch(
-				'http://localhost:3000/accounts/status',
-				{
-					status: editstatus,
+		const response = await axios.patch(
+			'http://localhost:3000/accounts/status',
+			{ status: editstatus },
+			{
+				headers: {
+					Authorization: 'Bearer ' + authToken,
 				},
-				{
-					headers: {
-						Authorization: 'Bearer ' + authToken,
-					},
-				},
-			)
-			.then((response) => {
-				dispatch(setStatus(response.data.status))
-				handleClose()
-			})
-			.catch((error) => {
-				console.log(error)
-			})
+			},
+		)
+
+		dispatch(setStatus(response.data.status))
+		handleClose()
 	}
 
 	useEffect(() => {
-		getProfileImage()
+		async function onGetProfileImage() {
+			let headersList = {
+				Accept: '*/*',
+				Authorization: `Bearer ${user.authUser.token}`,
+			}
+
+			let reqOptions = {
+				responseType: 'arraybuffer',
+				url: 'http://localhost:3000/file/get/profile-image',
+				method: 'GET',
+				headers: headersList,
+			}
+
+			try {
+				let response = await axios.request(reqOptions)
+				const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+				const url = URL.createObjectURL(blob)
+				console.log(url)
+				setProfileImage(url)
+			} catch (error) {
+				console.log(error)
+			}
+		}
+
+		onGetProfileImage()
+	}, [user])
+
+	useEffect(() => {
+		async function onGetQuizzes() {
+			const response = await axios.get('http://localhost:3000/quizzes')
+			console.log(response.data)
+			setQuizzes(response.data)
+		}
+		onGetQuizzes()
 	}, [])
 
-	async function getProfileImage() {
-		let headersList = {
-			Accept: '*/*',
-			Authorization: `Bearer ${user.authUser.token}`,
-		}
-
-		let reqOptions = {
-			responseType: 'arraybuffer',
-			url: 'http://localhost:3000/file/get/profile-image',
-			method: 'GET',
-			headers: headersList,
-		}
-
-		let response = await axios.request(reqOptions)
-		const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
-		const url = URL.createObjectURL(blob)
-		setProfileImage(url)
-	}
-
-	function errorProfileImage(event){
-		setProfileImage(User)
-	}
-
 	return (
-		<div className="ContainerHome">
-			<div className="split">
-				<div className="home-1">
-					<div className="col1">
-						<div className="col11">
-							<div className="col111">
-								<div className="col111-img">
-									<img src={profileImage} onError={errorProfileImage} width={'90%'} height={'82.5%'} alt="profile"></img>
-								</div>
-							</div>
-							<div className="col112">
-								<p style={{ fontSize: '15px' }}>{user.authUser.fullname}</p>
-								<p style={{ fontSize: '12.5px' }}>{user.authUser.status}</p>
-								<Link
-									to="/EditUserProfile"
-									style={{
-										textDecoration: 'none',
-										color: 'white',
-										backgroundColor: '#161B22',
-										borderRadius: '5px',
-									}}
-								>
-									Edit profile
-								</Link>
-								<button style={{ marginRight: '3px', borderRadius: '5px' }} onClick={handleShow}>
-									Edit Status
-								</button>
-							</div>
-						</div>
+		<div className="home-container">
+			<div className="home-sidebar">
+				<div className="home-profile">
+					<div className="profile-image-container">
+						<img src={profileImage} alt="profile"></img>
 					</div>
-					<div className="col2">
-						<div className="col22">
-							<p>Find Quiz</p>
-							<input placeholder="Enter code"></input>
-							<button>Join</button>
-						</div>
-					</div>
-					<div className="col3">
-						<div className="col33">
-							<p>Make a Quiz</p>
-							<button>Create</button>
-						</div>
+					<div className="profile-desc-container">
+						<h3>{user.authUser.fullname}</h3>
+						<p>{user.authUser.status}</p>
+						<button onClick={handleClickNavigateToEditUserProfile}>Edit profile</button>
+						<button onClick={handleShow}>Edit Status</button>
 					</div>
 				</div>
-
-				<div className="home-2">This is a Home page</div>
+				<div className="find-quiz-container">
+					<h4>Find Quiz</h4>
+					<input placeholder="Enter code"></input>
+					<button>JOIN</button>
+				</div>
+				<div className="make-quiz-container">
+					<h4>Make a Quiz</h4>
+					<button>CREATE</button>
+				</div>
 			</div>
 
-			<Modal show={show} onHide={handleClose} style={{ top: '40%', color: 'white' }}>
-				<Modal.Header style={{ backgroundColor: '#0D1117', border: '1px solid #0D1117' }}>
-					<Modal.Title>
-						<FaEdit style={{ marginBottom: '5.5px', marginRight: '7.5px' }} />
-						{'Status'}
-					</Modal.Title>
-				</Modal.Header>
-				<Modal.Body style={{ backgroundColor: '#0D1117' }}>
-					<div className="col-12" style={{ padding: '5px' }}>
-						<input
-							onChange={(e) => setEidtStatus(e.target.value)}
-							placeholder=" 🧠 What are you thinking "
-							style={{
-								color: 'white',
-								width: '100%',
-								backgroundColor: '#0D1117',
-								border: '1px solid #585E65',
-								borderRadius: '5px',
-								height: '35px',
-							}}
-						></input>
-					</div>
-				</Modal.Body>
-				<Modal.Footer style={{ backgroundColor: '#0D1117', border: '1px solid #0D1117' }}>
-					<button
-						type="button"
-						className="btn btn-success"
-						style={{ backgroundColor: '#238636' }}
-						onClick={editStatusFunc}
-					>
-						Save
-					</button>
-					<button type="button" className="btn btn-secondary" onClick={handleClose}>
-						Cancel
-					</button>
-				</Modal.Footer>
-			</Modal>
+			<div className="home-content">
+				<h4>All Quizzes</h4>
+				<div className="quiz-list-container">
+					{quizzes.map((quiz) => (
+						<QuizCard
+							name={quiz.name}
+							owner={quiz.user?.fullname}
+							numberOfTasks={quiz.questions.length}
+							key={quiz._id}
+						/>
+					))}
+				</div>
+			</div>
+
+			<ModalStatus
+				show={show}
+				handleClose={handleClose}
+				status={user.authUser.status}
+				setEditStatus={setEditStatus}
+				handleEditStatus={handleEditStatus}
+			/>
 		</div>
 	)
 }

@@ -1,13 +1,10 @@
 .App {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  color: white;
-  overflow: hidden;
+	margin: 0;
+	padding: 0;
+	color: white;
+	overflow: hidden;
 }
 
 .modal-content {
-  background-color: #0D1117;
+	background-color: #0d1117;
 }
-
