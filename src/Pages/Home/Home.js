@@ -59,8 +59,7 @@ const Home = () => {
 				let response = await axios.request(reqOptions)
 				const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
 				const url = URL.createObjectURL(blob)
-				console.log(url)
-				setProfileImage(url)
+				setProfileImage(response.data.byteLength === 0 ? null : url)
 			} catch (error) {
 				console.log(error)
 			}
@@ -72,7 +71,6 @@ const Home = () => {
 	useEffect(() => {
 		async function onGetQuizzes() {
 			const response = await axios.get('http://localhost:3000/quizzes')
-			console.log(response.data)
 			setQuizzes(response.data)
 		}
 		onGetQuizzes()
@@ -83,7 +81,13 @@ const Home = () => {
 			<div className="home-sidebar">
 				<div className="home-profile">
 					<div className="profile-image-container">
-						<img src={profileImage} alt="profile"></img>
+						{!profileImage ? (
+							<div className="profile-image-null">
+								<h1>{user.authUser.fullname[0]}</h1>
+							</div>
+						) : (
+							<img src={profileImage} alt="profile"></img>
+						)}
 					</div>
 					<div className="profile-desc-container">
 						<h3>{user.authUser.fullname}</h3>

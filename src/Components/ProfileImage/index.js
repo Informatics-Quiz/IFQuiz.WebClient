@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { uploadUserProfile } from '../../Services/upload'
+import './style.css'
 
-export default function ProfileImage({ userProfileImage }) {
+export default function ProfileImage({ userProfileImage, firstLetter }) {
 	const [renderImage, setRenderImage] = useState(null)
 	const user = useSelector((state) => state.user.authUser)
 
@@ -12,7 +13,6 @@ export default function ProfileImage({ userProfileImage }) {
 		formData.append('profile-image', file)
 		try {
 			const res = await uploadUserProfile(user.token, formData)
-			console.log(res)
 			if (res.status === 201) {
 				const renderImage = URL.createObjectURL(file)
 				setRenderImage(renderImage)
@@ -23,16 +23,20 @@ export default function ProfileImage({ userProfileImage }) {
 	}
 
 	return (
-		<div className="profile">
-			<img
-				className="circle-img align-self-center object-fit-contain"
-				width="140"
-				height="140"
-				src={renderImage || userProfileImage}
-				alt={`profile`}
-			/>
-			<div className="bc_img"></div>
-			<input type="file" accept="image/*" onChange={onImageChange} className="choose" />
+		<div className="profile-image-container">
+			<div className="image-container">
+				{!renderImage && !userProfileImage ? (
+					<div className="profile-image-null">
+						<h1>{firstLetter}</h1>
+					</div>
+				) : (
+					<img src={renderImage || userProfileImage} alt="profile" />
+				)}
+			</div>
+			<label for="file-upload" class="custom-file-upload">
+				Upload
+			</label>
+			<input id="file-upload" type="file" accept="image/*" onChange={onImageChange} />
 		</div>
 	)
 }

@@ -31,6 +31,20 @@
 	object-fit: cover;
 }
 
+.profile-image-null {
+	width: 100px;
+	height: 100px;
+	background-color: rgb(239, 236, 232);
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.profile-image-null h1 {
+	color: rgb(164, 164, 162);
+}
+
 .profile-desc-container {
 	width: 180px;
 }

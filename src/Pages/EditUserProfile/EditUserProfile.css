@@ -1,31 +1,62 @@
-.Container-Edit {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: #010409;
-    padding-bottom: 2.5%;
+.edit-profile-container {
+	display: flex;
+	flex-direction: column;
+	width: 350px;
+	margin: 0 auto;
+	/* background-color: red; */
+	margin-top: 24px;
 }
 
-.circle-img {
-    background-color: rgb(218, 218, 218);
-    border-radius: 100%;
+.user-profile-container {
+	background-color: #0d1117;
+	border-radius: 7.5px;
+	padding: 8px 16px;
 }
 
-.main-1 input {
-    border: 1px solid rgba(135, 135, 135, 0.5);
-    border-radius: 4px;
-    background-color: #0D1117;
-    margin-bottom: 20px;
-
-    color: white;
+.user-profile-container:not(:first-child) {
+	margin-top: 16px;
 }
-.input-change{
-    border: 1px solid rgba(135, 135, 135, 0.5);
-    border-radius: 4px;
-    background-color: #0D1117;
-    margin-bottom: 20px;
-    
 
-    color: white;
+.user-profile-container p {
+	margin: 8px 0;
+}
+
+.user-profile-container input[type='text'] {
+	width: 100%;
+	padding: 8px 16px;
+	border: 1.5px solid rgba(201, 209, 217, 0.4);
+	background-color: inherit;
+	border-radius: 6px;
+}
+
+.user-profile-container input[type='checkbox'] {
+	background-color: #c9d1d9;
+	border: none;
+	cursor: pointer;
+}
+
+.user-profile-container input[type='checkbox']:checked {
+	background-color: #238636;
+}
+
+.save-button {
+	width: 100%;
+	border: none;
+	background-color: #238636;
+	color: white;
+	padding: 4px 0;
+	border-radius: 7.5px;
+	margin-top: 16px;
+}
+
+.logout-button {
+	border: none;
+	background-color: inherit;
+	color: white;
+	margin-top: 16px;
+	transition: all 0.3s;
+}
+
+.logout-button:hover {
+	color: rgba(201, 209, 217, 0.4);
 }

@@ -1,5 +1,5 @@
-button {
-    border: none;
-    background-color: #161B22;
-    color: white;
+.navbar button {
+	border: none;
+	background-color: #161b22;
+	color: white;
 }

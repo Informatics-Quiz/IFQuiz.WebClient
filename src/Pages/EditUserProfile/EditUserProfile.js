@@ -11,7 +11,6 @@ import axios from 'axios'
 import { updateUserProfile, updateUserPassword, deleteUserAccount } from '../../Services/user'
 
 const EditUserProfile = () => {
-
 	const user = useSelector((state) => state.user.authUser)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -20,13 +19,12 @@ const EditUserProfile = () => {
 	const [show2, setShow2] = useState(false)
 	const [show3, setShow3] = useState(false)
 
-
 	const [profileImage, setProfileImage] = useState('')
 
 	const [message, setMessage] = useState('')
 
 	const [newPassword, setNewPassword] = useState({
-		password: null
+		password: null,
 	})
 
 	const [userProfileState, setUserProfileState] = useState({
@@ -74,7 +72,7 @@ const EditUserProfile = () => {
 		let response = await axios.request(reqOptions)
 		const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
 		const url = URL.createObjectURL(blob)
-		setProfileImage(url)
+		setProfileImage(response.data.byteLength === 0 ? null : url)
 	}
 
 	const handleChangeProfileState = (e) => {
@@ -85,7 +83,7 @@ const EditUserProfile = () => {
 	const handleChangePassword = (e) => {
 		const { name, value } = e.target
 		setNewPassword({
-			password: value
+			password: value,
 		})
 	}
 
@@ -121,9 +119,6 @@ const EditUserProfile = () => {
 
 			setMessage(data.message) // POP UP THIS "data.message"
 			handleShow3()
-
-
-
 		} catch (error) {
 			setMessage(error.response.data.message) // POP UP THIS "error.response.data.message"
 			handleShow3()
@@ -145,48 +140,19 @@ const EditUserProfile = () => {
 	}
 
 	return (
-		<div className="Container-Edit d-flex flex-column align-items-center">
-			{/* {JSON.stringify(user)} */}
-			<div
-				className="main-1 d-flex flex-column p-2"
-				style={{
-					backgroundColor: '#0D1117',
-					height: '45%',
-					width: '22.5%',
-					borderRadius: '7.5px',
-					marginTop: '1.5%',
-				}}
-			>
+		<div className="edit-profile-container">
+			<div className="user-profile-container">
 				<p>
 					<FaUserEdit style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
-					ProfileSetting
+					Profile Settings
 				</p>
-				<ProfileImage userProfileImage={profileImage} />
-				<p style={{ marginTop: '2.5px' }}>Display Name</p>
-				<input
-					name="fullname"
-					placeholder={user.fullname}
-					style={{ padding: '5px', marginBottom: '10px' }}
-					onChange={handleChangeProfileState}
-				></input>
-				<p style={{ marginBottom: '10px' }}>Status</p>
-				<input
-					name="status"
-					placeholder={user.status}
-					style={{ padding: '5px', marginBottom: '5px' }}
-					onChange={handleChangeProfileState}
-				></input>
+				<ProfileImage userProfileImage={profileImage} firstLetter={user.fullname[0]} />
+				<p>Display Name</p>
+				<input name="fullname" type="text" placeholder={user.fullname} onChange={handleChangeProfileState}></input>
+				<p>Status</p>
+				<input name="status" type="text" placeholder={user.status} onChange={handleChangeProfileState}></input>
 			</div>
-			<div
-				className="main-2 p-2"
-				style={{
-					backgroundColor: '#0D1117',
-					height: '15%',
-					width: '22.5%',
-					borderRadius: '7.5px',
-					marginTop: '1%',
-				}}
-			>
+			<div className="user-profile-container">
 				<p>
 					<FaUserEdit style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					Quiz Setting
@@ -202,7 +168,6 @@ const EditUserProfile = () => {
 							id="flexSwitchCheckDefault"
 							checked={userProfileState.backgroundMusic}
 							onChange={handleChangeProfileStateCheckbox}
-							style={{ backgroundColor: '#238636', border: 'none' }}
 						></input>
 					</div>
 				</div>
@@ -217,22 +182,11 @@ const EditUserProfile = () => {
 							id="flexSwitchCheckDefault"
 							checked={userProfileState.soundEffect}
 							onChange={handleChangeProfileStateCheckbox}
-							style={{ backgroundColor: '#238636', border: 'none' }}
 						></input>
 					</div>
 				</div>
 			</div>
-			<div
-				className="main-3 p-2"
-				style={{
-					backgroundColor: '#0D1117',
-					height: '25%',
-					width: '22.5%',
-					borderRadius: '7.5px',
-					marginTop: '1%',
-					marginBottom: '1%',
-				}}
-			>
+			<div className="user-profile-container">
 				<p>
 					<FaLock style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					Account Setting
@@ -245,23 +199,11 @@ const EditUserProfile = () => {
 					<p style={{ marginTop: '2.5px' }}>Delete Account</p>
 					<FaArrowRight onClick={handleShow2} />
 				</div>
-				<button
-					style={{ backgroundColor: '#21262D', marginTop: '65px', width: '30%', borderRadius: '5px' }}
-					onClick={handleClickLogout}
-				>
-					Logout
+				<button class="logout-button" onClick={handleClickLogout}>
+					Log Out
 				</button>
 			</div>
-			<button
-				style={{
-					backgroundColor: '#238636',
-					height: '4.25%',
-					width: '22.5%',
-					borderRadius: '5px',
-					fontSize: '17.5px',
-				}}
-				onClick={handleClickUpdateProfile}
-			>
+			<button className="save-button" onClick={handleClickUpdateProfile}>
 				Save
 			</button>
 
@@ -280,9 +222,7 @@ const EditUserProfile = () => {
 						style={{ padding: '5px', marginBottom: '10px', width: '100%' }}
 						onChange={handleChangePassword}
 					></input>
-					<p style={{ marginBottom: '7px', marginRight: '7.5px', marginTop: '10px' }}>
-						Re-Enter New Password
-					</p>
+					<p style={{ marginBottom: '7px', marginRight: '7.5px', marginTop: '10px' }}>Re-Enter New Password</p>
 					<input
 						className="input-change"
 						type={'text'}
@@ -373,7 +313,6 @@ const EditUserProfile = () => {
 				<Modal.Body style={{ color: 'white', border: '0px' }}>{message}</Modal.Body>
 				<Modal.Footer style={{ color: 'white', border: '0px' }}></Modal.Footer>
 			</Modal>
-
 		</div>
 	)
 }
