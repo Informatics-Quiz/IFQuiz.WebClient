@@ -81,7 +81,7 @@ const EditUserProfile = () => {
 	}
 
 	const handleChangePassword = (e) => {
-		const { name, value } = e.target
+		const { value } = e.target
 		setNewPassword({
 			password: value,
 		})
