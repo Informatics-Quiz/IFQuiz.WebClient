@@ -10,3 +10,9 @@
 .modal-content {
 	background-color: #0d1117;
 }
+
+.navbar button {
+	border: none;
+	background-color: #161b22;
+	color: white;
+}
