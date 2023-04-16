@@ -11,11 +11,11 @@ import CreateQuiz from './Pages/CreateQuiz/CreateQuiz'
 import Home from './Pages/Home/Home'
 import EditUserProfile from './Pages/EditUserProfile/EditUserProfile'
 
-import { Route, Routes } from 'react-router-dom'
-// import { useSelector } from 'react-redux'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function App() {
-	// const user = useSelector((state) => state.user.authUser)
+	const isAuthenticated = useSelector((state) => state.user.authUser) === null ? false : true
 
 	return (
 		<div className="App">
@@ -27,8 +27,8 @@ function App() {
 				<Route path="/Register" element={<Register />} />
 				<Route path="/LoginEmail" element={<LoginEmail />} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
-				<Route path="/Home" element={<Home />} />
-				<Route path="/EditUserProfile" element={<EditUserProfile />} />
+				<Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/Login" />} />
+				<Route path="/EditUserProfile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="Login" />} />
 			</Routes>
 		</div>
 	)

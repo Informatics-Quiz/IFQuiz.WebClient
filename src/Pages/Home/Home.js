@@ -21,8 +21,8 @@ const Home = () => {
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
 
-	function handleClickNavigateToEditUserProfile() {
-		navigate('/EditUserProfile')
+	function handleClickNavigate(url) {
+		navigate(url)
 	}
 
 	async function handleEditStatus() {
@@ -92,7 +92,7 @@ const Home = () => {
 					<div className="profile-desc-container">
 						<h3>{user.authUser.fullname}</h3>
 						<p>{user.authUser.status}</p>
-						<button onClick={handleClickNavigateToEditUserProfile}>Edit profile</button>
+						<button onClick={() => handleClickNavigate('/EditUserProfile')}>Edit profile</button>
 						<button onClick={handleShow}>Edit Status</button>
 					</div>
 				</div>
@@ -103,7 +103,7 @@ const Home = () => {
 				</div>
 				<div className="make-quiz-container">
 					<h4>Make a Quiz</h4>
-					<button>CREATE</button>
+					<button onClick={() => handleClickNavigate('/CreateQuiz')}>CREATE</button>
 				</div>
 			</div>
 

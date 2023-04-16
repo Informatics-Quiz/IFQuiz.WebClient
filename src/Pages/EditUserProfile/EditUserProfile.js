@@ -199,7 +199,7 @@ const EditUserProfile = () => {
 					<p style={{ marginTop: '2.5px' }}>Delete Account</p>
 					<FaArrowRight onClick={handleShow2} />
 				</div>
-				<button class="logout-button" onClick={handleClickLogout}>
+				<button className="logout-button" onClick={handleClickLogout}>
 					Log Out
 				</button>
 			</div>

@@ -33,7 +33,7 @@ export default function ProfileImage({ userProfileImage, firstLetter }) {
 					<img src={renderImage || userProfileImage} alt="profile" />
 				)}
 			</div>
-			<label for="file-upload" class="custom-file-upload">
+			<label htmlFor="file-upload" className="custom-file-upload">
 				Upload
 			</label>
 			<input id="file-upload" type="file" accept="image/*" onChange={onImageChange} />
