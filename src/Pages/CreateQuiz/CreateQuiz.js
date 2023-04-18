@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BsImage, BsEyeFill } from 'react-icons/bs'
 import './CreateQuiz.css'
 import FillBlankChoice from '../../Components/Choice/FillBlank'
 import NormalChoice from '../../Components/Choice/Normal'
+import { uploadQuiz } from '../../Services/quiz'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const CreateQuiz = () => {
+	const user = useSelector((state) => state.user.authUser)
+	const navigate = useNavigate()
 	const [selectedQuestion, setSelectedQuestion] = useState(0)
 
 	const [questionList, setQuestionList] = useState([
@@ -13,12 +18,12 @@ const CreateQuiz = () => {
 			timer: 0,
 			points: 0,
 			explanation: {
-				explain: 'q1',
+				explain: '',
 				imageUrl: '',
 			},
 			answer: {
-				selectAnswers: [],
 				correctAnswer: 0,
+				selectAnswers: [],
 			},
 		},
 		{
@@ -26,12 +31,12 @@ const CreateQuiz = () => {
 			timer: 0,
 			points: 0,
 			explanation: {
-				explain: 'q2',
+				explain: '',
 				imageUrl: '',
 			},
 			answer: {
-				selectAnswers: [],
 				correctAnswer: 0,
+				selectAnswers: [],
 			},
 		},
 		{
@@ -39,15 +44,23 @@ const CreateQuiz = () => {
 			timer: 0,
 			points: 0,
 			explanation: {
-				explain: 'q3',
+				explain: '',
 				imageUrl: '',
 			},
 			answer: {
-				selectAnswers: [],
 				correctAnswer: 0,
+				selectAnswers: [],
 			},
 		},
 	])
+
+	const [quiz, setQuiz] = useState({
+		name: '',
+		description: 'something like this in the future',
+		category: 'Mathematics',
+		hideCorrectAnswer: false,
+		questions: questionList,
+	})
 
 	const [selectedFillBlankChoice, setSelectedFillBlankChoice] = useState([
 		{
@@ -58,7 +71,7 @@ const CreateQuiz = () => {
 
 	const [selectedNormalChoices, setSelectedNormalChoices] = useState([
 		{
-			answer: '',
+			explain: '',
 			checked: false,
 		},
 	])
@@ -73,7 +86,7 @@ const CreateQuiz = () => {
 		])
 		setSelectedNormalChoices([
 			{
-				answer: '',
+				explain: '',
 				checked: false,
 			},
 		])
@@ -85,7 +98,7 @@ const CreateQuiz = () => {
 		const newQuestionList = [...questionList]
 		const index = selectedQuestion
 		if (basicsData.includes(name)) {
-			newQuestionList[index][name] = value
+			newQuestionList[index][name] = name === 'type' ? value : +value
 		} else {
 			if (name === 'explain' || name === 'imageUrl') {
 				newQuestionList[index].explanation[name] = value
@@ -94,22 +107,91 @@ const CreateQuiz = () => {
 		setQuestionList(newQuestionList)
 	}
 
+	function handleChangeQuiz(e) {
+		const { name, value } = e.target
+		switch (name) {
+			case 'hideCorrectAnswer':
+				setQuiz({ ...quiz, [name]: !quiz.hideCorrectAnswer })
+				break
+			default:
+				setQuiz({ ...quiz, [name]: value })
+				break
+		}
+	}
+
+	async function handleSubmit() {
+		const newQuestionList = quiz.questions.map((obj) => {
+			if (obj.type === 'fill-choice') {
+				return { ...obj }
+			}
+			const { selectAnswers, ...rest } = obj.answer
+			const newSelectAnswers = selectAnswers.map(({ checked, ...rest }) => rest)
+			return { ...obj, answer: { ...rest, selectAnswers: newSelectAnswers } }
+		})
+
+		const data = { ...quiz, questions: newQuestionList }
+		console.log(JSON.stringify(data))
+
+		const res = await uploadQuiz(user.token, data)
+
+		if (res.status === 201) {
+			navigate('/Home')
+		}
+	}
+
+	useEffect(() => {
+		function handleChangeAnswer() {
+			const newQuestionList = [...questionList]
+			const index = selectedQuestion
+			const questionType = questionList[selectedQuestion].type
+			if (questionType === 'fill-choice') {
+				newQuestionList[index].answer.correctAnswer = selectedFillBlankChoice
+				delete newQuestionList[index].answer.selectAnswers
+			} else if (['single-choice', 'multiple-choice'].includes(questionType)) {
+				newQuestionList[index].answer.selectAnswers = selectedNormalChoices
+				newQuestionList[index].answer.correctAnswer =
+					questionType === 'single-choice'
+						? selectedNormalChoices.findIndex((choice) => choice.checked)
+						: selectedNormalChoices
+								.filter((choice) => choice.checked)
+								.map((choice) => selectedNormalChoices.indexOf(choice))
+			}
+			setQuestionList(newQuestionList)
+		}
+
+		handleChangeAnswer()
+	}, [selectedFillBlankChoice, selectedNormalChoices])
+
+	useEffect(() => {
+		setQuiz({ ...quiz, questions: questionList })
+	}, [questionList])
+
 	return (
 		<div>
 			<div className="flex justify-between bg-[#4A5059] p-2">
-				<input type="text" placeholder="Untitled Quiz" className="p-2 w-72 rounded bg-[#161B22]" />
+				<input
+					type="text"
+					name="name"
+					placeholder="Untitled Quiz"
+					className="p-2 w-72 rounded bg-[#161B22]"
+					value={quiz.name}
+					onChange={handleChangeQuiz}
+				/>
 				<div className="flex items-center">
 					<label>Hide Correct Answer</label>
 					<div className="form-check form-switch mb-0 mx-2">
 						<input
-							name="backgroundMusic"
+							name="hideCorrectAnswer"
 							className="form-check-input bg-[#238636]"
 							type="checkbox"
-							role="switch"
-							id="flexSwitchCheckDefault"
-						></input>
+							value={quiz.hideCorrectAnswer}
+							checked={quiz.hideCorrectAnswer}
+							onChange={handleChangeQuiz}
+						/>
 					</div>
-					<button className="px-8 py-2 rounded bg-[#238636] text-[#C9D1D9] ml-6">SAVE</button>
+					<button onClick={handleSubmit} className="px-8 py-2 rounded bg-[#238636] text-[#C9D1D9] ml-6">
+						SAVE
+					</button>
 				</div>
 			</div>
 
@@ -135,17 +217,16 @@ const CreateQuiz = () => {
 					</select>
 				</div>
 
-				{questionList[selectedQuestion] && (
+				{quiz.questions[selectedQuestion] && (
 					<div className="flex-1 flex flex-col py-3 pr-3">
 						<div className="h-[450px] bg-[#161B22] rounded flex-col items-center justify-center relative">
 							<div className="flex justify-between p-2">
 								<BsEyeFill className="text-xl text-[#4A5059]" />
 								<div className="flex items-center">
 									<select
-										defaultValue={0}
-										name="timer"
-										value={questionList[selectedQuestion].timer}
 										className="bg-[#161B22] border p-1.5 rounded text-slate-300"
+										name="timer"
+										value={quiz.questions[selectedQuestion].timer}
 										onChange={handleChangeInput}
 									>
 										<option value={0} disabled>
@@ -156,10 +237,9 @@ const CreateQuiz = () => {
 										<option value={120}>2 min</option>
 									</select>
 									<select
-										defaultValue={''}
-										name="points"
-										value={questionList[selectedQuestion].points}
 										className="bg-[#161B22] border p-1.5 rounded text-slate-300 mx-3"
+										name="points"
+										value={quiz.questions[selectedQuestion].points}
 										onChange={handleChangeInput}
 									>
 										<option value={0} disabled>
@@ -170,10 +250,9 @@ const CreateQuiz = () => {
 										<option value={10}>10 Points</option>
 									</select>
 									<select
-										defaultValue={''}
-										name="type"
-										value={questionList[selectedQuestion].type}
 										className="bg-[#161B22] border p-1.5 rounded text-slate-300"
+										name="type"
+										value={quiz.questions[selectedQuestion].type}
 										onChange={handleClickChoiceType}
 									>
 										<option value={''} disabled>
@@ -181,21 +260,21 @@ const CreateQuiz = () => {
 										</option>
 										<option value={'single-choice'}>Single Choice</option>
 										<option value={'multiple-choice'}>Multiple Choice</option>
-										<option value={'fill-blank'}>Fill Blank</option>
+										<option value={'fill-choice'}>Fill Choice</option>
 									</select>
 								</div>
 							</div>
 							<input
 								type="text"
 								name="explain"
-								value={questionList[selectedQuestion].explanation.explain}
+								value={quiz.questions[selectedQuestion].explanation.explain}
 								placeholder="Type a question..."
 								onChange={handleChangeInput}
 								className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl text-slate-400 text-center border-none outline-none bg-transparent w-4/5"
 							/>
 						</div>
 
-						{questionList[selectedQuestion].type === 'fill-blank' ? (
+						{questionList[selectedQuestion].type === 'fill-choice' ? (
 							<FillBlankChoice
 								selectedFillBlankChoice={selectedFillBlankChoice}
 								setSelectedFillBlankChoice={setSelectedFillBlankChoice}
@@ -205,7 +284,7 @@ const CreateQuiz = () => {
 								questionList[selectedQuestion].type === 'multiple-choice') && (
 								<NormalChoice
 									choiceType={questionList[selectedQuestion].type}
-									selectedChoices={selectedNormalChoices}
+									selectedChoices={questionList[selectedQuestion].answer.selectAnswers}
 									setSelectedChoices={setSelectedNormalChoices}
 								/>
 							)

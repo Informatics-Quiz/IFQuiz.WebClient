@@ -8,12 +8,12 @@ export default function NormalChoice({ choiceType, selectedChoices, setSelectedC
 	}
 
 	function handleClickAddChoice() {
-		setSelectedChoices([...selectedChoices, { answer: '', checked: false }])
+		setSelectedChoices([...selectedChoices, { explain: '', checked: false }])
 	}
 
 	function handleChangeInput(e, index) {
 		const newSelectedChoices = [...selectedChoices]
-		newSelectedChoices[index].answer = e.target.value
+		newSelectedChoices[index].explain = e.target.value
 		setSelectedChoices(newSelectedChoices)
 	}
 
@@ -33,7 +33,7 @@ export default function NormalChoice({ choiceType, selectedChoices, setSelectedC
 		<div className="flex items-center mt-2">
 			{selectedChoices.map((choice, index) => (
 				<NormalChoiceCard
-					answer={choice.answer}
+					answer={choice.explain}
 					disabled={condition && !choice.checked}
 					checked={choice.checked}
 					handleClickChecked={() => handleClickChecked(index)}
@@ -71,7 +71,7 @@ function NormalChoiceCard({
 						className="ml-2 w-7 h-7 rounded accent-[#238636]"
 						checked={checked}
 						disabled={disabled}
-						onClick={handleClickChecked}
+						onChange={handleClickChecked}
 					/>
 				</div>
 				<div className="p-2 bg-[#161B22] rounded cursor-pointer" onClick={handleClickRemoveChoice}>
