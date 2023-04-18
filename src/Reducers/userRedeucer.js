@@ -6,6 +6,7 @@ const initialState = {
 		fullname: null,
 		status: null,
 		birthday: null,
+		imageUrl: null,
 		backgroundMusic: null,
 		soundEffect: null,
 		token: null,

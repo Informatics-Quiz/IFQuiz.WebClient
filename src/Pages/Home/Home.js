@@ -81,12 +81,12 @@ const Home = () => {
 			<div className="home-sidebar">
 				<div className="home-profile">
 					<div className="profile-image-container">
-						{!profileImage ? (
+						{!user.authUser.imageUrl ? (
 							<div className="profile-image-null">
 								<h1>{user.authUser.fullname[0]}</h1>
 							</div>
 						) : (
-							<img src={profileImage} alt="profile"></img>
+							<img src={user.authUser.imageUrl} alt="profile" />
 						)}
 					</div>
 					<div className="profile-desc-container">
