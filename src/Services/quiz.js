@@ -8,3 +8,13 @@ export async function uploadQuiz(token, requestBody) {
 	})
 	return res
 }
+
+export async function getQuizzes() {
+	const res = await client.get('/quizzes')
+	return res
+}
+
+export async function getQuizById(id) {
+	const res = await client.get(`/quizzes/${id}`)
+	return res
+}

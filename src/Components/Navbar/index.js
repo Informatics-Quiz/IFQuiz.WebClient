@@ -3,7 +3,7 @@ import { TbRotateClockwise2 } from 'react-icons/tb'
 import React from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../../Reducers/userRedeucer'
+import { setUser } from '../../Reducers/userReducer'
 import { MdLogout } from 'react-icons/md'
 
 const Navbar2 = () => {
@@ -15,6 +15,8 @@ const Navbar2 = () => {
 		dispatch(setUser(null))
 		navigate('/')
 	}
+
+	if (window.location.pathname === '/Quiz/Take') return null
 
 	return (
 		<nav className="navbar navbar-expand-md" style={{ backgroundColor: '#161B22' }}>

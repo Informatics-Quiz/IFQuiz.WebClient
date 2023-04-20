@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setStatus } from '../../Reducers/userRedeucer'
+import { setStatus } from '../../Reducers/userReducer'
 import ModalStatus from '../../Components/ModalStatus'
 import QuizCard from '../../Components/QuizCard'
 
@@ -14,7 +14,6 @@ const Home = () => {
 	const navigate = useNavigate()
 
 	const [show, setShow] = useState(false)
-	const [profileImage, setProfileImage] = useState('')
 	const [editstatus, setEditStatus] = useState('')
 	const [quizzes, setQuizzes] = useState([])
 
@@ -41,32 +40,32 @@ const Home = () => {
 		handleClose()
 	}
 
-	useEffect(() => {
-		async function onGetProfileImage() {
-			let headersList = {
-				Accept: '*/*',
-				Authorization: `Bearer ${user.authUser.token}`,
-			}
+	// useEffect(() => {
+	// 	async function onGetProfileImage() {
+	// 		let headersList = {
+	// 			Accept: '*/*',
+	// 			Authorization: `Bearer ${user.authUser.token}`,
+	// 		}
 
-			let reqOptions = {
-				responseType: 'arraybuffer',
-				url: 'http://localhost:3000/file/get/profile-image',
-				method: 'GET',
-				headers: headersList,
-			}
+	// 		let reqOptions = {
+	// 			responseType: 'arraybuffer',
+	// 			url: 'http://localhost:3000/file/get/profile-image',
+	// 			method: 'GET',
+	// 			headers: headersList,
+	// 		}
 
-			try {
-				let response = await axios.request(reqOptions)
-				const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
-				const url = URL.createObjectURL(blob)
-				setProfileImage(response.data.byteLength === 0 ? null : url)
-			} catch (error) {
-				console.log(error)
-			}
-		}
+	// 		try {
+	// 			let response = await axios.request(reqOptions)
+	// 			const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+	// 			const url = URL.createObjectURL(blob)
+	// 			setProfileImage(response.data.byteLength === 0 ? null : url)
+	// 		} catch (error) {
+	// 			console.log(error)
+	// 		}
+	// 	}
 
-		onGetProfileImage()
-	}, [user])
+	// 	onGetProfileImage()
+	// }, [user])
 
 	useEffect(() => {
 		async function onGetQuizzes() {
@@ -112,6 +111,7 @@ const Home = () => {
 				<div className="quiz-list-container">
 					{quizzes.map((quiz) => (
 						<QuizCard
+							id={quiz._id}
 							name={quiz.name}
 							owner={quiz.user?.fullname}
 							numberOfTasks={quiz.questions.length}

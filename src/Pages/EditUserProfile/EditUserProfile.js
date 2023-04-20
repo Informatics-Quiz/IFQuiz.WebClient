@@ -1,13 +1,12 @@
 import './EditUserProfile.css'
 import { FaUserEdit, FaLock, FaArrowRight, FaKey } from 'react-icons/fa'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import ProfileImage from '../../Components/ProfileImage'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../../Reducers/userRedeucer'
+import { setUser } from '../../Reducers/userReducer'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { updateUserProfile, updateUserPassword, deleteUserAccount } from '../../Services/user'
 
 const EditUserProfile = () => {
@@ -18,8 +17,6 @@ const EditUserProfile = () => {
 	const [show, setShow] = useState(false)
 	const [show2, setShow2] = useState(false)
 	const [show3, setShow3] = useState(false)
-
-	const [profileImage, setProfileImage] = useState('')
 
 	const [message, setMessage] = useState('')
 
@@ -50,29 +47,6 @@ const EditUserProfile = () => {
 	const handleClickLogout = () => {
 		dispatch(setUser(null))
 		navigate('/')
-	}
-
-	useEffect(() => {
-		getProfileImage()
-	}, [])
-
-	async function getProfileImage() {
-		let headersList = {
-			Accept: '*/*',
-			Authorization: `Bearer ${user.token}`,
-		}
-
-		let reqOptions = {
-			responseType: 'arraybuffer',
-			url: 'http://localhost:3000/file/get/profile-image',
-			method: 'GET',
-			headers: headersList,
-		}
-
-		let response = await axios.request(reqOptions)
-		const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
-		const url = URL.createObjectURL(blob)
-		setProfileImage(response.data.byteLength === 0 ? null : url)
 	}
 
 	const handleChangeProfileState = (e) => {
@@ -146,7 +120,7 @@ const EditUserProfile = () => {
 					<FaUserEdit style={{ marginBottom: '7px', marginRight: '7.5px', width: '19px' }} />
 					Profile Settings
 				</p>
-				<ProfileImage userProfileImage={profileImage} firstLetter={user.fullname[0]} />
+				<ProfileImage userProfileImage={user.imageUrl} firstLetter={user.fullname[0]} />
 				<p>Display Name</p>
 				<input name="fullname" type="text" placeholder={user.fullname} onChange={handleChangeProfileState}></input>
 				<p>Status</p>
