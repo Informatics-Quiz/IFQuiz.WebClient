@@ -43,7 +43,7 @@ export default function TakeQuiz() {
 			if (!userAnswers[index]) {
 				const newUserAnswers = [...userAnswers]
 				newUserAnswers[index] = [+value]
-				console.log(newUserAnswers)
+				// console.log(newUserAnswers)
 				setUserAnswers(newUserAnswers)
 				return
 			}
@@ -64,7 +64,6 @@ export default function TakeQuiz() {
 	}
 
 	async function handleSubmit() {
-		console.log('userAnswers : ' + userAnswers)
 		try {
 			const requestBody = {
 				userAnswers: userAnswers,
@@ -135,12 +134,13 @@ export default function TakeQuiz() {
 				</div>
 			) : (
 				<div className="flex flex-col py-5 w-[1000px]" style={{ marginLeft: '35%' }}>
-					<div style={{ width: '450px', height: '150px', position: 'absolute', top: '9.425%', left: '2.15%', borderRadius: '10px', display: 'flex', flexWrap: 'wrap' }}>
+					
+					<div className="select__question">
 						{currentQuiz.questions.map((question, index) => (
-							<button key={index} onClick={(e) => setNumber(e.target.value)} value={index} style={{ backgroundColor: '#161B22', height: '30px', width: '45px', borderRadius: '3px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{index + 1}</button>
+							<button key={index} onClick={(e) => changeQuestion(e.target.value)} value={index} className={index == number ? 'selected__question__button' : 'select__question__button'}>{index + 1}</button>
 						))}
 					</div>
-
+					
 					<div className="bg-[#0d1117] flex items-center justify-center rounded mb-4">
 						<h2 className="m-0 py-2">{currentQuiz.name}</h2>
 					</div>
@@ -148,17 +148,11 @@ export default function TakeQuiz() {
 						<h1 style={{ display: 'inline', fontSize: '1.15vw' }}>{currentQuiz.questions[number].explanation.explain}</h1>
 					</div>
 					<div className='choice' style={{ width: '100%', height: '285px', marginTop: '20px' }}>
-
 						{currentQuiz.questions[number].type !== 'fill-choice' ? (
-							<div style={{ width: '100%', height: '100%' }}>
-								<div className='row1' style={{ width: '100%', height: '50%', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-									<button onClick={(e) => handleChangeUserAnswers(e, number, currentQuiz.questions[number].type)} value={0} style={{ height: '70%', width: '30%', backgroundColor: '#0d1117', borderRadius: '10px', fontSize: '0.75vw', wordWrap: 'break-word', paddingLeft: '4px', paddingRight: '4px', overflow: 'hidden' }}>{currentQuiz.questions[number].answer.selectAnswers[0].explain}</button>
-									<button onClick={(e) => handleChangeUserAnswers(e, number, currentQuiz.questions[number].type)} value={1} style={{ height: '75%', width: '30%', backgroundColor: '#0d1117', borderRadius: '10px', fontSize: '0.75vw', wordWrap: 'break-word', paddingLeft: '4px', paddingRight: '4px', overflow: 'hidden' }}>{currentQuiz.questions[number].answer.selectAnswers[1].explain}</button>
-								</div>
-								<div className='row2' style={{ width: '100%', height: '50%', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-									<button onClick={(e) => handleChangeUserAnswers(e, number, currentQuiz.questions[number].type)} value={2} style={{ height: '70%', width: '30%', backgroundColor: '#0d1117', borderRadius: '10px', fontSize: '0.75vw', wordWrap: 'break-word', paddingLeft: '4px', paddingRight: '4px', overflow: 'hidden' }}>{currentQuiz.questions[number].answer.selectAnswers[2].explain}</button>
-									<button onClick={(e) => handleChangeUserAnswers(e, number, currentQuiz.questions[number].type)} value={3} style={{ height: '75%', width: '30%', backgroundColor: '#0d1117', borderRadius: '10px', fontSize: '0.75vw', wordWrap: 'break-word', paddingLeft: '4px', paddingRight: '4px', overflow: 'hidden' }}>{currentQuiz.questions[number].answer.selectAnswers[3].explain}</button>
-								</div>
+							<div className='fill__choice'>
+								{currentQuiz.questions[number].answer.selectAnswers.map((answer, index) => (
+									<button key={index} onClick={(e) => handleChangeUserAnswers(e, number, currentQuiz.questions[number].type)} value={index} className={currentQuiz.questions[number].type == 'multiple-choice' ? isMultipleSelect(index) ? 'fill__choice__selected' : 'fill__choice__unselect' : userAnswers[number] == index ? 'fill__choice__selected' : 'fill__choice__unselect'}>{answer.explain}</button>
+								))}
 							</div>
 						) : (
 							<div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
@@ -174,9 +168,9 @@ export default function TakeQuiz() {
 						}
 					</div>
 
-					<button className="bg-[#238636] rounded py-2 mt-3" onClick={handleSubmit}>
+					{/* <button className="bg-[#238636] rounded py-2 mt-3" onClick={handleSubmit}>
 						ส่ง
-					</button>
+					</button> */}
 				</div>
 			)
 			}
