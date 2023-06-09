@@ -694,8 +694,10 @@ const CreateQuiz = () => {
 		let data = { ...quiz, questions: newQuestionList }
 		let arrs = []
 
+		// eslint-disable-next-line
 		data.questions.map((quest, index) => {
-			if (quest.type != "") {
+
+			if (quest.type !== "") {
 				arrs.push(quest)
 			}
 		})
@@ -731,10 +733,12 @@ const CreateQuiz = () => {
 		}
 
 		handleChangeAnswer()
+		// eslint-disable-next-line
 	}, [selectedFillBlankChoice, selectedNormalChoices])
 
 	useEffect(() => {
 		setQuiz({ ...quiz, questions: questionList })
+		// eslint-disable-next-line
 	}, [questionList])
 
 	return (

@@ -1,4 +1,3 @@
-
 :root {
 	--web-background-color: #010409;
 	--font-color: #C9D1D9;
@@ -38,9 +37,15 @@
 	font-size: 13px;
 }
 
+.question {
+	position: absolute;
+	top: 6.425%;
+	left: 2.15%;
+}
+
 .select__question {
 	position: absolute;
-	top: 9.425%;
+	top: 11.425%;
 	left: 2.15%;
 	border-radius: 3px;
 	display: flex;
