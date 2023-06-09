@@ -46,7 +46,9 @@ export default function Quiz() {
 				className="my-6"
 			></img>
 			<h5>Category: {quiz.category}</h5>
-			<h5>Created By: {quiz.user.fullname}</h5>
+			<div>
+				Created By: {quiz.user.fullname}
+			</div>
 			<button
 				onClick={() => navigateToTakeQuiz(quiz)}
 				className="px-5 py-3 bg-[#238636] rounded mt-3 hover:scale-[1.05] duration-200"
