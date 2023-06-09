@@ -28,6 +28,11 @@ export default function TakeQuiz() {
 
 		if (type === 'single-choice') {
 			const newUserAnswers = [...userAnswers]
+			if (newUserAnswers[index] == value) {
+				newUserAnswers.splice(index, 1)
+				setUserAnswers(newUserAnswers)
+				return
+			}
 			newUserAnswers[index] = +value
 			setUserAnswers(newUserAnswers)
 		} else if (type === 'fill-choice') {
@@ -54,6 +59,10 @@ export default function TakeQuiz() {
 		}
 	}
 
+	function changeQuestion(number) {
+		setNumber(number)
+	}
+
 	async function handleSubmit() {
 		console.log('userAnswers : ' + userAnswers)
 		try {
@@ -71,6 +80,13 @@ export default function TakeQuiz() {
 
 	}
 
+	function isMultipleSelect(choiceId) {
+		if(!userAnswers[number]) return false
+		for(const answerId of userAnswers[number]){
+			if (answerId === choiceId) return true
+		}
+		return false
+	}
 
 	function onLeavingPage(isActive, onConfirm) {
 		onConfirm(isActive)
