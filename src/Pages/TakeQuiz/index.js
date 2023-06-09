@@ -93,10 +93,18 @@ export default function TakeQuiz() {
 		dispatch(setCurrentQuiz(null))
 	}
 
+	function getScoreOfQuiz(){
+		let score = 0
+		for (const question of currentQuiz.questions){
+			score += question.points
+		}
+		return score
+	}
+
 	if (!currentQuiz) return null
 
-	console.log(JSON.stringify(userAnswers))
-	console.log(JSON.stringify(currentQuiz))
+	// console.log(JSON.stringify(userAnswers))
+	// console.log(JSON.stringify(currentQuiz))
 
 	return (
 
@@ -120,7 +128,7 @@ export default function TakeQuiz() {
 				<div className="w-[600px] bg-[#0d1117] mt-20 mx-auto flex flex-col items-center py-12 rounded">
 					<h4>ระบบได้ทำการตรวจคะเเนนข้อสอบของท่านเรียบร้อยเเล้ว</h4>
 					<BsCheckCircle className="text-[100px] my-12" />
-					<h1>{score} / {currentQuiz.questions.length}</h1>
+					<h1>{score} / { getScoreOfQuiz() }</h1>
 					<button onClick={() => navigate('/Home')} className="bg-[#171b21] px-3 py-2 rounded shadow mt-5">
 						กลับสู่หน้าหลัก
 					</button>
