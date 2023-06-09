@@ -89,8 +89,8 @@ const Home = () => {
 						)}
 					</div>
 					<div className="profile-desc-container">
-						<h3>{user.authUser.fullname}</h3>
-						<p>{user.authUser.status}</p>
+						<p className='profile__name'>{user.authUser.fullname}</p>
+						<p className='under__description'>{user.authUser.status}</p>
 						<button onClick={() => handleClickNavigate('/EditUserProfile')}>Edit profile</button>
 						<button onClick={handleShow}>Edit Status</button>
 					</div>
