@@ -1,18 +1,100 @@
+
+:root {
+	--web-background-color: #010409;
+	--font-color: #C9D1D9;
+	--border-line: #585E65;
+	--normal-button-color: #161B22;
+	--modal-background-color: #0d1117;
+	--success-button-color: #238636;
+	--select-button-color: #238636;
+}
+
+
 .App {
 	margin: 0;
 	padding: 0;
 	color: white;
 	/* overflow: hidden; */
 	min-height: 100vh;
-	background-color: #010409;
+	background-color: var(--web-background-color);
 }
 
 .modal-content {
-	background-color: #0d1117;
+	background-color: var(--modal-background-color);
 }
 
 .navbar button {
 	border: none;
-	background-color: #161b22;
+	background-color: var(--normal-button-color);
 	color: white;
+}
+
+
+.profile__name {
+	font-size: 17px;
+}
+
+.under__description {
+	font-size: 13px;
+}
+
+.select__question {
+	position: absolute;
+	top: 9.425%;
+	left: 2.15%;
+	border-radius: 3px;
+	display: flex;
+	flex-wrap: wrap;
+	border: solid var(--border-line) 1px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+}
+
+
+.select__question__button {
+	background-color: var(--normal-button-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 3px;
+	margin-left: 10px;
+}
+
+.selected__question__button {
+	transition: .3s;
+	background-color: var(--select-button-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 3px;
+	margin-left: 10px;
+}
+
+.fill__choice {
+	width: 100%;
+	display: grid;
+	grid-template-columns: auto auto;
+	column-gap: 10px;
+	row-gap: 10px;
+}
+
+.fill__choice button {
+	font-size: 16px;
+	border-radius: 3px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	transition: .3s;
+}
+
+.fill__choice__selected {
+	background-color: var(--select-button-color);
+}
+
+.fill__choice__unselect {
+	background: var(--normal-button-color);
 }
