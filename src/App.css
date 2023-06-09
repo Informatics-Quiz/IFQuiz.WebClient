@@ -2,7 +2,7 @@
 	margin: 0;
 	padding: 0;
 	color: white;
-	overflow: hidden;
+	/* overflow: hidden; */
 	min-height: 100vh;
 	background-color: #010409;
 }

@@ -25,8 +25,7 @@ const CreateQuiz = () => {
 				correctAnswer: 0,
 				selectAnswers: [],
 			},
-		},
-		{
+		}, {
 			type: '',
 			timer: 0,
 			points: 0,
@@ -38,8 +37,7 @@ const CreateQuiz = () => {
 				correctAnswer: 0,
 				selectAnswers: [],
 			},
-		},
-		{
+		}, {
 			type: '',
 			timer: 0,
 			points: 0,
@@ -51,7 +49,571 @@ const CreateQuiz = () => {
 				correctAnswer: 0,
 				selectAnswers: [],
 			},
-		},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}, {
+			type: '',
+			timer: 0,
+			points: 0,
+			explanation: {
+				explain: '',
+				imageUrl: '',
+			},
+			answer: {
+				correctAnswer: 0,
+				selectAnswers: [],
+			},
+		}
 	])
 
 	const [quiz, setQuiz] = useState({
@@ -129,7 +691,16 @@ const CreateQuiz = () => {
 			return { ...obj, answer: { ...rest, selectAnswers: newSelectAnswers } }
 		})
 
-		const data = { ...quiz, questions: newQuestionList }
+		let data = { ...quiz, questions: newQuestionList }
+		let arrs = []
+
+		data.questions.map((quest, index) => {
+			if (quest.type != "") {
+				arrs.push(quest)
+			}
+		})
+
+		data.questions = arrs
 		console.log(JSON.stringify(data))
 
 		const res = await uploadQuiz(user.token, data)
@@ -153,8 +724,8 @@ const CreateQuiz = () => {
 					questionType === 'single-choice'
 						? selectedNormalChoices.findIndex((choice) => choice.checked)
 						: selectedNormalChoices
-								.filter((choice) => choice.checked)
-								.map((choice) => selectedNormalChoices.indexOf(choice))
+							.filter((choice) => choice.checked)
+							.map((choice) => selectedNormalChoices.indexOf(choice))
 			}
 			setQuestionList(newQuestionList)
 		}
@@ -209,7 +780,7 @@ const CreateQuiz = () => {
 							setSelectedQuestion(index)
 						}}
 					>
-						{[...Array(3)].map((_, i) => (
+						{[...Array(50)].map((_, i) => (
 							<option className="bg-[#161B22]" value={i} key={i}>
 								Question {i + 1}
 							</option>

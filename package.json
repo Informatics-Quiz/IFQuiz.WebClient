@@ -33,7 +33,7 @@
     "react-router": "6.4.1",
     "react-router-dom": "6.4.1",
     "react-router-prompt": "0.3.1-beta",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "use-history": "^1.4.1",
