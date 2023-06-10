@@ -36,7 +36,7 @@ export default function Quiz() {
 	return (
 		<div className="p-6 w-[600px] mx-auto text-center">
 			<h2>
-				{quiz.name} ({quiz.questions.length} questions)
+				{quiz.name} ({quiz.questions.length} Tasks)
 			</h2>
 			<h5>{quiz.description}</h5>
 			<img
