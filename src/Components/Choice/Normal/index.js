@@ -1,6 +1,10 @@
 import { BsImage, BsTrashFill, BsPlus } from 'react-icons/bs'
 
-export default function NormalChoice({ choiceType, selectedChoices, setSelectedChoices }) {
+export default function NormalChoice({
+	choiceType,
+	selectedChoices,
+	setSelectedChoices,
+}) {
 	function handleClickChecked(index) {
 		const newSelectedChoices = [...selectedChoices]
 		newSelectedChoices[index].checked = !newSelectedChoices[index].checked
@@ -27,23 +31,31 @@ export default function NormalChoice({ choiceType, selectedChoices, setSelectedC
 		setSelectedChoices(newSelectedChoices)
 	}
 
-	const condition = choiceType === 'single-choice' && selectedChoices.filter((choice) => choice.checked).length >= 1
-
 	return (
 		<div className="flex items-center mt-2">
-			{selectedChoices.map((choice, index) => (
-				<NormalChoiceCard
-					answer={choice.explain}
-					disabled={condition && !choice.checked}
-					checked={choice.checked}
-					handleClickChecked={() => handleClickChecked(index)}
-					handleClickRemoveChoice={() => handleClickRemoveChoice(index)}
-					handleChangeInput={(e) => handleChangeInput(e, index)}
-					key={index}
-				/>
-			))}
+			{selectedChoices &&
+				selectedChoices.map((choice, index) => {
+					const condition =
+						choiceType === 'single-choice' &&
+						selectedChoices.filter((choice) => choice.checked).length >= 1
+
+					return (
+						<NormalChoiceCard
+							answer={choice.explain}
+							disabled={condition && !choice.checked}
+							checked={choice.checked}
+							handleClickChecked={() => handleClickChecked(index)}
+							handleClickRemoveChoice={() => handleClickRemoveChoice(index)}
+							handleChangeInput={(e) => handleChangeInput(e, index)}
+							key={index}
+						/>
+					)
+				})}
 			<div className="ml-4">
-				<div className="bg-[#161B22] mr-10 p-1. 5 rounded cursor-pointer" onClick={handleClickAddChoice}>
+				<div
+					className="bg-[#161B22] mr-10 p-1. 5 rounded cursor-pointer"
+					onClick={handleClickAddChoice}
+				>
 					<BsPlus className="text-3xl" />
 				</div>
 			</div>
@@ -74,7 +86,10 @@ function NormalChoiceCard({
 						onChange={handleClickChecked}
 					/>
 				</div>
-				<div className="p-2 bg-[#161B22] rounded cursor-pointer" onClick={handleClickRemoveChoice}>
+				<div
+					className="p-2 bg-[#161B22] rounded cursor-pointer"
+					onClick={handleClickRemoveChoice}
+				>
 					<BsTrashFill />
 				</div>
 			</div>
