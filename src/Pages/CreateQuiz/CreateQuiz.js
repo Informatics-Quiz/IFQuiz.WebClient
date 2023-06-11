@@ -41,6 +41,7 @@ const CreateQuiz = () => {
 			},
 		})
 		setQuestionList(newQuestion)
+		setSelectedQuestion(newQuestion.length -1)
 	}
 
 	function removeCurrentQuestion(){
@@ -224,7 +225,7 @@ const CreateQuiz = () => {
 					>
 						{questionList.map((_, i) => (
 							<option value={i} key={i}>
-								{questionList[i].explanation.explain == '' ? 'กำลังแก้ไข...' : questionList[i].explanation.explain}
+								{questionList[i].explanation.explain == '' ? 'New Question' : questionList[i].explanation.explain}
 							</option>
 						))}
 					</select>
