@@ -769,7 +769,9 @@ const CreateQuiz = () => {
 					</button>
 				</div>
 			</div>
-
+			<button className='add__question__button' onClick={addMoreQuestion}>
+				Add more question
+			</button>
 			<div className="flex">
 				<div className="flex flex-col p-3">
 					<div className="flex flex-col items-center bg-[#161B22] px-4 py-3 rounded">
