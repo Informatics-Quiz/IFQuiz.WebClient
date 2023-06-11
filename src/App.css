@@ -6,6 +6,7 @@
 	--modal-background-color: #0d1117;
 	--success-button-color: #238636;
 	--select-button-color: #238636;
+	--error-color: #EA4949; 
 }
 
 
@@ -104,22 +105,39 @@
 	background: var(--normal-button-color);
 }
 
-.add__question__button {
+.add__question__button, .remove__question__button {
+	outline: 0;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 8px;
 	padding-right: 8px;
-
 	border-radius: 3px;
 	background: var(--normal-button-color);
 	margin-top: 15px;
 	transition: .2s;
 }
-.add__question__button:hover {
+.add__question__button:hover, .remove__question__button:hover{
 	opacity: .8;
 	transform: scale(99%);
 }
 
-.add__question__button:active{
+.add__question__button:active, .remove__question__button:active{
 	transform: scale(101%);
+}
+
+.remove__question__button {
+	background: var(--error-color);
+}
+
+.selection__question__creating {
+	margin-top: 5px;
+	padding-left: 10px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	outline: 0;
+	border-radius: 6px;
+	border: 1px solid #c9d1d938;
+	width: 150px;
+	background: var(--web-background-color);
+	text-overflow: ellipsis; 
 }
