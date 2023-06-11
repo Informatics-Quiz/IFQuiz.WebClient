@@ -97,7 +97,7 @@ const CreateQuiz = () => {
 
 	function handleChangeQuiz(e) {
 		const { name, value } = e.target
-				setQuiz({ ...quiz, [name]: value })
+		setQuiz({ ...quiz, [name]: value })
 	}
 
 	async function handleSubmit() {
@@ -193,13 +193,14 @@ const CreateQuiz = () => {
 							setSelectedQuestion(index)
 						}}
 					>
-						{[...Array(50)].map((_, i) => (
+						{questionList.map((_, i) => (
 							<option className="bg-[#161B22]" value={i} key={i}>
 								Question {i + 1}
 							</option>
 						))}
 					</select>
 				</div>
+				
 
 				{quiz.questions[selectedQuestion] && (
 					<div className="flex-1 flex flex-col py-3 pr-3">
