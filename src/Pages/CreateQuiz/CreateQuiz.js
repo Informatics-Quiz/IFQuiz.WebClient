@@ -52,6 +52,7 @@ const CreateQuiz = () => {
 		name: '',
 		description: 'something like this in the future',
 		category: 'Mathematics',
+		hideCorrectAnswer: false,
 		questions: questionList,
 	})
 
@@ -102,7 +103,14 @@ const CreateQuiz = () => {
 
 	function handleChangeQuiz(e) {
 		const { name, value } = e.target
-		setQuiz({ ...quiz, [name]: value })
+		switch (name) {
+			case 'hideCorrectAnswer':
+				setQuiz({ ...quiz, [name]: !quiz.hideCorrectAnswer })
+				break
+			default:
+				setQuiz({ ...quiz, [name]: value })
+				break
+		}
 	}
 
 	async function handleSubmit() {
@@ -176,6 +184,17 @@ const CreateQuiz = () => {
 					onChange={handleChangeQuiz}
 				/>
 				<div className="flex items-center">
+					<label>Hide Correct Answer</label>
+					<div className="form-check form-switch mb-0 mx-2">
+						<input
+							name="hideCorrectAnswer"
+							className="form-check-input bg-[#238636]"
+							type="checkbox"
+							value={quiz.hideCorrectAnswer}
+							checked={quiz.hideCorrectAnswer}
+							onChange={handleChangeQuiz}
+						/>
+					</div>
 					<button onClick={handleSubmit} className="px-8 py-2 rounded bg-[#238636] text-[#C9D1D9] ml-6">
 						SAVE
 					</button>
