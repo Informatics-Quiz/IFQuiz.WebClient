@@ -254,7 +254,7 @@ const CreateQuiz = () => {
 										onChange={handleClickChoiceType}
 									>
 										<option value={''} disabled>
-											Choice
+											Select Choice
 										</option>
 										<option value={'single-choice'}>Single Choice</option>
 										<option value={'multiple-choice'}>Multiple Choice</option>
