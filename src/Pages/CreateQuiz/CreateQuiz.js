@@ -11,11 +11,9 @@ const CreateQuiz = () => {
 	const user = useSelector((state) => state.user.authUser)
 	const navigate = useNavigate()
 	const [selectedQuestion, setSelectedQuestion] = useState(0)
-
 	const [questionList, setQuestionList] = useState([
 		{
 			type: '',
-			timer: 0,
 			points: 0,
 			explanation: {
 				explain: '',
@@ -32,7 +30,6 @@ const CreateQuiz = () => {
 		const newQuestion = [...questionList]
 		newQuestion.push({
 			type: '',
-			timer: 0,
 			points: 0,
 			explanation: {
 				explain: '',
@@ -45,13 +42,11 @@ const CreateQuiz = () => {
 		})
 		setQuestionList(newQuestion)
 	}
-	])
 
 	const [quiz, setQuiz] = useState({
 		name: '',
 		description: 'something like this in the future',
 		category: 'Mathematics',
-		hideCorrectAnswer: false,
 		questions: questionList,
 	})
 
@@ -102,11 +97,6 @@ const CreateQuiz = () => {
 
 	function handleChangeQuiz(e) {
 		const { name, value } = e.target
-		switch (name) {
-			case 'hideCorrectAnswer':
-				setQuiz({ ...quiz, [name]: !quiz.hideCorrectAnswer })
-				break
-			default:
 				setQuiz({ ...quiz, [name]: value })
 	}
 
@@ -182,17 +172,6 @@ const CreateQuiz = () => {
 					onChange={handleChangeQuiz}
 				/>
 				<div className="flex items-center">
-					<label>Hide Correct Answer</label>
-					<div className="form-check form-switch mb-0 mx-2">
-						<input
-							name="hideCorrectAnswer"
-							className="form-check-input bg-[#238636]"
-							type="checkbox"
-							value={quiz.hideCorrectAnswer}
-							checked={quiz.hideCorrectAnswer}
-							onChange={handleChangeQuiz}
-						/>
-					</div>
 					<button onClick={handleSubmit} className="px-8 py-2 rounded bg-[#238636] text-[#C9D1D9] ml-6">
 						SAVE
 					</button>
@@ -229,19 +208,6 @@ const CreateQuiz = () => {
 							<div className="flex justify-between p-2">
 								<BsEyeFill className="text-xl text-[#4A5059]" />
 								<div className="flex items-center">
-									<select
-										className="bg-[#161B22] border p-1.5 rounded text-slate-300"
-										name="timer"
-										value={quiz.questions[selectedQuestion].timer}
-										onChange={handleChangeInput}
-									>
-										<option value={0} disabled>
-											Timer
-										</option>
-										<option value={30}>30 sec</option>
-										<option value={60}>1 min</option>
-										<option value={120}>2 min</option>
-									</select>
 									<select
 										className="bg-[#161B22] border p-1.5 rounded text-slate-300 mx-3"
 										name="points"
