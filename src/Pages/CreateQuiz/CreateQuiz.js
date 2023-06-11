@@ -103,8 +103,6 @@ const CreateQuiz = () => {
 				break
 			default:
 				setQuiz({ ...quiz, [name]: value })
-				break
-		}
 	}
 
 	async function handleSubmit() {
