@@ -43,6 +43,30 @@ const CreateQuiz = () => {
 		setQuestionList(newQuestion)
 	}
 
+	function removeCurrentQuestion(){
+		const newQuestion = [...questionList]
+		console.log("selectedQuestion:", selectedQuestion)
+		newQuestion.splice(selectedQuestion, 1)
+		if(newQuestion.length <= 0){
+			newQuestion.push({
+				type: '',
+				points: 0,
+				explanation: {
+					explain: '',
+					imageUrl: '',
+				},
+				answer: {
+					correctAnswer: 0,
+					selectAnswers: [],
+				},
+			})
+		}
+		setQuestionList(newQuestion)
+		setSelectedQuestion(selectedQuestion-1 < 0 ? 0 : selectedQuestion-1)
+		console.log("length:", questionList.length)
+
+	}
+
 	const [quiz, setQuiz] = useState({
 		name: '',
 		description: 'something like this in the future',
@@ -177,7 +201,11 @@ const CreateQuiz = () => {
 				</div>
 			</div>
 			<button className='add__question__button' onClick={addMoreQuestion}>
-				Add more question
+				ADD QUESTION
+			</button>
+
+			<button className='remove__question__button' onClick={removeCurrentQuestion}>
+				REMOVE ข้อที่กำลังแก้ไขอยู่
 			</button>
 			<div className="flex">
 				<div className="flex flex-col p-3">
@@ -186,16 +214,17 @@ const CreateQuiz = () => {
 						<span>Image</span>
 					</div>
 					<select
-						defaultValue={0}
-						className="border p-1.5 rounded mt-3 text-slate-300 bg-[#010409]"
+						defaultValue={selectedQuestion}
+						className="selection__question__creating"
 						onChange={(e) => {
 							let index = parseInt(e.target.value)
 							setSelectedQuestion(index)
 						}}
+						value={selectedQuestion}
 					>
 						{questionList.map((_, i) => (
-							<option className="bg-[#161B22]" value={i} key={i}>
-								Question {i + 1}
+							<option value={i} key={i}>
+								{questionList[i].explanation.explain == '' ? 'กำลังแก้ไข...' : questionList[i].explanation.explain}
 							</option>
 						))}
 					</select>
