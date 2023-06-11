@@ -122,7 +122,6 @@ const CreateQuiz = () => {
 		})
 
 		data.questions = arrs
-		console.log(JSON.stringify(data))
 
 		const res = await uploadQuiz(user.token, data)
 
