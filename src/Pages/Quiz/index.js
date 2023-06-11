@@ -55,6 +55,22 @@ export default function Quiz() {
 			>
 				Take a quiz
 			</button>
+
+
+			{!quiz.hideCorrectAnswer ? (
+				<div className='not__hide__correct_answer'>
+					ข้อสอบนี้เป็นข้อสอบที่มีการเเสดงคำตอบที่ถูกต้อง
+					<br/>
+					สามารถดูคำตอบได้ในอีก <span className='timer__show__correct_answer'>10 ชั่วโมง 20 นาที 00 วินาที</span> 
+				</div>
+			) : (
+				<div className='hide__correct_answer'>
+					ข่อสอบนี้เป็นข้อสอบที่ไม่มีการเเสดงคำตอบที่ถูกต้อง
+					<br/>
+					<span className='timer__not__show__correct_answer'>ไม่สามารถดูคำตอบที่ถูกต้องได้</span> 
+				</div>
+			)}
+			
 		</div>
 	)
 }

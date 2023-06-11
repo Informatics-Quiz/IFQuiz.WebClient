@@ -11,35 +11,26 @@ const CreateQuiz = () => {
 	const user = useSelector((state) => state.user.authUser)
 	const navigate = useNavigate()
 	const [selectedQuestion, setSelectedQuestion] = useState(0)
+
+	const emptyQuestion = {
+		type: '',
+		points: 1,
+		explanation: {
+			explain: '',
+			imageUrl: '',
+		},
+		answer: {
+			correctAnswer: 0,
+			selectAnswers: [],
+		},
+	}
 	const [questionList, setQuestionList] = useState([
-		{
-			type: '',
-			points: 0,
-			explanation: {
-				explain: '',
-				imageUrl: '',
-			},
-			answer: {
-				correctAnswer: 0,
-				selectAnswers: [],
-			},
-		}
+		emptyQuestion
 	])
 
 	function addMoreQuestion(){
 		const newQuestion = [...questionList]
-		newQuestion.push({
-			type: '',
-			points: 0,
-			explanation: {
-				explain: '',
-				imageUrl: '',
-			},
-			answer: {
-				correctAnswer: 0,
-				selectAnswers: [],
-			},
-		})
+		newQuestion.push(emptyQuestion)
 		setQuestionList(newQuestion)
 		setSelectedQuestion(newQuestion.length -1)
 	}
@@ -49,18 +40,7 @@ const CreateQuiz = () => {
 		console.log("selectedQuestion:", selectedQuestion)
 		newQuestion.splice(selectedQuestion, 1)
 		if(newQuestion.length <= 0){
-			newQuestion.push({
-				type: '',
-				points: 0,
-				explanation: {
-					explain: '',
-					imageUrl: '',
-				},
-				answer: {
-					correctAnswer: 0,
-					selectAnswers: [],
-				},
-			})
+			newQuestion.push(emptyQuestion)
 		}
 		setQuestionList(newQuestion)
 		setSelectedQuestion(selectedQuestion-1 < 0 ? 0 : selectedQuestion-1)
@@ -244,9 +224,6 @@ const CreateQuiz = () => {
 										value={quiz.questions[selectedQuestion].points}
 										onChange={handleChangeInput}
 									>
-										<option value={0} disabled>
-											Point
-										</option>
 										<option value={1}>1 Point</option>
 										<option value={3}>3 Points</option>
 										<option value={10}>10 Points</option>
