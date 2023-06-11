@@ -25,7 +25,12 @@ const CreateQuiz = () => {
 				correctAnswer: 0,
 				selectAnswers: [],
 			},
-		}, {
+		}
+	])
+
+	function addMoreQuestion(){
+		const newQuestion = [...questionList]
+		newQuestion.push({
 			type: '',
 			timer: 0,
 			points: 0,
