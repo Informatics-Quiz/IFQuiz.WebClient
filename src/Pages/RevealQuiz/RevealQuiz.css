@@ -151,8 +151,9 @@ body {
 .back__home__btn {
     position: fixed;
     display: flex;
-    bottom: 20px;
-    left: 30px;
+    bottom: 10px;
+    text-align: center;
+    right: 40px;
     transition: .3s;
 }
 .back__home__btn:hover {
@@ -164,8 +165,8 @@ body {
     opacity: 1;
 }
 .back__home__btn svg {
-    margin-right: 15px;
-    margin-top: 10px;
+    margin-right: 10px;
+    margin-top: 8px;
 }
 
 .back__home__btn p {
