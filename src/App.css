@@ -103,3 +103,23 @@
 .fill__choice__unselect {
 	background: var(--normal-button-color);
 }
+
+.add__question__button {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 8px;
+	padding-right: 8px;
+
+	border-radius: 3px;
+	background: var(--normal-button-color);
+	margin-top: 15px;
+	transition: .2s;
+}
+.add__question__button:hover {
+	opacity: .8;
+	transform: scale(99%);
+}
+
+.add__question__button:active{
+	transform: scale(101%);
+}
