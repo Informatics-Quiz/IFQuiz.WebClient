@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+
 :root {
-	--web-background-color: #010409;
-	--font-color: #C9D1D9;
+	--web-background-color: radial-gradient(50% 50% at 50% 50%, #1A2327 0%, #0F0F0F 100%);
+	--font-color: #ffffff;
 	--border-line: #585E65;
 	--normal-button-color: #161B22;
 	--modal-background-color: #0d1117;
@@ -13,10 +16,12 @@
 .App {
 	margin: 0;
 	padding: 0;
-	color: white;
+	color: #ffffff;
 	/* overflow: hidden; */
+    font-family: 'Poppins', 'Prompt', sans-serif;
+	font-weight: 300;
 	min-height: 100vh;
-	background-color: var(--web-background-color);
+	background: var(--web-background-color);
 }
 
 .modal-content {
