@@ -82,7 +82,7 @@ const CreateQuiz = () => {
 
 	function handleChangeInput(e) {
 		const { name, value } = e.target
-		const basicsData = ['type', 'timer', 'points']
+		const basicsData = ['type', 'points']
 		const newQuestionList = [...questionList]
 		const index = selectedQuestion
 		if (basicsData.includes(name)) {
