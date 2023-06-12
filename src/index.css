@@ -2,25 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-	font-family: CSChatThaiUI;
-	src: url('../public/CSChatThaiUI-Light.otf'), we;
-}
-
-@font-face {
-	font-family: "CSChatThaiUI";
-	src: url('../public/CSChatThaiUI-Light.otf') format("truetype");
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: "CSChatThaiUI";
-	src: url('../public/CSChatThaiUI-Bold.otf') format("truetype");
-	font-weight: bold;
-	font-style: normal;
-}
-
 
 body {
 	margin: 0;
@@ -29,7 +10,6 @@ body {
 }
 
 * {
-	font-family: "CSChatThaiUI";
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;

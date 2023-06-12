@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+
 :root {
-	--web-background-color: #010409;
-	--font-color: #C9D1D9;
+	--web-background-color: radial-gradient(50% 50% at 50% 50%, #1A2327 0%, #0F0F0F 100%);
+	--font-color: #ffffff;
 	--border-line: #585E65;
 	--normal-button-color: #161B22;
 	--modal-background-color: #0d1117;
@@ -13,15 +16,40 @@
 .App {
 	margin: 0;
 	padding: 0;
-	color: white;
+	color: #ffffff;
 	/* overflow: hidden; */
+    font-family: 'Poppins', 'Prompt', sans-serif;
+	font-weight: 300;
 	min-height: 100vh;
-	background-color: var(--web-background-color);
+	background: var(--web-background-color);
 }
 
 .modal-content {
 	background-color: var(--modal-background-color);
 }
+
+
+.login__btn, .signup__btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 1vh;
+	margin-right: 2vw;
+	transition: .25s;
+}
+.login__btn svg, .signup__btn svg {
+	margin-right: 8px;
+}
+.login__btn:hover, 
+.signup__btn:hover {
+	opacity: .8;
+	transform: scale(1.1);
+}
+.login__btn:active,
+.signup__btn:active {
+	transform: scale(0.95);
+}
+
 
 .navbar button {
 	border: none;

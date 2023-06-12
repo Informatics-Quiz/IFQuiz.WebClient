@@ -8,6 +8,7 @@ import Signup from './Pages/Signup/Signup'
 import Register from './Pages/Register/Register'
 import LoginEmail from './Pages/LoginEmail/LoginEmail'
 import CreateQuiz from './Pages/CreateQuiz/CreateQuiz'
+import RevealQuiz from './Pages/RevealQuiz/RevealQuiz.js'
 import Home from './Pages/Home/Home'
 import EditUserProfile from './Pages/EditUserProfile/EditUserProfile'
 
@@ -21,7 +22,6 @@ function App() {
 
 	return (
 		<div className="App">
-			<Navbar />
 			<Routes>
 				<Route path="/" element={<Welcome />} />
 				<Route path="/Login" element={<Login />} />
@@ -29,6 +29,7 @@ function App() {
 				<Route path="/Register" element={<Register />} />
 				<Route path="/LoginEmail" element={<LoginEmail />} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
+				<Route path="RevealQuiz" element={<RevealQuiz />} />
 				<Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/Login" />} />
 				<Route path="/EditUserProfile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="Login" />} />
 				<Route path="/Quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="Login" />} />
