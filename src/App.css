@@ -112,7 +112,7 @@
 	padding-left: 8px;
 	padding-right: 8px;
 	border-radius: 3px;
-	background: var(--normal-button-color);
+	background: var(--success-button-color);
 	margin-top: 15px;
 	transition: .2s;
 }

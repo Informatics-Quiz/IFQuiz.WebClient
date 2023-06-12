@@ -61,6 +61,7 @@ export default function TakeQuiz() {
 
   function isLastQuestion() {
     console.log(number);
+	// eslint-disable-next-line
     return number == currentQuiz.questions.length - 1;
   }
 
@@ -85,7 +86,9 @@ export default function TakeQuiz() {
 
   function getChoiceTypeLabel(type) {
     console.log(type);
+	// eslint-disable-next-line
     if (type == "multiple-choice") return "Multiple Choice";
+	// eslint-disable-next-line
     if (type == "single-choice") return "Single Choice";
     return "Fill Choice";
   }
@@ -162,6 +165,7 @@ export default function TakeQuiz() {
                   onClick={(e) => changeQuestion(e.target.value)}
                   value={index}
                   className={
+					        // eslint-disable-next-line
                     index == number
                       ? "selected__question__button"
                       : "select__question__button"

@@ -28,22 +28,22 @@ const CreateQuiz = () => {
 		emptyQuestion
 	])
 
-	function addMoreQuestion(){
+	function addMoreQuestion() {
 		const newQuestion = [...questionList]
 		newQuestion.push(emptyQuestion)
 		setQuestionList(newQuestion)
-		setSelectedQuestion(newQuestion.length -1)
+		setSelectedQuestion(newQuestion.length - 1)
 	}
 
-	function removeCurrentQuestion(){
+	function removeCurrentQuestion() {
 		const newQuestion = [...questionList]
 		console.log("selectedQuestion:", selectedQuestion)
 		newQuestion.splice(selectedQuestion, 1)
-		if(newQuestion.length <= 0){
+		if (newQuestion.length <= 0) {
 			newQuestion.push(emptyQuestion)
 		}
 		setQuestionList(newQuestion)
-		setSelectedQuestion(selectedQuestion-1 < 0 ? 0 : selectedQuestion-1)
+		setSelectedQuestion(selectedQuestion - 1 < 0 ? 0 : selectedQuestion - 1)
 		console.log("length:", questionList.length)
 
 	}
@@ -179,7 +179,7 @@ const CreateQuiz = () => {
 					type="text"
 					name="name"
 					placeholder="Untitled Quiz"
-					className="p-2 w-72 rounded bg-[#161B22]"
+					className="p-2 w-72 rounded bg-[#161B22] ml-1"
 					value={quiz.name}
 					onChange={handleChangeQuiz}
 				/>
@@ -200,20 +200,17 @@ const CreateQuiz = () => {
 					</button>
 				</div>
 			</div>
-			<button className='add__question__button' onClick={addMoreQuestion}>
-				ADD QUESTION
-			</button>
 
-			<button className='remove__question__button' onClick={removeCurrentQuestion}>
-				REMOVE ข้อที่กำลังแก้ไขอยู่
-			</button>
+
+
 			<div className="flex">
-				<div className="flex flex-col p-3">
-					<div className="flex flex-col items-center bg-[#161B22] px-4 py-3 rounded">
+				<div className="flex flex-col p-4">
+					<div className="flex flex-col items-center bg-[#161B22] px-4 py-4 rounded mb-3">
 						<BsImage className="text-7xl" />
 						<span>Image</span>
 					</div>
 					<select
+						style={{ alignSelf: 'center' }}
 						defaultValue={selectedQuestion}
 						className="selection__question__creating"
 						onChange={(e) => {
@@ -224,16 +221,22 @@ const CreateQuiz = () => {
 					>
 						{questionList.map((_, i) => (
 							<option value={i} key={i}>
-								{questionList[i].explanation.explain == '' ? 'New Question' : questionList[i].explanation.explain}
+								{questionList[i].explanation.explain == '' ? `${i + 1} : New Question` : `${i + 1} : ${questionList[i].explanation.explain}`}
 							</option>
 						))}
 					</select>
+					<button className='add__question__button' onClick={addMoreQuestion}>
+						ADD QUESTION
+					</button>
+					<button className='remove__question__button' onClick={removeCurrentQuestion}>
+						REMOVE QUESTION
+					</button>
 				</div>
-				
+
 
 				{quiz.questions[selectedQuestion] && (
-					<div className="flex-1 flex flex-col py-3 pr-3">
-						<div className="h-[450px] bg-[#161B22] rounded flex-col items-center justify-center relative">
+					<div className="flex-1  flex flex-col py-3 pr-3">
+						<div className="h-[385px] bg-[#161B22] rounded flex-col items-center justify-center relative">
 							<div className="flex justify-between p-2">
 								<BsEyeFill className="text-xl text-[#4A5059]" />
 								<div className="flex items-center">

@@ -93,7 +93,7 @@ function NormalChoiceCard({
 					<BsTrashFill />
 				</div>
 			</div>
-			<div className="w-[320px] h-[320px] bg-[#161B22] rounded-xl flex items-center justify-center">
+			<div className="w-[255px] h-[255px] bg-[#161B22] rounded-xl flex items-center justify-center">
 				<input
 					type="text"
 					value={answer}
