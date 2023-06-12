@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BsImage, BsEyeFill } from 'react-icons/bs'
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import './CreateQuiz.css'
 import FillBlankChoice from '../../Components/Choice/FillBlank'
 import NormalChoice from '../../Components/Choice/Normal'
@@ -290,6 +291,10 @@ const CreateQuiz = () => {
 								/>
 							)
 						)}
+						<footer style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between' }}>
+							<button ><AiOutlineArrowLeft style={{ width: '100px', height: '100px' }} /></button>
+							<button ><AiOutlineArrowRight style={{ width: '100px', height: '100px' }} /></button>
+						</footer>
 					</div>
 				)}
 			</div>
