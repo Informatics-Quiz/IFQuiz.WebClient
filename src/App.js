@@ -1,7 +1,6 @@
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import Navbar from './Components/Navbar'
 import Welcome from './Pages/Welcome/Welcome'
 import Login from './Pages/Login/Login'
 import Signup from './Pages/Signup/Signup'
@@ -24,13 +23,13 @@ function App() {
 		<div className="App">
 			<Routes>
 				<Route path="/" element={<Welcome />} />
-				<Route path="/Login" element={<Login />} />
-				<Route path="/Signup" element={<Signup />} />
-				<Route path="/Register" element={<Register />} />
-				<Route path="/LoginEmail" element={<LoginEmail />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/signup" element={<Signup />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/login-email" element={<LoginEmail />} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
 				<Route path="RevealQuiz" element={<RevealQuiz />} />
-				<Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="/Login" />} />
+				<Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="login" />} />
 				<Route path="/EditUserProfile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="Login" />} />
 				<Route path="/Quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="Login" />} />
 				<Route path="/Quiz/Take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="Login" />} />

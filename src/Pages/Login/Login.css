@@ -1,113 +1,34 @@
-.ContainerLogin {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: #010409;
+:root {
+    --alpha-color: #C9D1D9;
+    --button-active-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
+}
 
+.login__header {
     display: flex;
-    justify-content: center;
     align-items: center;
+    margin-bottom: 4vw;
+    transition: 0.8s;
 }
 
-.content {
-    width: 60vw;
-    height: 70vh;
-    
-    background-color: #0D1117;
-
-    position: relative;
-
-    border-radius: 10px;
-}
-
-@media screen and (max-width: 425px) {
-    .content {
-        width: 80vw;
-        height: 60vh;
-        background-color: #0D1117;
-    }
-}
-
-.section-1 button p {
-    margin: 0;
-    padding: 0;
-}
-
-.section-1 {
-    width: 100%;
-    height: 90%;
-
-    padding: 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.section-1 button {
-    background-color: #238636;
-    color: white;
-    padding: 0;
-    border: none;
-    border-radius: 5px;
-
-    font-size: 15px;
+.login__header:hover {
+    transform: rotate(-2deg);
 }
 
 
-
-#text1 {
-    font-size: 25px;
+.login__header .login__image {
+    width: 4.7vw;
+    margin-right: 0.8vw;
 }
 
-
-
-#text2 {
-    font-size: 14.5px;
-    font-weight: lighter;
+.login__title {
+    font-size: 1.5vw;
 }
 
-
-.section-2 {
-    width: 100%;
-    height: 10%;
-    
-    background-color: #161A20;
-    border-radius: 0 0 10px 10px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.login__description {
+    font-size: 0.9vw;
+    color: var(--alpha-color);
 }
 
-.section-2 p {
-    padding: 0;
-    margin: 0;
-    margin-right: 5px;
-}
-
-.section-2 button {
-    margin: 0;
-    padding-left: 2px;
-    padding-right: 2px;
-    border: none;
-    color: white;
-    background-color: #434653;
-    border-radius: 3px;
-}
-
-
-
-@media screen and (min-width: 768px) {
-    .text-2 {
-        display: flex;
-        align-items: flex-end;
-        flex-direction: column;
-    }
-
-    .section-1 button {
-        padding: 2.5px;
-        font-size: 12.5px;
-    }
-
+.continue__container {
+    display: grid;
 }

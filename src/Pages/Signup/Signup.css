@@ -1,0 +1,79 @@
+:root {
+    --alpha-color: #C9D1D9;
+    --button-active-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
+}
+
+.signup__container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    -webkit-animation: flip-2-hor-top-1 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+	        animation: flip-2-hor-top-1 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+
+
+.signup__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4vw;
+    transition: 0.8s;
+}
+
+.signup__header:hover {
+    transform: rotate(2deg);
+}
+
+
+.signup__header .signup__image {
+    width: 5vw;
+    margin-right: 0.8vw;
+}
+
+.signup__title {
+    font-size: 1.5vw;
+}
+
+.signup__description {
+    font-size: 0.9vw;
+    color: var(--alpha-color);
+}
+
+.continue__container {
+    display: grid;
+}
+
+.continue__container .signup__button {
+    display: flex;
+    font-size: 1.0vw;
+    background: var(--button-active-color);
+    color: white;
+    text-decoration: none;
+    align-items: center;
+    margin-top: 0.8vw;
+    padding: 0.1vh 0.7vw 0.1vh 0.7vw;
+    border-radius: 5px;
+    transition: .3s;
+}
+
+.continue__container .signup__button:hover {
+    opacity: 0.8;
+    transform: scale(1.03);
+}
+
+.continue__container .signup__button:active {
+    opacity: 1;
+    transform: scale(0.98);
+}
+
+.continue__container .signup__button svg {
+    margin-right: 0.8vw;
+    width: 2vw;
+    height: 2vw;
+}
+
+  

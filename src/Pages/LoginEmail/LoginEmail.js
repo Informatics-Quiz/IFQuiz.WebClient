@@ -1,6 +1,7 @@
+import './LoginEmail.css'
+import { ReactComponent as LogoSvg } from "../../Assets/svg/logo.svg"
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import './LoginEmail.css'
 import Modal from 'react-bootstrap/Modal'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../Reducers/userReducer'
@@ -35,52 +36,42 @@ const LoginEmail = () => {
 	}
 
 	return (
-		<div className="ContainerLoginEmail">
-			<div className="content">
-				<div className="section-1x">
-					<div className="row1">
-						<div className="col-sm-12">
-							<p id="text1">Continue with Email</p>
-						</div>
 
-						<div className="row1 mt-3">
-							<div className="col-sm-6 col-md-8 col-xl-5 d-flex flex-column">
-								<p>Enter email address</p>
-								<input onChange={(e) => setEmail(e.target.value)}></input>
-								<p>Enter password</p>
-								<input type="password" onChange={(e) => setPassword(e.target.value)}></input>
-								<Link
-									role="button"
-									onClick={handleClickLogin}
-									style={{
-										textDecoration: 'none',
-										color: 'white',
-										backgroundColor: '#238636',
-										display: 'flex',
-										justifyContent: 'center',
-										borderRadius: '3px',
-									}}
-								>
-									Continue
-								</Link>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div className="section-2">
-					<p>Don't have an account ?</p>
-					<Link to={'/Signup'}>
-						<button>Sign up</button>
-					</Link>
+		<div className='login__email__container'>
+			<div className="login__email__header">
+				<LogoSvg className="login__image" />
+				<div className="login__info">
+					<div className="login__title">Login to Informatics Quiz</div>
+					<div className="login__description">Go in with your account</div>
 				</div>
 			</div>
+			<div className="login__form">
+				<p>Email</p>
+				<input className='email__field' type="text" onChange={(e) => setEmail(e.target.value)}></input>
+
+				<p>Password</p>
+				<input type="password" onChange={(e) => setPassword(e.target.value)}></input>
+			</div>
+			<Link 
+				className='login__button'
+				role="button"
+				onClick={handleClickLogin}
+			>
+				Sign in to account
+			</Link>
+
+			<div className='login__footer'>
+			Thank you for participating in the Informatics Quiz! We hope you enjoyed testing your knowledge about our vibrant student community.<br/>
+ Burapha University takes pride in nurturing exceptional talent, fostering academic excellence, and cultivating a supportive environment for all students. <br/>
+Remember, learning is a lifelong journey, and we encourage you to continue exploring the diverse opportunities and experiences that await you at Burapha University. <br/>
+Best of luck in your academic pursuits and beyond!
+			</div>
+
 			<Modal show={show} onHide={handleClose}>
-				<Modal.Header style={{ color: 'white', border: '0px' }}>
-					<Modal.Title>Error Message</Modal.Title>
-					<button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleClose}></button>
+				<Modal.Header>
+					<Modal.Title>Somthing's went wrong ?</Modal.Title>
 				</Modal.Header>
-				<Modal.Body style={{ color: 'white', border: '0px' }}>{errorMessage}</Modal.Body>
-				<Modal.Footer style={{ color: 'white', border: '0px' }}></Modal.Footer>
+				<Modal.Body>{errorMessage}</Modal.Body>
 			</Modal>
 		</div>
 	)

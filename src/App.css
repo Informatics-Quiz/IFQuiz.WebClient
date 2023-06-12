@@ -24,39 +24,6 @@
 	background: var(--web-background-color);
 }
 
-.modal-content {
-	background-color: var(--modal-background-color);
-}
-
-
-.login__btn, .signup__btn {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 1vh;
-	margin-right: 2vw;
-	transition: .25s;
-}
-.login__btn svg, .signup__btn svg {
-	margin-right: 8px;
-}
-.login__btn:hover, 
-.signup__btn:hover {
-	opacity: .8;
-	transform: scale(1.1);
-}
-.login__btn:active,
-.signup__btn:active {
-	transform: scale(0.95);
-}
-
-
-.navbar button {
-	border: none;
-	background-color: var(--normal-button-color);
-	color: white;
-}
-
 
 .profile__name {
 	font-size: 17px;
@@ -187,3 +154,5 @@
 	color: white;
 	background: var(--error-color);
 }
+
+

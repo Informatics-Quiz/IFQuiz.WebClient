@@ -7,17 +7,16 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    -webkit-animation: flip-2-hor-top-1 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+    animation: flip-2-hor-top-1 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
 }
-.title__container .logo {
-    display: inline-block;
-    vertical-align: middle;
+.logo {
     margin-right: 2vw;
-    width: 7vw;
+    width: 50vw;
 }
-.title__container .title {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 6vw;
+.title {
+    font-size: 7vw;
+    margin-bottom: 10px;
 }
 .description {
     width: 70vw;
