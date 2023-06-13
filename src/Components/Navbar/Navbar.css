@@ -21,10 +21,14 @@
 }
 
 .home__nav__svg {
-	margin-top: 1px;
+	margin-top: 0.32vh;
 	width: 1.1vw;
 	height: 1.1vw;
-	margin-right: 6px;
+	margin-right: 5px;
+}
+
+.home__fixed {
+	margin-top: 0.25vh;
 }
 
 .navbar {
@@ -38,6 +42,7 @@
 	justify-content: center;
 	border: none;
 	color: white;
+	font-size: 1vw;
     transition: .3s;
 }
 

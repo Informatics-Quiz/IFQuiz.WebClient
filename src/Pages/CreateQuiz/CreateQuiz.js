@@ -138,7 +138,7 @@ const CreateQuiz = () => {
 		const res = await uploadQuiz(user.token, data)
 
 		if (res.status === 201) {
-			navigate('/Home')
+			navigate('/home')
 		}
 	}
 
