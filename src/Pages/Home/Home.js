@@ -100,7 +100,7 @@ const Home = () => {
           </div>
           <div className="profile__info">
             <p className="profile__info__fullname">{user.authUser.fullname}</p>
-            <p className="profile__info__status">{user.authUser.status +"sadasdsad"}</p>
+            <p className="profile__info__status">{user.authUser.status}</p>
             <div className="profile__info__settings">
               <button onClick={() => handleClickNavigate("/EditUserProfile")}>
                 Edit Profile
