@@ -5,6 +5,9 @@ import { setUser } from "../../Reducers/userReducer";
 import { ReactComponent as HomeSvg } from "../../Assets/svg/home.svg";
 import { ReactComponent as ActivitySvg } from "../../Assets/svg/activity.svg";
 import { ReactComponent as LogoutSvg } from "../../Assets/svg/logout.svg";
+import { ReactComponent as FindQuizSvg } from "../../Assets/svg/find_quiz.svg";
+import { ReactComponent as CreateQuizSvg } from "../../Assets/svg/create_quiz.svg";
+
 import "./Navbar.css";
 
 const Navbar2 = () => {
@@ -36,7 +39,7 @@ const Navbar2 = () => {
               style={{ textDecoration: "none", color: "white" }}
             >
               <button className="mx-xl-1">
-                <HomeSvg className="home__nav__svg" />
+                <HomeSvg className="home__nav__svg home__fixed" />
                 Home
               </button>
             </Link>
@@ -46,6 +49,23 @@ const Navbar2 = () => {
                 Activity
               </button>
             </div>
+            <div className="d-flex align-items-center mx-2">
+              <button className="mx-xl-1">
+                <FindQuizSvg className="home__nav__svg" />
+                Find Quiz
+              </button>
+            </div>
+            <Link
+              to="/CreateQuiz"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <div className="d-flex align-items-center mx-2">
+                <button className="mx-xl-1">
+                  <CreateQuizSvg className="home__nav__svg" />
+                  Create Quiz
+                </button>
+              </div>
+            </Link>
           </div>
           <div className="d-flex align-items-center">
             <button onClick={handleClickLogout} className="mx-xl-1">

@@ -79,7 +79,7 @@ const EditUserProfile = () => {
 				soundEffect: data.soundEffect,
 			}
 			dispatch(setUser({ ...user, ...userProfile }))
-			navigate('/Home')
+			navigate('/home')
 		} catch (error) {
 			console.error(error)
 		}

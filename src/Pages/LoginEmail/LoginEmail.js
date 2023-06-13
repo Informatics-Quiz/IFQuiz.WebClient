@@ -28,7 +28,7 @@ const LoginEmail = () => {
 			}
 			const res = await loginWithEmail(requestBody)
 			dispatch(setUser(res.data))
-			navigate('/Home')
+			navigate('/home')
 		} catch (error) {
 			setErrorMessage(error.response.data.message)
 			handleShow()

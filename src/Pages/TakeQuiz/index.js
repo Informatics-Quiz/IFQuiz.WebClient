@@ -143,7 +143,7 @@ export default function TakeQuiz() {
             {score} / {getScoreOfQuiz()}
           </h1>
           <button
-            onClick={() => navigate("/Home")}
+            onClick={() => navigate("/home")}
             className="bg-[#171b21] px-3 py-2 rounded shadow mt-5"
           >
             กลับสู่หน้าหลัก
