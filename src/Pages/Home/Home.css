@@ -42,10 +42,18 @@
 	font-size: 1.5vw;
 	padding: 0;
 	margin-bottom: 0;
+	white-space: nowrap; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 260px;
 }
 .profile__info__status {
 	font-size: 0.9vw;
 	color: var(--alpha-color);
+	white-space: nowrap; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 260px;
 	margin-bottom: 1.4vh;
 }
 

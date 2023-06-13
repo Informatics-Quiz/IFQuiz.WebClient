@@ -99,8 +99,8 @@ const Home = () => {
             />
           </div>
           <div className="profile__info">
-            <p className="profile__info__fullname">Jakkrit Chaopron</p>
-            <p className="profile__info__status">🧠 doing some test ...</p>
+            <p className="profile__info__fullname">{user.authUser.fullname}</p>
+            <p className="profile__info__status">{user.authUser.status +"sadasdsad"}</p>
             <div className="profile__info__settings">
               <button onClick={() => handleClickNavigate("/EditUserProfile")}>
                 Edit Profile
@@ -153,9 +153,9 @@ const Home = () => {
               );
             }
             return (
-              <div 
-              className="quiz__card" 
-              onClick={() => navigate(`/Quiz/${quiz._id}`)}
+              <div
+                className="quiz__card"
+                onClick={() => navigate(`/Quiz/${quiz._id}`)}
               >
                 <div className="quiz__image">
                   <img src={quiz.imageUrl || onErrorQuizImageUrl}></img>
@@ -164,29 +164,29 @@ const Home = () => {
                   <p className="quiz__title">{quiz.name}</p>
                   <p className="quiz__description">{quiz.description}</p>
                   <div className="quiz__deep__info">
-                  <div className="author">
-                        <UserSvg />
-                        {quiz.user?.fullname || anonymousFullName}
+                    <div className="author">
+                      <UserSvg />
+                      {quiz.user?.fullname || anonymousFullName}
+                    </div>
+                    <div className="total__task">
+                      <TaskSvg />
+                      {quiz.questions.length} Tasks
+                    </div>
+                    <div className="join__code">
+                      <CodeQuizSvg />
+                      S8DXE7
+                    </div>
+                    {quiz.hideCorrectAnswer ? (
+                      <div className="hide__show__correct__answer">
+                        <HideSvg />
+                        Hide Correct Answers
                       </div>
-                      <div className="total__task">
-                        <TaskSvg />
-                        {quiz.questions.length} Tasks
+                    ) : (
+                      <div className="hide__show__correct__answer">
+                        <ShowSvg />
+                        Show Correct Answers
                       </div>
-                      <div className="join__code">
-                        <CodeQuizSvg />
-                        S8DXE7
-                      </div>
-                      {quiz.hideCorrectAnswer ? (
-                        <div className="hide__show__correct__answer">
-                          <HideSvg />
-                          Hide Correct Answers
-                        </div>
-                      ) : (
-                        <div className="hide__show__correct__answer">
-                          <ShowSvg />
-                          Show Correct Answers
-                        </div>
-                      )}
+                    )}
                   </div>
                 </div>
               </div>
