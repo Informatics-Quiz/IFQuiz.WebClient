@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BsImage, BsEyeFill } from 'react-icons/bs'
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineFieldTime } from "react-icons/ai";
 import './CreateQuiz.css'
 import FillBlankChoice from '../../Components/Choice/FillBlank'
 import NormalChoice from '../../Components/Choice/Normal'
@@ -45,8 +45,6 @@ const CreateQuiz = () => {
 		}
 		setQuestionList(newQuestion)
 		setSelectedQuestion(selectedQuestion - 1 < 0 ? 0 : selectedQuestion - 1)
-		console.log("length:", questionList.length)
-
 	}
 
 	const [quiz, setQuiz] = useState({
@@ -176,14 +174,18 @@ const CreateQuiz = () => {
 	return (
 		<div>
 			<div className="flex justify-between bg-[#4A5059] p-2">
-				<input
-					type="text"
-					name="name"
-					placeholder="Untitled Quiz"
-					className="p-2 w-72 rounded bg-[#161B22] ml-1"
-					value={quiz.name}
-					onChange={handleChangeQuiz}
-				/>
+				<div>
+					<input
+						type="text"
+						name="name"
+						placeholder="Untitled Quiz"
+						className="p-2 w-72 rounded bg-[#161B22] ml-1"
+						value={quiz.name}
+						onChange={handleChangeQuiz}
+					/>
+					
+				</div>
+
 				<div className="flex items-center">
 					<label>Hide Correct Answer</label>
 					<div className="form-check form-switch mb-0 mx-2">
@@ -270,7 +272,7 @@ const CreateQuiz = () => {
 								type="text"
 								name="explain"
 								value={quiz.questions[selectedQuestion].explanation.explain}
-								placeholder="Type a question..."
+								placeholder="question..."
 								onChange={handleChangeInput}
 								className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl text-slate-400 text-center border-none outline-none bg-transparent w-4/5"
 							/>
@@ -292,13 +294,13 @@ const CreateQuiz = () => {
 							)
 						)}
 						<footer style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between' }}>
-							<button ><AiOutlineArrowLeft style={{ width: '100px', height: '100px' }} /></button>
-							<button ><AiOutlineArrowRight style={{ width: '100px', height: '100px' }} /></button>
+							<button><AiOutlineArrowLeft style={{ width: '100px', height: '100px' }} /></button>
+							<button><AiOutlineArrowRight style={{ width: '100px', height: '100px' }} /></button>
 						</footer>
 					</div>
 				)}
 			</div>
-		</div>
+		</div >
 	)
 }
 

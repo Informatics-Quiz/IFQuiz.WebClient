@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { FcNext, FcPrevious } from "react-icons/fc";
+
 import ReactRouterPrompt from "react-router-prompt";
 import PreventDialog from "../../Components/PreventDialog";
 import { setCurrentQuiz } from "../../Reducers/quizReducer";
@@ -61,7 +63,7 @@ export default function TakeQuiz() {
 
   function isLastQuestion() {
     console.log(number);
-	// eslint-disable-next-line
+    // eslint-disable-next-line
     return number == currentQuiz.questions.length - 1;
   }
 
@@ -86,9 +88,9 @@ export default function TakeQuiz() {
 
   function getChoiceTypeLabel(type) {
     console.log(type);
-	// eslint-disable-next-line
+    // eslint-disable-next-line
     if (type == "multiple-choice") return "Multiple Choice";
-	// eslint-disable-next-line
+    // eslint-disable-next-line
     if (type == "single-choice") return "Single Choice";
     return "Fill Choice";
   }
@@ -151,12 +153,22 @@ export default function TakeQuiz() {
         </div>
       ) : (
         <div
-          className="flex flex-col py-5 w-[1000px]"
+          className="flex flex-col py-3 w-[1000px]"
           style={{ marginLeft: "35%" }}
+
         >
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+            {/* wait for function on click something :-; */}
+            <button><FcPrevious style={{ width: '55px', height: '55px' }} /></button>
+            <button><FcNext style={{ width: '55px', height: '55px' }} /></button>
+          </div>
+
           <div>
             <div className="question">
               <h4>Questions</h4>
+            </div>
+            <div className="timer">
+              <h1>10:00</h1>
             </div>
             <div className="select__question">
               {currentQuiz.questions.map((question, index) => (
@@ -165,7 +177,7 @@ export default function TakeQuiz() {
                   onClick={(e) => changeQuestion(e.target.value)}
                   value={index}
                   className={
-					        // eslint-disable-next-line
+                    // eslint-disable-next-line
                     index == number
                       ? "selected__question__button"
                       : "select__question__button"
@@ -180,6 +192,7 @@ export default function TakeQuiz() {
           <div className="bg-[#0d1117] flex items-center justify-center rounded mb-4">
             <h2 className="m-0 py-2">{currentQuiz.name}</h2>
           </div>
+
           <div
             className="bg-[#0d1117]"
             style={{
@@ -196,6 +209,9 @@ export default function TakeQuiz() {
             <h1 style={{ display: "inline", fontSize: "1.15vw" }}>
               {currentQuiz.questions[number].explanation.explain}
             </h1>
+
+
+
           </div>
           <div
             className="choice"
@@ -222,13 +238,13 @@ export default function TakeQuiz() {
                         value={index}
                         className={
                           currentQuiz.questions[number].type ===
-                          "multiple-choice"
+                            "multiple-choice"
                             ? isMultipleSelect(index)
                               ? "fill__choice__selected"
                               : "fill__choice__unselect"
                             : userAnswers[number] === index
-                            ? "fill__choice__selected"
-                            : "fill__choice__unselect"
+                              ? "fill__choice__selected"
+                              : "fill__choice__unselect"
                         }
                       >
                         {answer.explain}

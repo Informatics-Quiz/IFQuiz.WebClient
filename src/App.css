@@ -9,7 +9,7 @@
 	--modal-background-color: #0d1117;
 	--success-button-color: #238636;
 	--select-button-color: #238636;
-	--error-color: #EA4949; 
+	--error-color: #EA4949;
 }
 
 
@@ -18,7 +18,7 @@
 	padding: 0;
 	color: #ffffff;
 	/* overflow: hidden; */
-    font-family: 'Poppins', 'Prompt', sans-serif;
+	font-family: 'Poppins', 'Prompt', sans-serif;
 	font-weight: 300;
 	min-height: 100vh;
 	background: var(--web-background-color);
@@ -33,11 +33,30 @@
 	font-size: 13px;
 }
 
+
+
 .question {
 	position: absolute;
 	top: 6.425%;
 	left: 2.15%;
 }
+
+.timer {
+	position: absolute;
+	top: 27.5%;
+	left: 2.15%;
+	width: 150px;
+	height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: solid var(--border-line) 2px;
+	border-radius: 5px;
+}
+
+
+
+
 
 .select__question {
 	position: absolute;
@@ -100,7 +119,8 @@
 	background: var(--normal-button-color);
 }
 
-.add__question__button, .remove__question__button {
+.add__question__button,
+.remove__question__button {
 	outline: 0;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -111,12 +131,15 @@
 	margin-top: 15px;
 	transition: .2s;
 }
-.add__question__button:hover, .remove__question__button:hover{
+
+.add__question__button:hover,
+.remove__question__button:hover {
 	opacity: .8;
 	transform: scale(99%);
 }
 
-.add__question__button:active, .remove__question__button:active{
+.add__question__button:active,
+.remove__question__button:active {
 	transform: scale(101%);
 }
 
@@ -134,15 +157,17 @@
 	border: 1px solid #c9d1d938;
 	width: 150px;
 	background: var(--web-background-color);
-	text-overflow: ellipsis; 
+	text-overflow: ellipsis;
 }
 
-.not__hide__correct_answer, .hide__correct_answer {
+.not__hide__correct_answer,
+.hide__correct_answer {
 	line-height: 30px;
 	margin-top: 10px;
 }
 
-.timer__show__correct_answer, .timer__not__show__correct_answer {
+.timer__show__correct_answer,
+.timer__not__show__correct_answer {
 	color: var(--font-color);
 	background: var(--normal-button-color);
 	border-radius: 6px;
@@ -154,5 +179,3 @@
 	color: white;
 	background: var(--error-color);
 }
-
-
