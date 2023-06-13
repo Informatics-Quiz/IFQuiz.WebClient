@@ -34,7 +34,7 @@ const Navbar2 = () => {
         <div className="container-fluid py-2 px-4">
           <div className="d-flex align-items-center">
             <Link
-              to="/Home"
+              to="/home"
               className="d-flex align-items-center mx-2"
               style={{ textDecoration: "none", color: "white" }}
             >

@@ -29,8 +29,8 @@ function App() {
 				<Route path="/login-email" element={<LoginEmail />} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
 				<Route path="RevealQuiz" element={<RevealQuiz />} />
-				<Route path="/Home" element={isAuthenticated ? <Home /> : <Navigate to="login" />} />
-				<Route path="/EditUserProfile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="Login" />} />
+				<Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="login" />} />
+				<Route path="/edit-user-profile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="Login" />} />
 				<Route path="/Quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="Login" />} />
 				<Route path="/Quiz/Take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="Login" />} />
 			</Routes>

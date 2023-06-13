@@ -1,0 +1,83 @@
+.modal__container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+	backdrop-filter: blur(3px);
+    background: rgba(6, 6, 6, 0.8);
+    -webkit-animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+}
+
+.modal__info {
+    width: 380px;
+    display: flex;
+}
+
+.status__svg {
+    margin-right: 8px;
+}
+
+.status__svg svg {
+    width: 72px;
+    height: 72px;
+}
+
+.status__label__container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+}
+.status__label__container p {
+    margin: 0;
+    padding: 0;
+}
+
+.status__title {
+    font-size: 24px;
+}
+
+.status__description {
+    color: var(--alpha-color);
+    font-size: 18px;
+}
+
+.status__edit__field {
+    display: flex;
+}
+.status__edit__field input {
+    background: transparent;
+    border-bottom: 1px solid #C9D1D9;
+    width: 250px;
+    font-size: 14px;
+    margin-right: 11px;
+}
+.status__edit__field svg {
+    width: 27px;
+    height: 27px;
+    transition: .25s;
+}
+
+.status__edit__field svg:hover, .tap__close:hover {
+    transform: scale(1.2);
+
+}
+
+.status__edit__field svg:active, .tap__close:active {
+    opacity: 0.4;
+    transform: scale(0.99);
+}
+
+.tap__close {
+    position: absolute;
+    font-size: 18px;
+    margin-top: 300px;
+    color: var(--alpha-color);
+    transition: .26s;
+}
+

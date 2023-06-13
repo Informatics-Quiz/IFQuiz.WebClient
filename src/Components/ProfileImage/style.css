@@ -4,11 +4,12 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin-bottom: 48px;
 }
 
 .profile-image-container .image-container {
-	width: 135px;
-	height: 135px;
+	width: 200px;
+	height: 200px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -25,12 +26,23 @@ input[type='file'] {
 }
 
 .custom-file-upload {
-	border: 1px solid #424242;
-	border-radius: 6px;
-	padding: 4px 12px;
+	width: 168px;
+	text-align: center;
+	border-radius: 5px;
 	cursor: pointer;
-	background-color: #21262d;
-	font-size: 13px;
-	color: #c9d1d9;
-	margin-top: 12px;
+	background: var(--active-button-color);
+	font-size: 24px;
+	margin-top: 24px;
+	transition: .25s;
+}
+
+
+.custom-file-upload:hover {
+	transform: scale(1.05);
+    opacity: .7;
+}
+
+.custom-file-upload:active {
+	transform: scale(0.95);
+    opacity: 1;
 }

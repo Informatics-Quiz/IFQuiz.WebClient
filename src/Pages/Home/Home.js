@@ -89,6 +89,13 @@ const Home = () => {
 
   return (
     <>
+        <ModalStatus
+          show={show}
+          handleClose={handleClose}
+          status={user.authUser.status}
+          setEditStatus={setEditStatus}
+          handleEditStatus={handleEditStatus}
+        />
       <Navbar />
       <div className="home__container">
         <div className="profile__container">
@@ -100,9 +107,9 @@ const Home = () => {
           </div>
           <div className="profile__info">
             <p className="profile__info__fullname">{user.authUser.fullname}</p>
-            <p className="profile__info__status">{user.authUser.status}</p>
+            <p className="profile__info__status">{user.authUser.status.length < 1 ? "Think nothing..." : user.authUser.status}</p>
             <div className="profile__info__settings">
-              <button onClick={() => handleClickNavigate("/EditUserProfile")}>
+              <button onClick={() => handleClickNavigate("/edit-user-profile")}>
                 Edit Profile
               </button>
               <button onClick={handleShow}>Edit Status</button>
@@ -193,13 +200,6 @@ const Home = () => {
             );
           })}
         </div>
-        <ModalStatus
-          show={show}
-          handleClose={handleClose}
-          status={user.authUser.status}
-          setEditStatus={setEditStatus}
-          handleEditStatus={handleEditStatus}
-        />
       </div>
       {/*       
       <div className="home-container">
