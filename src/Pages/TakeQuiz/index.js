@@ -62,13 +62,24 @@ export default function TakeQuiz() {
   }
 
   function isLastQuestion() {
-    console.log(number);
     // eslint-disable-next-line
     return number == currentQuiz.questions.length - 1;
   }
 
   function changeQuestion(number) {
     setNumber(number);
+  }
+
+  function nextButton() {
+    if (number + 1 < currentQuiz.questions.length) {
+      setNumber((number + 1))
+    }
+  }
+
+  function previousButton() {
+    if (number != 0) {
+      setNumber((number - 1))
+    }
   }
 
   async function handleSubmit() {
@@ -158,9 +169,9 @@ export default function TakeQuiz() {
 
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-            {/* wait for function on click something :-; */}
-            <button><FcPrevious style={{ width: '55px', height: '55px' }} /></button>
-            <button><FcNext style={{ width: '55px', height: '55px' }} /></button>
+
+            <button onClick={previousButton}><FcPrevious style={{ width: '55px', height: '55px' }} /></button>
+            <button onClick={nextButton}><FcNext style={{ width: '55px', height: '55px' }} /></button>
           </div>
 
           <div>
