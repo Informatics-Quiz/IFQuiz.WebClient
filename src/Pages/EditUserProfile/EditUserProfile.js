@@ -1,6 +1,5 @@
 import "./EditUserProfile.css";
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import ProfileImage from "../../Components/ProfileImage";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../Reducers/userReducer";
@@ -17,6 +16,7 @@ import { ReactComponent as ChangePasswordSvg } from "../../Assets/svg/change_pas
 import { ReactComponent as DeleteSvg } from "../../Assets/svg/delete.svg";
 
 import ModalChangePassword from "../../Components/ModalChangePassword";
+import ModalConfirmAction from "../../Components/ModalConfirmAction";
 import Notify from "../../Components/Notify";
 
 const EditUserProfile = () => {
@@ -55,17 +55,18 @@ const EditUserProfile = () => {
     }
   }
 
+  // Delete Account
+  const [deleteAccountSuccess, setDeleteAccountSuccess] = useState(false);
+  const [deleteAccountShow, setDeleteAccountShow] = useState(true);
   async function handleTriggerDeleteAccount() {
     if (!user.token) return;
     try {
       const res = await deleteUserAccount(user.token);
       const { data } = res;
-
-      // setMessage(data.message); // POP UP THIS "data.message"
-      // handleShow3();
+      showNotify("Finally success your action!", data.message);
+      setDeleteAccountSuccess(true)
     } catch (error) {
-      // setMessage(error.response.data.message); // POP UP THIS "error.response.data.message"
-      // handleShow3();
+      showNotify("Something went wrong?", error.response.data.message);
     }
   }
 
@@ -91,6 +92,10 @@ const EditUserProfile = () => {
     if (newPasswordUpdateSuccess) {
       dispatch(setUser(null));
       navigate("/login-email");
+    }
+    if(deleteAccountSuccess){
+      dispatch(setUser(null));
+      navigate("/");
     }
   }
 
@@ -163,7 +168,6 @@ const EditUserProfile = () => {
       showNotify("Finally success your action!", data.message);
     } catch (error) {
       showNotify("Something went wrong?", error.response.data.message);
-      // setMessage(error.response.data.message);
     }
   }
 
@@ -181,6 +185,10 @@ const EditUserProfile = () => {
         handleChangePassword={handleChangePassword}
         handleChangeConfirmPassword={handleChangeConfirmPassword}
         handleClickUpdatePassword={handleClickUpdatePassword}
+      />
+
+      <ModalConfirmAction
+        show={deleteAccountShow}
       />
 
       <div className="edit__profile__container">
