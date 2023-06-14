@@ -85,6 +85,15 @@ const CreateQuiz = () => {
 		])
 	}
 
+	function nextButton() {
+		if (selectedQuestion + 1 < questionList.length) { setSelectedQuestion(selectedQuestion + 1) }
+	}
+
+	function previousButton() {
+		if (selectedQuestion != 0) { setSelectedQuestion(selectedQuestion - 1) }
+	}
+
+
 	function handleChangeInput(e) {
 		const { name, value } = e.target
 		const basicsData = ['type', 'points']
@@ -183,7 +192,7 @@ const CreateQuiz = () => {
 						value={quiz.name}
 						onChange={handleChangeQuiz}
 					/>
-					
+
 				</div>
 
 				<div className="flex items-center">
@@ -294,8 +303,8 @@ const CreateQuiz = () => {
 							)
 						)}
 						<footer style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between' }}>
-							<button><AiOutlineArrowLeft style={{ width: '100px', height: '100px' }} /></button>
-							<button><AiOutlineArrowRight style={{ width: '100px', height: '100px' }} /></button>
+							<button onClick={previousButton}><AiOutlineArrowLeft style={{ width: '100px', height: '100px' }} /></button>
+							<button onClick={nextButton}><AiOutlineArrowRight style={{ width: '100px', height: '100px' }} /></button>
 						</footer>
 					</div>
 				)}
