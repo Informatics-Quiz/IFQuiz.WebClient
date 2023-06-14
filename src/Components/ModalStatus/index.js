@@ -21,7 +21,7 @@ export default function ModalStatus({ show, handleClose, status, setEditStatus, 
 					</div>
 				</div>
 			</div>
-			<div className='tap__close' onClick={handleClose}>TAP TO CLOSE</div>
+			<div className='tap__close' onClick={handleClose}>TAP ANYWHERE TO CLOSE</div>
 		</div>
 	) : null
 }

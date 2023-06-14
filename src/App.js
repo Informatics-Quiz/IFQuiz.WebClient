@@ -10,10 +10,11 @@ import CreateQuiz from './Pages/CreateQuiz/CreateQuiz'
 import RevealQuiz from './Pages/RevealQuiz/RevealQuiz.js'
 import Home from './Pages/Home/Home'
 import EditUserProfile from './Pages/EditUserProfile/EditUserProfile'
+import FindQuiz from './Pages/FindQuiz/FindQuiz'
 
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import Quiz from './Pages/Quiz'
+import Quiz from './Pages/Quiz/Quiz'
 import TakeQuiz from './Pages/TakeQuiz'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/signup" element={<Signup />} />
 				<Route path="/register" element={<Register />} />
+				<Route path="/find-quiz" element={<FindQuiz />} />
 				<Route path="/login-email" element={<LoginEmail />} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
 				<Route path="RevealQuiz" element={<RevealQuiz />} />

@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStatus } from "../../Reducers/userReducer";
 import ModalStatus from "../../Components/ModalStatus";
-import QuizCard from "../../Components/QuizCard";
 import Navbar from "../../Components/Navbar";
 import { ReactComponent as UserSvg } from "../../Assets/svg/user.svg";
 import { ReactComponent as TaskSvg } from "../../Assets/svg/task.svg";
 import { ReactComponent as CodeQuizSvg } from "../../Assets/svg/code_quiz.svg";
 import { ReactComponent as HideSvg } from "../../Assets/svg/hide.svg";
 import { ReactComponent as ShowSvg } from "../../Assets/svg/show.svg";
+import { ReactComponent as TimerWhiteSvg } from "../../Assets/svg/timer_white.svg";
 
 const Home = () => {
   const onErrorQuizImageUrl =
@@ -141,7 +141,7 @@ const Home = () => {
                       </div>
                       <div className="join__code">
                         <CodeQuizSvg />
-                        S8DXE7
+                        {quiz.codeJoin || "S8DXE7"}
                       </div>
                       {quiz.hideCorrectAnswer ? (
                         <div className="hide__show__correct__answer">
@@ -154,6 +154,10 @@ const Home = () => {
                           Show Correct Answers
                         </div>
                       )}
+                      <div className="timer__info">
+                        <TimerWhiteSvg />
+                        48 : 58 : 02
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -194,6 +198,10 @@ const Home = () => {
                         Show Correct Answers
                       </div>
                     )}
+                    <div className="timer__info">
+                        <TimerWhiteSvg />
+                        48 : 58 : 02
+                      </div>
                   </div>
                 </div>
               </div>

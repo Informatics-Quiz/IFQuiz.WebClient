@@ -57,7 +57,7 @@ const EditUserProfile = () => {
 
   // Delete Account
   const [deleteAccountSuccess, setDeleteAccountSuccess] = useState(false);
-  const [deleteAccountShow, setDeleteAccountShow] = useState(true);
+  const [deleteAccountShow, setDeleteAccountShow] = useState(false);
   async function handleTriggerDeleteAccount() {
     if (!user.token) return;
     try {
@@ -171,6 +171,10 @@ const EditUserProfile = () => {
     }
   }
 
+  function closeIttt(){
+    console.log("asdasd")
+  }
+
   return (
     <>
       <Notify
@@ -187,8 +191,16 @@ const EditUserProfile = () => {
         handleClickUpdatePassword={handleClickUpdatePassword}
       />
 
+      {/* Modal Delete Account */}
       <ModalConfirmAction
         show={deleteAccountShow}
+        colorStyle={"error_color"}
+        svgEnum={"TRASH_BIN"}
+        title={"Account deletion request"}
+        description={"You will loss of all associated data"}
+        buttonConfirmLabel={"SURE, DELETE IT"}
+        handleConfirm={handleTriggerDeleteAccount}
+        handleCancel={()=> setDeleteAccountShow(false)}
       />
 
       <div className="edit__profile__container">
@@ -259,7 +271,9 @@ const EditUserProfile = () => {
                 <div className="svg__icon">
                   <DeleteSvg />
                 </div>
-                <div className="button__label">Delete Account</div>
+                <div className="button__label"
+                  onClick={() => setDeleteAccountShow(true)}
+                >Delete Account</div>
               </div>
             </div>
           </div>

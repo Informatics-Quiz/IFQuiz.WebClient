@@ -13,7 +13,6 @@
 .login__btn:hover, 
 .signup__btn:hover {
 	opacity: .8;
-	transform: scale(1.1);
 }
 .login__btn:active,
 .signup__btn:active {
@@ -48,10 +47,9 @@
 
 .navbar button:hover {
 	opacity: 0.8;
-    transform: scale(1.03);
 }
 
 .navbar button:active {
 	opacity: 1;
-    transform: scale(0.98);
+    transform: scale(0.95);
 }

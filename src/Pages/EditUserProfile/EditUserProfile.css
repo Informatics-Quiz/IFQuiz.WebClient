@@ -111,8 +111,7 @@
     transition: .3s;
 }
 .back__home__button:hover,
-.svg__with__button:hover,
-.save__button:hover {
+.svg__with__button:hover {
     transform: scale(1.05);
     opacity: .7;
 }
@@ -233,6 +232,10 @@
 	margin-left: 58px;
 }
 
+
+.save__button:hover {
+	opacity: .7;
+}
 .save__button {
 	width: 168px;
 	text-align: center;

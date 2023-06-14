@@ -49,12 +49,16 @@ const Navbar2 = () => {
                 Activity
               </button>
             </div>
-            <div className="d-flex align-items-center mx-2">
-              <button className="mx-xl-1">
-                <FindQuizSvg className="home__nav__svg" />
-                Find Quiz
-              </button>
-            </div>
+            <Link to="/find-quiz"
+              style={{ textDecoration: "none"}}
+            >
+              <div className="d-flex align-items-center mx-2">
+                <button className="mx-xl-1">
+                  <FindQuizSvg className="home__nav__svg" />
+                  Find Quiz
+                </button>
+              </div>
+            </Link>
             <Link
               to="/CreateQuiz"
               style={{ textDecoration: "none", color: "white" }}

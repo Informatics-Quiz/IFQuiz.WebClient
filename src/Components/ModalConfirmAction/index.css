@@ -1,9 +1,105 @@
 .modal__confirm__action__container {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(6, 6, 6, 0.8);
-    backdrop-filter: blur(8px);
     z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 35%;
 }
 
+.modal__confirm__action__container__close {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(6, 6, 6, 0.8);
+    padding-top: 300px;
+    color: rgba(255, 255, 255, 0.0);
+    transition: .25s;
+}
+.modal__confirm__action__container__close p {
+    font-size: 32px;
+}
+
+.modal__header__title {
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.modal__header__description {
+    font-size: 18px;
+    color: var(--alpha-color);
+}
+
+.modal__header__svg svg {
+    width: 70px;
+    height: 70px;
+}
+
+.modal__confirm__action__container__close:hover {
+    transform: scale(1.02);
+    color: white;
+    opacity: 1;
+}
+
+.modal__confirm__action__container__close:active {
+    color: rgba(255, 255, 255, 0.0);
+}
+
+
+
+.modal__button__confirm__container button {
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding-top: 2px;
+    padding-left: 16px;
+    padding-right: 16px;
+    transition: .25s;
+}
+
+.modal__button__confirm__container button:hover {
+    opacity: 0.8;
+}
+
+.modal__button__confirm__container button:active {
+    opacity: 1;
+    transform: scale(0.98);
+}
+
+.error_color {
+    background: var(--error-color);
+}
+
+.active_color {
+    background: var(--active-button-color);
+}
+
+.modal__header__container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 45px;
+
+}
+.modal__header__text__container p {
+    margin: 0;
+    padding: 0;
+}
+
+
+.modal__button__confirm__container, 
+.modal__header__container, 
+.modal__confirm__action__container__close {
+    -webkit-animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+}

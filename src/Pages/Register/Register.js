@@ -54,10 +54,10 @@ const Register = () => {
   }
 
   async function createAccount() {
-    if (!validatePassword()) {
+    if (!validateFullName()) {
       return;
     }
-    if (!validateFullName()) {
+    if (!validatePassword()) {
       return;
     }
     const bodyRequest = {

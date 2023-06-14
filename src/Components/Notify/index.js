@@ -14,7 +14,7 @@ export default function Notify({show, title, handleClose, message}) {
                 </div>
             </div>
             <div className='tap__close__label'>
-                TAP ANYWHERE TO CLOSE
+                TAP TO CLOSE
             </div>
         </div>
     ) : null
