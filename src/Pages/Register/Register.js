@@ -1,9 +1,8 @@
 import "./Register.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Modal from "react-bootstrap/Modal";
 import { registerAuthUser } from "../../Services/auth";
 import { useNavigate } from "react-router-dom";
+import Notify from "../../Components/Notify";
 
 import { ReactComponent as CreateUserSvg } from "../../Assets/svg/create__user.svg";
 
@@ -27,13 +26,11 @@ const Register = () => {
 
   function validatePassword() {
     if (!validateStrongPassword(password)) {
-      errorModal(
-        "At least 8 characters in length\nContains at least one uppercase letter\nContains at least one lowercase letter\nContains at least one digit\nContains at least one special character (e.g., @$!%*?&)\n"
-      );
+      showNotify("Something went wrong?", "At least 8 characters in length\nContains at least one uppercase letter\nContains at least one lowercase letter\nContains at least one digit\nContains at least one special character (e.g., @$!%*?&)\n")
       return false;
     }
     if (password !== password2) {
-      errorModal("Password not match");
+      showNotify("Something went wrong?", "Password not match")
       return false;
     }
     return true;
@@ -46,11 +43,11 @@ const Register = () => {
 
   function validateFullName() {
     if (!validateMinLength(firstname, 2)) {
-      errorModal("Firstname must be at least 2 characters");
+      showNotify("Something went wrong?", "Firstname must be at least 2 characters")
       return false;
     }
     if (!validateMinLength(lastname, 2)) {
-      errorModal("Lastname must be at least 2 characters");
+      showNotify("Something went wrong?", "Lastname must be at least 2 characters")
       return false;
     }
     return true;
@@ -74,20 +71,32 @@ const Register = () => {
       await registerAuthUser(bodyRequest);
       navigate("/login-email");
     } catch (error) {
-      setErrorMessage(error.response.data.message);
-      handleShow();
+      showNotify("Something went wrong?", error.response.data.message)
     }
   }
 
-  // Modal Variables
-  const [show, setShow] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
-  function errorModal(msg) {
-    setErrorMessage(msg);
-    handleShow();
+  // Notify
+  // Notify
+  const [notify, setNotify] = useState({
+    show: false,
+    title: "",
+    message: "",
+  });
+  function showNotify(title, message) {
+    setNotify({
+      title: title,
+      show: true,
+      message: message,
+    });
   }
+  function closeNotify() {
+    setNotify({
+      title: "",
+      show: false,
+      message: "",
+    });
+  }
+
 
   // Validate Email
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -98,14 +107,20 @@ const Register = () => {
     const isValid = emailPattern.test(email);
     if (!isValid) {
       setIsEmailValid(false);
-      errorModal("Email is not valid");
+      showNotify("Something went wrong?", "Email is not valid")
     } else {
       setIsEmailValid(true);
     }
   }
 
   return (
-    <div>
+    <>
+      <Notify
+        show={notify.show}
+        title={notify.title}
+        handleClose={closeNotify}
+        message={notify.message}
+      />
       {!isEmailValid ? (
         <div className="register__container">
           <div className="register__info">
@@ -208,128 +223,9 @@ const Register = () => {
         </div>
       )}
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>Somthing's went wrong ?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{errorMessage}</Modal.Body>
-      </Modal>
-    </div>
+    
+    </>
 
-    // <div className="ContainerRegister">
-    // 	<div className="content-1">
-    // 		<div className="section-1x">
-    // 			<div className="row" style={{ padding: '5' }}>
-    // 				<div className="col" style={{ backgroundColor: '#0D1117' }}>
-    // 					<div className="col-sm-12">
-    // 						<p id="section1-text1" >Continue with Email</p>
-    // 						<div className="row mt-0" style={{ backgroundColor: '#0D1117' }}>
-    // 							<div className="col-sm-6 col-md-8 col-xl-5 d-flex flex-column" >
-    // 								<p id="section1-text1">Enter email address</p>
-    // 								<input onChange={(e) => setEmail(e.target.value)}></input>
-    // 								<Link
-    // 									role="button"
-    // 									style={{
-    // 										textDecoration: 'none',
-    // 										color: 'white',
-    // 										backgroundColor: '#238636',
-    // 										display: 'flex',
-    // 										justifyContent: 'center',
-    // 										borderRadius: '3px',
-    // 									}}
-    // 								>
-    // 									<button id="btn1" onClick={loginRegister}>
-    // 										Continue
-    // 									</button>
-    // 								</Link>
-    // 							</div>
-    // 						</div>
-    // 					</div>
-
-    // 				</div>
-    // 				<div className="col" style={{ backgroundColor: '#0D1117' }}>
-    // 					<p id="fontresp">Please fill in your account details</p>
-    // 					<div className="col-sm-6  col-md-7 col-lg-7 col-xl-4">
-    // 						<p>firstname</p>
-    // 						<input style={{ width: '100%' }} onChange={(e) => setFirstname(e.target.value)}></input>
-    // 					</div>
-    // 					<div className="col-sm-12  col-md-7 col-lg-7 col-xl-4">
-    // 						<p className="mt-1">Lastname</p>
-    // 						<input style={{ width: '100%' }} onChange={(e) => setLastname(e.target.value)}></input>
-    // 					</div>
-    // 					<div className="col-sm-12 col-md-7 col-lg-7 col-xl-4">
-    // 						<p className="mt-1" style={{ marginBottom: '10px' }}>
-    // 							Password
-    // 						</p>
-    // 						<input
-    // 							type="password"
-    // 							style={{ width: '100%' }}
-    // 							onChange={(e) => setPassword(e.target.value)}
-    // 						></input>
-    // 					</div>
-    // 					<div className="col-sm-12 col-md-7 col-lg-7 col-xl-4">
-    // 						<p className="mt-1" style={{ marginBottom: '10px' }}>
-    // 							Confirm Password
-    // 						</p>
-    // 						<input
-    // 							type="password"
-    // 							style={{ width: '100%' }}
-    // 							onChange={(e) => setPassword2(e.target.value)}
-    // 						></input>
-    // 					</div>
-    // 					<div
-    // 						className="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-5 justify-content-center align-items-center mt"
-    // 						style={{ height: '40%', padding: 0 }}
-    // 					>
-    // 						<p>Selected Date : {date}</p>
-    // 						<input
-    // 							type="date"
-    // 							onChange={(e) => setDate(e.target.value)}
-    // 							style={{ height: '17.25%', width: '80%', marginBottom: '5px' }}
-    // 						></input>
-    // 					</div>
-    // 					<Link
-    // 						to="/CreateQuiz"
-    // 						role="button"
-    // 						style={{
-    // 							textDecoration: 'none',
-    // 							color: 'white',
-    // 							backgroundColor: '#238636',
-    // 							display: 'flex',
-    // 							justifyContent: 'center',
-    // 							borderRadius: '3px',
-    // 						}}
-    // 					>
-    // 						<button id="btn2" onClick={loginRegister}>
-    // 							Continue
-    // 						</button>
-    // 					</Link>
-    // 				</div>
-    // 			</div>
-    // 		</div>
-    // 		<div className="section-2">
-    // 			<p>Already have an account ?</p>
-    // 			<Link to={'login'}>
-    // 				<button>Login</button>
-    // 			</Link>
-    // 		</div>
-    // 	</div>
-
-    // 	<Modal show={show} onHide={handleClose}>
-    // 		<Modal.Header style={{ color: 'white' }}>
-    // 			<Modal.Title>Error Message</Modal.Title>
-    // 			<button
-    // 				type="button"
-    // 				className="btn-close btn-close-white"
-    // 				aria-label="Close"
-    // 				onClick={handleClose}
-    // 			></button>
-    // 		</Modal.Header>
-    // 		<Modal.Body style={{ color: 'white', border: '0px' }}>{errorMessage}</Modal.Body>
-    // 		<Modal.Footer style={{ color: 'white', border: '0px' }}></Modal.Footer>
-    // 	</Modal>
-
-    // </div>
   );
 };
 export default Register;

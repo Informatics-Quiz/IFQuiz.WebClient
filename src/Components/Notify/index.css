@@ -1,0 +1,69 @@
+.notify__container {
+    position: absolute;
+    z-index: 999999;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	backdrop-filter: blur(2px);
+    background: rgb(6, 6, 6, 0.8);
+    -webkit-animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+}
+
+.notify__header {
+    margin-right: 14px;
+}
+
+.notify__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+.notify__title__container p {
+    margin: 0;
+    padding: 0;
+}
+
+.notify__header {
+    width: 70px;
+    height: 70px;
+}
+
+.notify__header svg {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.notify__title {
+    font-size: 24px;
+}
+
+.notify__description {
+    font-size: 18px;
+    color: var(--alpha-color);
+}
+
+.notify__giving__information {
+    font-size: 14px;
+    color: white;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+
+.tap__close__label {
+    position: absolute;
+    font-size: 18px;
+    margin-top: 20%;
+    color: var(--alpha-color);
+    transition: .26s;
+}
+

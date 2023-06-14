@@ -2,10 +2,10 @@ import './LoginEmail.css'
 import { ReactComponent as LogoSvg } from "../../Assets/svg/logo.svg"
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Modal from 'react-bootstrap/Modal'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../Reducers/userReducer'
 import { loginWithEmail } from '../../Services/auth'
+import Notify from '../../Components/Notify'
 
 const LoginEmail = () => {
 	const [email, setEmail] = useState('')
@@ -13,14 +13,8 @@ const LoginEmail = () => {
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const [show, setShow] = useState(false)
-	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
-
-	const [errorMessage, setErrorMessage] = useState()
 
 	async function handleClickLogin() {
-		console.log('Login with Email')
 		try {
 			const requestBody = {
 				email: email,
@@ -30,10 +24,30 @@ const LoginEmail = () => {
 			dispatch(setUser(res.data))
 			navigate('/home')
 		} catch (error) {
-			setErrorMessage(error.response.data.message)
-			handleShow()
+			showNotify("Something went wrong?", error.response.data.message)
 		}
 	}
+
+	// Notify
+	const [notify, setNotify] = useState({
+		show: false,
+		title: "",
+		message: ""
+	  }); 
+	  function showNotify(title, message) {
+		setNotify({
+			title: title,
+			show: true,
+			message: message
+		})
+	  }
+	  function closeNotify() {
+		setNotify({
+			title: "",
+			show: false,
+			message: ""
+		})
+	  }
 
 	return (
 
@@ -66,13 +80,13 @@ const LoginEmail = () => {
 Remember, learning is a lifelong journey, and we encourage you to continue exploring the diverse opportunities and experiences that await you at Burapha University. <br/>
 Best of luck in your academic pursuits and beyond!
 			</div>
-
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Header>
-					<Modal.Title>Somthing's went wrong ?</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>{errorMessage}</Modal.Body>
-			</Modal>
+			
+			<Notify
+				show={notify.show}
+				title={notify.title}
+				handleClose={closeNotify}
+				message={notify.message}
+			/>
 		</div>
 	)
 }
