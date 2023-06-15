@@ -109,6 +109,7 @@
     text-align: center;
     left: 30px;
     transition: .3s;
+	animation: slide-right .8s;
 }
 .back__home__button:hover,
 .svg__with__button:hover {

@@ -385,3 +385,16 @@
 
 	}
 }
+@keyframes slide-top-no-transform {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% - 100px));
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}

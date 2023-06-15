@@ -18,6 +18,7 @@ import { ReactComponent as DeleteSvg } from "../../Assets/svg/delete.svg";
 import ModalChangePassword from "../../Components/ModalChangePassword";
 import ModalConfirmAction from "../../Components/ModalConfirmAction";
 import Notify from "../../Components/Notify";
+import HomeButton from "../../Components/Button/Home/Home";
 
 const EditUserProfile = () => {
   const user = useSelector((state) => state.user.authUser);
@@ -213,7 +214,10 @@ const EditUserProfile = () => {
             <p className="page__description">Just settings what you want!</p>
           </div>
         </div>
-        <button
+        <HomeButton
+          navigate={navigate}
+        />
+        {/* <button
           className="back__home__button"
           onClick={() => navigate("/home")}
         >
@@ -224,7 +228,7 @@ const EditUserProfile = () => {
             />
           </svg>
           <p>Home</p>
-        </button>
+        </button> */}
         <div className="settings__container">
           <ProfileImage
             userProfileImage={user.imageUrl}

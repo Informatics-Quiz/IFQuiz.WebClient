@@ -11,11 +11,15 @@ import RevealQuiz from './Pages/RevealQuiz/RevealQuiz.js'
 import Home from './Pages/Home/Home'
 import EditUserProfile from './Pages/EditUserProfile/EditUserProfile'
 import FindQuiz from './Pages/FindQuiz/FindQuiz'
-
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import Quiz from './Pages/Quiz/Quiz'
 import TakeQuiz from './Pages/TakeQuiz'
+import Quiz from './Pages/Quiz/Quiz'
+import ActivitySelection from "./Pages/activity/selection/Selection"
+import Created from "./Pages/activity/created/Created"
+import Running from "./Pages/activity/running/Running"
+import Completed from "./Pages/activity/completed/Completed"
+import { Navigate, Route, Routes } from 'react-router-dom'
+
+import { useSelector } from 'react-redux'
 
 function App() {
 	const isAuthenticated = useSelector((state) => state.user.authUser) === null ? false : true
@@ -29,6 +33,10 @@ function App() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/find-quiz" element={<FindQuiz />} />
 				<Route path="/login-email" element={<LoginEmail />} />
+				<Route path="/activity" element={<ActivitySelection/>} />
+				<Route path="/activity/created" element={<Created/>} />
+				<Route path="/activity/running" element={<Running/>} />
+				<Route path="/activity/completed" element={<Completed/>} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
 				<Route path="RevealQuiz" element={<RevealQuiz />} />
 				<Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="login" />} />
