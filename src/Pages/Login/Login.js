@@ -9,7 +9,6 @@ import { ReactComponent as UserSvg } from "../../Assets/svg/user.svg";
 const Login = () => {
   return (
     <>
-      <Navbar />
       <div className="signup__container">
         <div className="login__header">
           <UserSvg className="login__image" />

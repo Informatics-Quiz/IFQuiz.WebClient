@@ -6,6 +6,7 @@
     width: 100vw;
     align-items: center;
     margin-top: 40px;
+    animation: fade-in 1s;
 }
 
 .quiz__detail__top {

@@ -23,10 +23,13 @@ const Navbar2 = () => {
   const authBlockNav = {
     "/login": true,
     "/signup": true,
+    "/login-email": true,
+    "/register": true
   };
 
+  console.log(authBlockNav[window.location.pathname] )
   if (window.location.pathname === "/Quiz/Take") return null;
-  if (authBlockNav[window.location.pathname] && isAuthenticated) return null;
+  if (authBlockNav[window.location.pathname]) return null;
 
   return (
     <nav className="navbar navbar-expand-md">

@@ -17,11 +17,11 @@ import { ReactComponent as TimerWhiteSvg } from "../../Assets/svg/timer_white.sv
 const Home = () => {
   const onErrorQuizImageUrl =
     "https://media.discordapp.net/attachments/1115338683671908462/1118138703580237844/image.png";
-  const onUserProfileImageUrl =
-    "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png";
-  const anonymousFullName = "Anonymous";
+  const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
+    const anonymousFullName = "Anonymous";
 
   const user = useSelector((state) => state.user);
+  const [profileImageUrl, setProfileImageUrl] = useState("")
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -52,32 +52,32 @@ const Home = () => {
     handleClose();
   }
 
-  // useEffect(() => {
-  // 	async function onGetProfileImage() {
-  // 		let headersList = {
-  // 			Accept: '*/*',
-  // 			Authorization: `Bearer ${user.authUser.token}`,
-  // 		}
+  useEffect(() => {
+  	async function onGetProfileImage() {
+  		let headersList = {
+  			Accept: '*/*',
+  			Authorization: `Bearer ${user.authUser.token}`,
+  		}
 
-  // 		let reqOptions = {
-  // 			responseType: 'arraybuffer',
-  // 			url: 'http://localhost:3000/file/get/profile-image',
-  // 			method: 'GET',
-  // 			headers: headersList,
-  // 		}
+  		let reqOptions = {
+  			responseType: 'arraybuffer',
+  			url: 'http://localhost:3000/file/get/profile-image',
+  			method: 'GET',
+  			headers: headersList,
+  		}
 
-  // 		try {
-  // 			let response = await axios.request(reqOptions)
-  // 			const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
-  // 			const url = URL.createObjectURL(blob)
-  // 			setProfileImage(response.data.byteLength === 0 ? null : url)
-  // 		} catch (error) {
-  // 			console.log(error)
-  // 		}
-  // 	}
+  		try {
+  			let response = await axios.request(reqOptions)
+  			const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+  			const url = URL.createObjectURL(blob)
+  			setProfileImageUrl(response.data.byteLength === 0 ? null : url)
+  		} catch (error) {
+  			console.log(error)
+  		}
+  	}
 
-  // 	onGetProfileImage()
-  // }, [user])
+  	onGetProfileImage()
+  }, [user])
 
   useEffect(() => {
     async function onGetQuizzes() {
@@ -96,12 +96,12 @@ const Home = () => {
           setEditStatus={setEditStatus}
           handleEditStatus={handleEditStatus}
         />
-      <Navbar />
+            <Navbar />
       <div className="home__container">
         <div className="profile__container">
           <div className="profile__image">
             <img
-              src={user.authUser.imageUrl || onUserProfileImageUrl}
+              src={profileImageUrl || onErrorProfileImageUrl}
               alt="profile"
             />
           </div>
@@ -118,7 +118,7 @@ const Home = () => {
         </div>
         <div className="quizzes__container">
           {quizzes.map((quiz, index) => {
-            if (index == 0) {
+            if (index === 0) {
               return (
                 <div
                   className="first__card"
@@ -185,7 +185,7 @@ const Home = () => {
                     </div>
                     <div className="join__code">
                       <CodeQuizSvg />
-                      S8DXE7
+                        {quiz.codeJoin || "S8DXE7"}
                     </div>
                     {quiz.hideCorrectAnswer ? (
                       <div className="hide__show__correct__answer">

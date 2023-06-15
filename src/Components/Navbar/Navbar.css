@@ -31,10 +31,8 @@
 }
 
 .navbar {
-	-webkit-animation: flip-2-hor-top-1 0.9s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-    animation: flip-2-hor-top-1 0.9s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+    transition: 1s;
 }
-
 
 .navbar button {
 	display: flex;
@@ -46,10 +44,9 @@
 }
 
 .navbar button:hover {
-	opacity: 0.8;
+	opacity: 0.3;
 }
 
 .navbar button:active {
 	opacity: 1;
-    transform: scale(0.95);
 }

@@ -19,6 +19,7 @@ import ModalChangePassword from "../../Components/ModalChangePassword";
 import ModalConfirmAction from "../../Components/ModalConfirmAction";
 import Notify from "../../Components/Notify";
 import HomeButton from "../../Components/Button/Home/Home";
+import Navbar from "../../Components/Navbar";
 
 const EditUserProfile = () => {
   const user = useSelector((state) => state.user.authUser);
@@ -77,7 +78,7 @@ const EditUserProfile = () => {
     title: "",
     message: "",
   });
-  function showNotify(title, message) {
+  const showNotify = (title, message) => {
     setNotify({
       title: title,
       show: true,
@@ -172,10 +173,6 @@ const EditUserProfile = () => {
     }
   }
 
-  function closeIttt(){
-    console.log("asdasd")
-  }
-
   return (
     <>
       <Notify
@@ -203,6 +200,7 @@ const EditUserProfile = () => {
         handleConfirm={handleTriggerDeleteAccount}
         handleCancel={()=> setDeleteAccountShow(false)}
       />
+      <Navbar />
 
       <div className="edit__profile__container">
         <div className="page__header">
@@ -214,9 +212,7 @@ const EditUserProfile = () => {
             <p className="page__description">Just settings what you want!</p>
           </div>
         </div>
-        <HomeButton
-          navigate={navigate}
-        />
+        
         {/* <button
           className="back__home__button"
           onClick={() => navigate("/home")}
@@ -231,8 +227,7 @@ const EditUserProfile = () => {
         </button> */}
         <div className="settings__container">
           <ProfileImage
-            userProfileImage={user.imageUrl}
-            firstLetter={user.fullname[0]}
+          notify={showNotify}
           />
           <div className="settings__identity__form">
             <div className="fullname__field">
@@ -286,6 +281,9 @@ const EditUserProfile = () => {
           </button>
         </div>
       </div>
+      <HomeButton
+          navigate={navigate}
+        />
     </>
   );
 };

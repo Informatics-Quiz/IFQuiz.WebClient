@@ -17,17 +17,17 @@ import { ReactComponent as TimerWhiteSvg } from "../../../Assets/svg/timer_white
 const Completed = () => {
   const onErrorQuizImageUrl =
     "https://media.discordapp.net/attachments/1115338683671908462/1118138703580237844/image.png";
-  const onUserProfileImageUrl =
-    "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png";
-  const anonymousFullName = "Anonymous";
+  const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
+    const anonymousFullName = "Anonymous";
 
   const user = useSelector((state) => state.user);
+  const [profileImageUrl, setProfileImageUrl] = useState("")
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const [editstatus, setEditStatus] = useState("");
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzesCreated, setQuizzesCreated] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -52,43 +52,44 @@ const Completed = () => {
     handleClose();
   }
 
-  // useEffect(() => {
-  // 	async function onGetProfileImage() {
-  // 		let headersList = {
-  // 			Accept: '*/*',
-  // 			Authorization: `Bearer ${user.authUser.token}`,
-  // 		}
+  useEffect(() => {
+  	async function onGetProfileImage() {
+  		let headersList = {
+  			Accept: '*/*',
+  			Authorization: `Bearer ${user.authUser.token}`,
+  		}
 
-  // 		let reqOptions = {
-  // 			responseType: 'arraybuffer',
-  // 			url: 'http://localhost:3000/file/get/profile-image',
-  // 			method: 'GET',
-  // 			headers: headersList,
-  // 		}
+  		let reqOptions = {
+  			responseType: 'arraybuffer',
+  			url: 'http://localhost:3000/file/get/profile-image',
+  			method: 'GET',
+  			headers: headersList,
+  		}
 
-  // 		try {
-  // 			let response = await axios.request(reqOptions)
-  // 			const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
-  // 			const url = URL.createObjectURL(blob)
-  // 			setProfileImage(response.data.byteLength === 0 ? null : url)
-  // 		} catch (error) {
-  // 			console.log(error)
-  // 		}
-  // 	}
+  		try {
+  			let response = await axios.request(reqOptions)
+  			const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+  			const url = URL.createObjectURL(blob)
+  			setProfileImageUrl(response.data.byteLength === 0 ? null : url)
+  		} catch (error) {
+  			console.log(error)
+  		}
+  	}
 
-  // 	onGetProfileImage()
-  // }, [user])
+  	onGetProfileImage()
+  }, [user])
 
   useEffect(() => {
     async function onGetQuizzes() {
       const response = await axios.get("http://localhost:3000/quizzes");
-      setQuizzes(response.data);
+      setQuizzesCreated(response.data);
     }
     onGetQuizzes();
   }, []);
 
   return (
     <>
+        <Navbar />
         <ModalStatus
           show={show}
           handleClose={handleClose}
@@ -96,12 +97,11 @@ const Completed = () => {
           setEditStatus={setEditStatus}
           handleEditStatus={handleEditStatus}
         />
-      <Navbar />
       <div className="home__container">
         <div className="profile__container">
           <div className="profile__image">
             <img
-              src={user.authUser.imageUrl || onUserProfileImageUrl}
+              src={profileImageUrl || onErrorProfileImageUrl}
               alt="profile"
             />
           </div>
@@ -117,8 +117,8 @@ const Completed = () => {
           </div>
         </div>
         <div className="quizzes__container">
-          {quizzes.map((quiz, index) => {
-            if (index == 0) {
+          {quizzesCreated.map((quiz, index) => {
+            if (index === 0) {
               return (
                 <div
                   className="first__card"
@@ -185,7 +185,7 @@ const Completed = () => {
                     </div>
                     <div className="join__code">
                       <CodeQuizSvg />
-                      S8DXE7
+                      {quiz.codeJoin || "S8DXE7"}
                     </div>
                     {quiz.hideCorrectAnswer ? (
                       <div className="hide__show__correct__answer">

@@ -18,6 +18,7 @@ import Created from "./Pages/activity/created/Created"
 import Running from "./Pages/activity/running/Running"
 import Completed from "./Pages/activity/completed/Completed"
 import { Navigate, Route, Routes } from 'react-router-dom'
+import Navbar from './Components/Navbar'
 
 import { useSelector } from 'react-redux'
 
@@ -39,10 +40,10 @@ function App() {
 				<Route path="/activity/completed" element={<Completed/>} />
 				<Route path="/CreateQuiz" element={<CreateQuiz />} />
 				<Route path="RevealQuiz" element={<RevealQuiz />} />
-				<Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="login" />} />
-				<Route path="/edit-user-profile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="Login" />} />
-				<Route path="/Quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="Login" />} />
-				<Route path="/Quiz/Take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="Login" />} />
+				<Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+				<Route path="/edit-user-profile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="/login" />} />
+				<Route path="/Quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
+				<Route path="/Quiz/Take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />
 			</Routes>
 		</div>
 	)

@@ -4,7 +4,6 @@ import { ReactComponent as ReactLogo } from '../../logo.svg'
 const Welcome = () => {
     return (
         <>
-            <Navbar />
             <div className='welcome__container'>
                 <ReactLogo className='logo' />
                 <div className='title'>INFORMATICS QUIZ</div>

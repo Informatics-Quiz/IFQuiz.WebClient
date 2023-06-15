@@ -49,7 +49,7 @@ export default function Quiz() {
   if (!quiz) return null;
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <div className="quiz__detail__container">
         <div className="quiz__detail__top">
           <div className="quiz__detail__image">

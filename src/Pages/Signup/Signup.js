@@ -8,7 +8,6 @@ import { ReactComponent as EmailSvg } from "../../Assets/svg/email.svg";
 const Signup = () => {
   return (
     <>
-      <Navbar />
       <div className="signup__container">
         <div className="signup__header">
           <CreateUserSvg className="signup__image" />

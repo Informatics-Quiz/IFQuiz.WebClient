@@ -6,6 +6,8 @@ export async function uploadQuiz(token, requestBody) {
 			Authorization: `Bearer ${token}`,
 		},
 	})
+
+	console.log(requestBody)
 	return res
 }
 
@@ -19,6 +21,11 @@ export async function getQuizById(id) {
 	return res
 }
 
+
+export async function getQuizByCode(codeJoin){
+	const res = await client.get(`/quizzes?codeJoin=${codeJoin}`)
+	return res
+}
 
 export async function sendQuiz(token, requestBody) {
 	const res = await client.post('/check_quizz', requestBody, {
