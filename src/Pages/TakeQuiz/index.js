@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import "./Takequiz.css";
 import { useDispatch, useSelector } from "react-redux";
 import { FcNext, FcPrevious } from "react-icons/fc";
 
@@ -12,19 +13,60 @@ import { sendQuiz } from "../../Services/quiz";
 export default function TakeQuiz() {
   const currentQuiz = useSelector((state) => state.quiz.current);
   const user = useSelector((state) => state.user.authUser);
+
   const [number, setNumber] = useState(0);
   const [score, setScore] = useState(0);
+
+  const [timer, setTimer] = useState(600)
+  const [isTimeup, setIsTimeUp] = useState(false)
+
   const [userAnswers, setUserAnswers] = useState([]);
   const [isFinished, setIsFinished] = useState(false);
   const [isOpenSuccessModal, setIsOpenSuccessModal] = useState(false);
 
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleChangeUserAnswers(e, index, type) {
-    console.log("number :" + number);
-    console.log("length : " + currentQuiz.questions.length);
+  function startTimer() {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 0) {
+          clearInterval(interval);
+          setIsTimeUp(true);
+          return prevTimer;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
 
+    return interval;
+  }
+
+  useEffect(() => {
+    const interval = startTimer();
+
+    return () => {
+      clearInterval(interval); // Clear the interval when the component unmounts
+    };
+  }, []);
+
+  function formatTime(seconds) {
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    if (days > 0) {
+      return `${days}D [ ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")} ]`;
+    } else if (hours > 0) {
+      return `${hours}H ${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+    } else {
+      return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    }
+  }
+
+  function handleChangeUserAnswers(e, index, type) {
     const { value } = e.target;
 
     if (type === "single-choice") {
@@ -98,7 +140,6 @@ export default function TakeQuiz() {
   }
 
   function getChoiceTypeLabel(type) {
-    console.log(type);
     // eslint-disable-next-line
     if (type == "multiple-choice") return "Multiple Choice";
     // eslint-disable-next-line
@@ -179,7 +220,7 @@ export default function TakeQuiz() {
               <h4>Questions</h4>
             </div>
             <div className="timer">
-              <h1>10:00</h1>
+              <h1>{formatTime(timer)}</h1>
             </div>
             <div className="select__question">
               {currentQuiz.questions.map((question, index) => (

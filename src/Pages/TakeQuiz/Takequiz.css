@@ -1,0 +1,18 @@
+.question {
+    position: absolute;
+    top: 6.425%;
+    left: 2.15%;
+}
+
+.timer {
+	position: absolute;
+	top: 27.5%;
+	left: 2.15%;
+	width: 350px;
+	height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: solid var(--border-line) 2px;
+	border-radius: 5px;
+}
