@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getQuizByCode } from "../../../services/quiz";
 
-import ModalStatus from "../../../components/modals/edit-status";
 import Navbar from "../../../components/navbar";
 import Notify from "../../../components/notify";
 
