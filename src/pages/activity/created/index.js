@@ -110,7 +110,7 @@ const Created = () => {
             <p className="profile__info__fullname">{user.authUser.fullname}</p>
             <p className="profile__info__status">{user.authUser.status.length < 1 ? "Think nothing..." : user.authUser.status}</p>
             <div className="profile__info__settings">
-              <button onClick={() => handleClickNavigate("user/edit")}>
+              <button onClick={() => handleClickNavigate("/user/edit")}>
                 Edit Profile
               </button>
               <button onClick={handleShow}>Edit Status</button>

@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;500;600;700&display=swap');
 :root {
 	--web-background-color: radial-gradient(50% 50% at 50% 50%,
 			#1a2327 0%,
@@ -12,6 +12,7 @@
 	--select-button-color: #238636;
 	--error-color: #ea4949;
 	--alpha-color: #c9d1d9;
+	--button-un-active-color: rgba(94, 94, 94, 1);
 	--card-bg: #262626;
 	--active-button-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
 }

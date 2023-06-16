@@ -1,319 +1,579 @@
-import './style.css'
+import "./style.css";
 
-import React, { useState, useEffect } from 'react'
-import { uploadQuiz } from '../../../services/quiz'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { ReactComponent as QuestionSvg } from "../../../assets/svg/question.svg";
+import { ReactComponent as AddButtonSvg } from "../../../assets/svg/add_button.svg";
+import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
+import { ReactComponent as NextSvg } from "../../../assets/svg/next.svg";
+import { ReactComponent as PointsSvg } from "../../../assets/svg/./points.svg";
+import { ReactComponent as CategorySvg } from "../../../assets/svg/category.svg";
+import { ReactComponent as ContainsSvg } from "../../../assets/svg/contains.svg";
+import { ReactComponent as ExactlySvg } from "../../../assets/svg/exactly.svg";
+
+import React, { useState, useEffect } from "react";
+import { uploadQuiz } from "../../../services/quiz";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Navbar from "../../../components/navbar";
+import InputTextAreaFillBlank from "../../../components/input/text-area-fill-blank";
+import InputTextAreaChoice from "../../../components/input/text-area-choice";
+import Notify from "../../../components/notify";
 
 const CreateQuiz = () => {
-	const user = useSelector((state) => state.user.authUser)
-	const navigate = useNavigate()
-	const [selectedQuestion, setSelectedQuestion] = useState(0)
+  const user = useSelector((state) => state.user.authUser);
+  const navigate = useNavigate();
 
-	const emptyQuestion = {
-		type: '',
-		points: 1,
-		explanation: {
-			explain: '',
-			imageUrl: '',
-		},
-		answer: {
-			correctAnswer: 0,
-			selectAnswers: [],
-		},
-	}
-	const [questionList, setQuestionList] = useState([
-		emptyQuestion
-	])
+  const [editingQuizDetail, setEditingQuizDetail] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(0);
+  const emptyQuestion = {
+    type: "single-choice",
+    points: 1,
+    explanation: {
+      explain: "",
+      imageUrl: "",
+    },
+    answer: {
+      correctAnswer: [{ explain: "", checked: false }],
+    },
+  };
 
-	function addMoreQuestion() {
-		const newQuestion = [...questionList]
-		newQuestion.push(emptyQuestion)
-		setQuestionList(newQuestion)
-		setSelectedQuestion(newQuestion.length - 1)
-	}
+  const [questionList, setQuestionList] = useState([emptyQuestion]);
+  const [quiz, setQuiz] = useState({
+    name: "",
+    description: "something like this in the future",
+    imageUrl: "",
+    hideCorrectAnswer: false,
+    questions: questionList,
+  });
 
-	function removeCurrentQuestion() {
-		const newQuestion = [...questionList]
-		console.log("selectedQuestion:", selectedQuestion)
-		newQuestion.splice(selectedQuestion, 1)
-		if (newQuestion.length <= 0) {
-			newQuestion.push(emptyQuestion)
-		}
-		setQuestionList(newQuestion)
-		setSelectedQuestion(selectedQuestion - 1 < 0 ? 0 : selectedQuestion - 1)
-	}
+  function validateAllQuestion() {
+    for (let questionId = 0; questionId < questionList.length; questionId++) {
+      const question = questionList[questionId];
 
-	const [quiz, setQuiz] = useState({
-		name: '',
-		description: 'something like this in the future',
-		category: 'Mathematics',
-		hideCorrectAnswer: false,
-		questions: questionList,
-	})
+      // validate question explanation
+      if (question.explanation.explain.length < 1) {
+        showNotify(
+          "Are you serious?",
+          `Question (${questionId + 1}) explanation must not be empty`,
+          () => {
+            setSelectedQuestion(questionId);
+          }
+        );
+        return false;
+      }
 
-	const [selectedFillBlankChoice, setSelectedFillBlankChoice] = useState([
-		{
-			type: 'is-exactly',
-			matchString: [],
-		},
-	])
+      // validate question type
+      if (
+        question.type !== "fill-choice" &&
+        question.type !== "single-choice" &&
+        question.type !== "multiple-choice"
+      ) {
+        showNotify(
+          "Are you serious?",
+          `Question (${questionId + 1}) type must be in correct format`,
+          () => {
+            setSelectedQuestion(questionId);
+          }
+        );
+        setSelectedQuestion(questionId);
+        return false;
+      }
 
-	const [selectedNormalChoices, setSelectedNormalChoices] = useState([
-		{
-			explain: '',
-			checked: false,
-		},
-	])
+      // validate question points
+      if (question.points < 1) {
+        showNotify(
+          "Are you serious?",
+          `Question (${questionId + 1}) points must be greater than 0`,
+          () => {
+            setSelectedQuestion(questionId);
+          }
+        );
+        setSelectedQuestion(questionId);
+        return false;
+      }
 
-	function handleClickChoiceType(e) {
-		handleChangeInput(e)
-		setSelectedFillBlankChoice([
-			{
-				type: 'is-exactly',
-				matchString: [],
-			},
-		])
-		setSelectedNormalChoices([
-			{
-				explain: '',
-				checked: false,
-			},
-		])
-	}
+      // validate question answer
+      if (question.type === "fill-choice") {
+        if (question.answer.correctAnswer.length < 1) {
+          showNotify(
+            "Are you serious?",
+            `Question (${questionId + 1}) must have at least 1 correct answer`,
+            () => {
+              setSelectedQuestion(questionId);
+            }
+          );
+          setSelectedQuestion(questionId);
+          return false;
+        }
+        for (const answer of question.answer.correctAnswer) {
+          if (answer.matchString.length < 1) {
+            showNotify(
+              "Are you serious?",
+              `Question (${questionId + 1}) answer must not be empty`,
+              () => {
+                setSelectedQuestion(questionId);
+              }
+            );
+            setSelectedQuestion(questionId);
+            return false;
+          }
+        }
+      } else if (
+        question.type === "single-choice" ||
+        question.type === "multiple-choice"
+      ) {
+        let foundOneCorrectAnswer = false;
+        for (const answer of question.answer.correctAnswer) {
+          if (answer.explain.length < 1) {
+            showNotify(
+              "Are you serious?",
+              `Question (${questionId + 1}) answer must not be empty`,
+              () => {
+                setSelectedQuestion(questionId);
+              }
+            );
+            setSelectedQuestion(questionId);
+            return false;
+          }
+          if (answer.checked) {
+            foundOneCorrectAnswer = true;
+            break;
+          }
+        }
+        if (!foundOneCorrectAnswer) {
+          showNotify(
+            "Are you serious?",
+            `Question (${questionId + 1}) must have at least 1 correct answer`,
+            () => {
+              setSelectedQuestion(questionId);
+            }
+          );
+          return false;
+        }
+      }
+    }
 
-	function nextButton() {
-		if (selectedQuestion + 1 < questionList.length) { setSelectedQuestion(selectedQuestion + 1) }
-	}
+    return true;
+  }
 
-	function previousButton() {
-		if (selectedQuestion != 0) { setSelectedQuestion(selectedQuestion - 1) }
-	}
+  function editQuizDetail() {
+    if (!validateAllQuestion()) {
+      return;
+    }
+    setEditingQuizDetail(true);
+  }
 
+  function addMoreQuestion() {
+    const newQuestion = [...questionList];
+    newQuestion.push(emptyQuestion);
+    setQuestionList(newQuestion);
+  }
 
-	function handleChangeInput(e) {
-		const { name, value } = e.target
-		const basicsData = ['type', 'points']
-		const newQuestionList = [...questionList]
-		const index = selectedQuestion
-		if (basicsData.includes(name)) {
-			newQuestionList[index][name] = name === 'type' ? value : +value
-		} else {
-			if (name === 'explain' || name === 'imageUrl') {
-				newQuestionList[index].explanation[name] = value
-			}
-		}
-		setQuestionList(newQuestionList)
-	}
+  function removeCurrentQuestion() {
+    const newQuestion = [...questionList];
+    newQuestion.splice(selectedQuestion, 1);
+    if (newQuestion.length <= 0) {
+      newQuestion.push(emptyQuestion);
+    }
+    setQuestionList(newQuestion);
+    setSelectedQuestion(selectedQuestion - 1 < 0 ? 0 : selectedQuestion - 1);
+  }
 
-	function handleChangeQuiz(e) {
-		const { name, value } = e.target
-		switch (name) {
-			case 'hideCorrectAnswer':
-				setQuiz({ ...quiz, [name]: !quiz.hideCorrectAnswer })
-				break
-			default:
-				setQuiz({ ...quiz, [name]: value })
-				break
-		}
-	}
+  function deleteChoice(index) {
+    const newQuestion = [...questionList];
+    if (newQuestion[selectedQuestion].type == "fill-choice") {
+      if (newQuestion[selectedQuestion].answer.correctAnswer.length < 2) {
+        // Notify at least 1 choice
+        showNotify("Are you serious?", "Question must have at least 1 choice");
+        return;
+      }
+      newQuestion[selectedQuestion].answer.correctAnswer.splice(index, 1);
+    } else {
+      if (newQuestion[selectedQuestion].answer.correctAnswer.length < 2) {
+        showNotify("Are you serious?", "Question must have at least 1 choice");
+        return;
+      }
+      newQuestion[selectedQuestion].answer.correctAnswer.splice(index, 1);
+    }
+    setQuestionList(newQuestion);
+  }
 
-	async function handleSubmit() {
-		const newQuestionList = quiz.questions.map((obj) => {
-			if (obj.type === 'fill-choice') {
-				return { ...obj }
-			}
-			const { selectAnswers, ...rest } = obj.answer
-			const newSelectAnswers = selectAnswers.map(({ checked, ...rest }) => rest)
-			return { ...obj, answer: { ...rest, selectAnswers: newSelectAnswers } }
-		})
+  function addChoice() {
+    const newQuestion = [...questionList];
+    if (newQuestion[selectedQuestion].type == "fill-choice") {
+      newQuestion[selectedQuestion].answer.correctAnswer.push({
+        type: "contains",
+        matchString: "",
+      });
+    } else {
+      newQuestion[selectedQuestion].answer.correctAnswer.push({
+        explain: "",
+        checked: false,
+      });
+    }
+    setQuestionList(newQuestion);
+  }
 
-		let data = { ...quiz, questions: newQuestionList }
-		let arrs = []
+  function validateQuestionType(type) {
+    if (
+      type !== "fill-choice" &&
+      type !== "single-choice" &&
+      type != "multiple-choice"
+    ) {
+      // notify question type in correct
+      showNotify(
+        "Something went wrong?",
+        "It's look like question type is incorrect."
+      );
+      return false;
+    }
+    return true;
+  }
+  function changeQuestionType(e) {
+    const questionType = e.target.value;
+    if (!validateQuestionType(questionType)) return;
+    const newQuestion = [...questionList];
+    newQuestion[selectedQuestion].type = questionType;
+    if (questionType == "fill-choice") {
+      newQuestion[selectedQuestion].answer = {
+        correctAnswer: [
+          {
+            type: "contains",
+            matchString: "",
+          },
+        ],
+      };
+    } else {
+      newQuestion[selectedQuestion].answer = {
+        correctAnswer: [{ explain: "", checked: false }],
+      };
+    }
+    setQuestionList(newQuestion);
+  }
 
-		// eslint-disable-next-line
-		data.questions.map((quest, index) => {
+  function changeQuestionPoints(e) {
+    const newQuestion = [...questionList];
+    try {
+      const points = parseInt(e.target.value);
+      newQuestion[selectedQuestion].points = points;
+      setQuestionList(newQuestion);
+    } catch (e) {
+      // notify points incorrect type
+      showNotify(
+        "Something went wrong?",
+        "It's look like points is not a number."
+      );
+      return;
+    }
+  }
 
-			if (quest.type !== "") {
-				arrs.push(quest)
-			}
-		})
+  function changeTypeFillChoice(index, type) {
+    if (type !== "contains" && type !== "is-exactly") return;
+    const newQuestion = [...questionList];
+    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
+      console.log(`not found answer index ${index}`);
+      return;
+    }
+    newQuestion[selectedQuestion].answer.correctAnswer[index].type = type;
+    setQuestionList(newQuestion);
+  }
 
-		data.questions = arrs
+  function changeAnswerTextFillChoice(index, text) {
+    const newQuestion = [...questionList];
+    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
+      console.log(`not found correctAnswer index ${index}`);
+      return;
+    }
+    newQuestion[selectedQuestion].answer.correctAnswer[index].matchString =
+      text;
+    setQuestionList(newQuestion);
+  }
 
-		const res = await uploadQuiz(user.token, data)
+  function changeAnswerTextSelectChoice(index, text) {
+    const newQuestion = [...questionList];
+    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
+      console.log(`not found correctAnswer index ${index}`);
+      return;
+    }
+    newQuestion[selectedQuestion].answer.correctAnswer[index].explain = text;
+    setQuestionList(newQuestion);
+  }
 
-		if (res.status === 201) {
-			navigate('/activity/created')
-		}
-	}
+  function changeQuestionExplanation(e) {
+    const newQuestion = [...questionList];
+    newQuestion[selectedQuestion].explanation.explain = e.target.value;
+    setQuestionList(newQuestion);
+  }
 
-	useEffect(() => {
-		function handleChangeAnswer() {
-			const newQuestionList = [...questionList]
-			const index = selectedQuestion
-			const questionType = questionList[selectedQuestion].type
-			if (questionType === 'fill-choice') {
-				newQuestionList[index].answer.correctAnswer = selectedFillBlankChoice
-				delete newQuestionList[index].answer.selectAnswers
-			} else if (['single-choice', 'multiple-choice'].includes(questionType)) {
-				newQuestionList[index].answer.selectAnswers = selectedNormalChoices
-				newQuestionList[index].answer.correctAnswer =
-					questionType === 'single-choice'
-						? selectedNormalChoices.findIndex((choice) => choice.checked)
-						: selectedNormalChoices
-							.filter((choice) => choice.checked)
-							.map((choice) => selectedNormalChoices.indexOf(choice))
-			}
-			setQuestionList(newQuestionList)
-		}
+  function changeCorrectAnswerSelectChoice(index) {
+    const newQuestion = [...questionList];
+    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
+      console.log(`not found correctAnswer index ${index}`);
+      return;
+    }
 
-		handleChangeAnswer()
-		// eslint-disable-next-line
-	}, [selectedFillBlankChoice, selectedNormalChoices])
+    if (newQuestion[selectedQuestion].type === "single-choice") {
+      for (let answer of newQuestion[selectedQuestion].answer.correctAnswer) {
+        answer.checked = false;
+      }
+      newQuestion[selectedQuestion].answer.correctAnswer[index].checked = true;
+    } else if (newQuestion[selectedQuestion].type === "multiple-choice") {
+      newQuestion[selectedQuestion].answer.correctAnswer[index].checked =
+        !newQuestion[selectedQuestion].answer.correctAnswer[index].checked;
+    }
+    setQuestionList(newQuestion);
+  }
 
-	useEffect(() => {
-		setQuiz({ ...quiz, questions: questionList })
-		// eslint-disable-next-line
-	}, [questionList])
+  function adjustTextareaHeight() {
+    var textarea = document.getElementById("questionTextArea");
+    textarea.style.height = "370px"; // Reset height to allow scrollHeight calculation
+    textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+  }
 
-	return (
-		<>
-        	<Navbar />
-		
-		</>
-		// <div>
-		// 	<div className="flex justify-between bg-[#4A5059] p-2">
-		// 		<div>
-		// 			<input
-		// 				type="text"
-		// 				name="name"
-		// 				placeholder="Untitled Quiz"
-		// 				className="p-2 w-72 rounded bg-[#161B22] ml-1"
-		// 				value={quiz.name}
-		// 				onChange={handleChangeQuiz}
-		// 			/>
+  async function handleSubmit() {
+    // const newQuestionList = quiz.questions.map((obj) => {
+    //   if (obj.type === "fill-choice") {
+    //     return { ...obj };
+    //   }
+    //   const { selectAnswers, ...rest } = obj.answer;
+    //   const newSelectAnswers = selectAnswers.map(
+    //     ({ checked, ...rest }) => rest
+    //   );
+    //   return { ...obj, answer: { ...rest, selectAnswers: newSelectAnswers } };
+    // });
+    // let data = { ...quiz, questions: newQuestionList };
+    // let arrs = [];
+    // // eslint-disable-next-line
+    // data.questions.map((quest, index) => {
+    //   if (quest.type !== "") {
+    //     arrs.push(quest);
+    //   }
+    // });
+    // data.questions = arrs;
+    // const res = await uploadQuiz(user.token, data);
+    // if (res.status === 201) {
+    //   navigate("/activity/created");
+    // }
+  }
 
-		// 		</div>
+  // Notify
+  const [notify, setNotify] = useState({
+    show: false,
+    title: "",
+    message: "",
+  });
+  function showNotify(title, message, cb) {
+    if (cb) {
+      setNotify({
+        title: title,
+        show: true,
+        message: message,
+        cb: cb,
+      });
+      return;
+    }
+    setNotify({
+      title: title,
+      show: true,
+      message: message,
+    });
+  }
+  function closeNotify() {
+    setNotify({
+      title: "",
+      show: false,
+      message: "",
+    });
+  }
 
-		// 		<div className="flex items-center">
-		// 			<label>Hide Correct Answer</label>
-		// 			<div className="form-check form-switch mb-0 mx-2">
-		// 				<input
-		// 					name="hideCorrectAnswer"
-		// 					className="form-check-input bg-[#238636]"
-		// 					type="checkbox"
-		// 					value={quiz.hideCorrectAnswer}
-		// 					checked={quiz.hideCorrectAnswer}
-		// 					onChange={handleChangeQuiz}
-		// 				/>
-		// 			</div>
-		// 			<button onClick={handleSubmit} className="px-8 py-2 rounded bg-[#238636] text-[#C9D1D9] ml-6">
-		// 				SAVE
-		// 			</button>
-		// 		</div>
-		// 	</div>
+  useEffect(() => {
+    setQuiz({ ...quiz, questions: questionList });
+    // eslint-disable-next-line
+  }, [questionList]);
 
+  return (
+    <>
+      <Notify
+        show={notify.show}
+        title={notify.title}
+        handleClose={closeNotify}
+        message={notify.message}
+        cb={notify.cb}
+      />
 
+      <Navbar />
 
-		// 	<div className="flex">
-		// 		<div className="flex flex-col p-4">
-		// 			<div className="flex flex-col items-center bg-[#161B22] px-4 py-4 rounded mb-3">
-		// 				<BsImage className="text-7xl" />
-		// 				<span>Image</span>
-		// 			</div>
-		// 			<select
-		// 				style={{ alignSelf: 'center' }}
-		// 				defaultValue={selectedQuestion}
-		// 				className="selection__question__creating"
-		// 				onChange={(e) => {
-		// 					let index = parseInt(e.target.value)
-		// 					setSelectedQuestion(index)
-		// 				}}
-		// 				value={selectedQuestion}
-		// 			>
-		// 				{questionList.map((_, i) => (
-		// 					<option value={i} key={i}>
-		// 						{questionList[i].explanation.explain == '' ? `${i + 1} : New Question` : `${i + 1} : ${questionList[i].explanation.explain}`}
-		// 					</option>
-		// 				))}
-		// 			</select>
-		// 			<button className='add__question__button' onClick={addMoreQuestion}>
-		// 				ADD QUESTION
-		// 			</button>
-		// 			<button className='remove__question__button' onClick={removeCurrentQuestion}>
-		// 				REMOVE QUESTION
-		// 			</button>
-		// 		</div>
+      {editingQuizDetail ? (
+        <>
+        
+          TODO EDIT QUIZ DETAIL
+        </>
+      ) : (
+        <div className="create__main__continer">
+          <div className="create__container">
+            <div className="question__container">
+              <div className="header">
+                <div className="img">
+                  <QuestionSvg />
+                </div>
+                <div className="title">Question</div>
+              </div>
+              <div className="items">
+                {questionList.map((_, i) => (
+                  <div className="item">
+                    <button
+                      onClick={() => setSelectedQuestion(i)}
+                      className={
+                        selectedQuestion === i
+                          ? "question__active"
+                          : "question__unactive"
+                      }
+                    >
+                      {" "}
+                      <span
+                        className={
+                          questionList[i].explanation.explain == ""
+                            ? "not__has__explanation"
+                            : "has__explanation"
+                        }
+                      >
+                        {questionList[i].explanation.explain == ""
+                          ? `(${i + 1}) Editing Question...`
+                          : `(${i + 1}) ${questionList[i].explanation.explain}`}
+                      </span>
+                    </button>
 
+                    {selectedQuestion === i ? (
+                      <DeleteSvg onClick={removeCurrentQuestion} />
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="action">
+                <button onClick={addMoreQuestion} className="add">
+                  <AddButtonSvg />
+                  Add Question
+                </button>
+              </div>
+            </div>
+          </div>
+          <button className="edit__detail" onClick={editQuizDetail}>
+            Edit quiz detail
+            <NextSvg />
+          </button>
+          <div className="question__content">
+            <div className="settings">
+              <div className="item">
+                <div className="header">
+                  <PointsSvg />
+                  <div className="label">Points</div>
+                </div>
+                <select
+                  id="if-select"
+                  name="points"
+                  onChange={changeQuestionPoints}
+                  value={quiz.questions[selectedQuestion].points}
+                >
+                  <option value={1}>1 Points</option>
+                  <option value={2}>2 Points</option>
+                  <option value={3}>3 Points</option>
+                  <option value={5}>5 Points</option>
+                  <option value={10}>10 Points</option>
+                </select>
+              </div>
+              <div className="item">
+                <div className="header">
+                  <CategorySvg />
+                  <div className="label2">Type</div>
+                </div>
+                <select
+                  name="type"
+                  onChange={changeQuestionType}
+                  value={quiz.questions[selectedQuestion].type}
+                >
+                  <option value={"single-choice"}>Single Choice</option>
+                  <option value={"multiple-choice"}>Multiple Choice</option>
+                  <option value={"fill-choice"}>Fill Choice</option>
+                </select>
+              </div>
+            </div>
+            <textarea
+              name="explain"
+              id="questionTextArea"
+              onInput={adjustTextareaHeight}
+              value={quiz.questions[selectedQuestion].explanation.explain}
+              onChange={changeQuestionExplanation}
+              placeholder="Write your question here... "
+            ></textarea>
+            {JSON.stringify(quiz)}
+            {questionList[selectedQuestion].type === "fill-choice" ? (
+              <>
+                <div className="explanation__type">
+                  <div className="item">
+                    <ContainsSvg />
+                    Contains
+                  </div>
+                  <div className="item">
+                    <ExactlySvg />
+                    Exactly
+                  </div>
+                </div>
+                <div className="answers">
+                  {quiz.questions[selectedQuestion].answer.correctAnswer.map(
+                    (data, index) => {
+                      return (
+                        <InputTextAreaFillBlank
+                          index={index}
+                          type={data.type}
+                          value={data.matchString}
+                          onChange={changeAnswerTextFillChoice}
+                          changeType={changeTypeFillChoice}
+                          deleteItem={deleteChoice}
+                        />
+                      );
+                    }
+                  )}
+                  <div className="add__choice">
+                    <button onClick={addChoice}>
+                      <AddButtonSvg />
+                      Add Choice
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="answers">
+                  {quiz.questions[selectedQuestion].answer.correctAnswer.map(
+                    (data, index) => {
+                      return (
+                        <InputTextAreaChoice
+                          index={index}
+                          checked={data.checked}
+                          onChange={changeAnswerTextSelectChoice}
+                          setCorrectAnswer={changeCorrectAnswerSelectChoice}
+                          deleteItem={deleteChoice}
+                          value={data.explain}
+                        />
+                      );
+                    }
+                  )}
+                  <div className="add__choice">
+                    <button onClick={addChoice}>
+                      <AddButtonSvg />
+                      Add Choice
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
-		// 		{quiz.questions[selectedQuestion] && (
-		// 			<div className="flex-1  flex flex-col py-3 pr-3">
-		// 				<div className="h-[385px] bg-[#161B22] rounded flex-col items-center justify-center relative">
-		// 					<div className="flex justify-between p-2">
-		// 						<BsEyeFill className="text-xl text-[#4A5059]" />
-		// 						<div className="flex items-center">
-		// 							<select
-		// 								className="bg-[#161B22] border p-1.5 rounded text-slate-300 mx-3"
-		// 								name="points"
-		// 								value={quiz.questions[selectedQuestion].points}
-		// 								onChange={handleChangeInput}
-		// 							>
-		// 								<option value={1}>1 Point</option>
-		// 								<option value={3}>3 Points</option>
-		// 								<option value={10}>10 Points</option>
-		// 							</select>
-		// 							<select
-		// 								className="bg-[#161B22] border p-1.5 rounded text-slate-300"
-		// 								name="type"
-		// 								value={quiz.questions[selectedQuestion].type}
-		// 								onChange={handleClickChoiceType}
-		// 							>
-		// 								<option value={''} disabled>
-		// 									Select Choice
-		// 								</option>
-		// 								<option value={'single-choice'}>Single Choice</option>
-		// 								<option value={'multiple-choice'}>Multiple Choice</option>
-		// 								<option value={'fill-choice'}>Fill Choice</option>
-		// 							</select>
-		// 						</div>
-		// 					</div>
-		// 					<input
-		// 						type="text"
-		// 						name="explain"
-		// 						value={quiz.questions[selectedQuestion].explanation.explain}
-		// 						placeholder="question..."
-		// 						onChange={handleChangeInput}
-		// 						className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl text-slate-400 text-center border-none outline-none bg-transparent w-4/5"
-		// 					/>
-		// 				</div>
-
-		// 				{questionList[selectedQuestion].type === 'fill-choice' ? (
-		// 					<FillBlankChoice
-		// 						selectedFillBlankChoice={selectedFillBlankChoice}
-		// 						setSelectedFillBlankChoice={setSelectedFillBlankChoice}
-		// 					/>
-		// 				) : (
-		// 					(questionList[selectedQuestion].type === 'single-choice' ||
-		// 						questionList[selectedQuestion].type === 'multiple-choice') && (
-		// 						<NormalChoice
-		// 							choiceType={questionList[selectedQuestion].type}
-		// 							selectedChoices={questionList[selectedQuestion].answer.selectAnswers}
-		// 							setSelectedChoices={setSelectedNormalChoices}
-		// 						/>
-		// 					)
-		// 				)}
-		// 				<footer style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between' }}>
-		// 					<button onClick={previousButton}><AiOutlineArrowLeft style={{ width: '100px', height: '100px' }} /></button>
-		// 					<button onClick={nextButton}><AiOutlineArrowRight style={{ width: '100px', height: '100px' }} /></button>
-		// 				</footer>
-		// 			</div>
-		// 		)}
-		// 	</div>
-		// </div >
-	)
-}
-
-export default CreateQuiz
+export default CreateQuiz;

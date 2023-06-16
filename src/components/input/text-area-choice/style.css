@@ -1,0 +1,16 @@
+.item > textarea {
+    min-width: 905px;
+    font-size: 18px;
+    border-radius: 5px;
+    margin-right: 15px;
+    background: var(--button-un-active-color);
+    resize: none;
+    overflow: hidden;
+    height: 35px;
+    padding: 4px 8px 4px 8px;
+    transition: .1s;
+}
+
+.type_btn:active, .type_btn_big:active {
+    transform: scale(.95);
+}

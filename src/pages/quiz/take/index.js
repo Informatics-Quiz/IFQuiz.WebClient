@@ -278,7 +278,7 @@ export default function TakeQuiz() {
                 </h5>
                 <br />
                 <div className="fill__choice">
-                  {currentQuiz.questions[number].answer.selectAnswers.map(
+                  {currentQuiz.questions[number].answer.correctAnswer.map(
                     (answer, index) => (
                       <button
                         key={index}

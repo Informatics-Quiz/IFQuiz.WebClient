@@ -1,9 +1,16 @@
 
 import './index.css'
 import { ReactComponent as WhatHappenSvg } from '../../assets/svg/what_happen.svg'
-export default function Notify({show, title, handleClose, message}) {
+export default function Notify({show, title, handleClose, message, cb}) {
     return show ? (
-        <div className='notify__container' onClick={handleClose}>
+        <div className='notify__container' onClick={()=> {
+            handleClose()
+            if(cb){
+                setTimeout(()=> {
+                    cb(true)
+                }, 100)
+            }
+        }}>
             <div className='notify__header'>
                 <WhatHappenSvg />
             </div>
