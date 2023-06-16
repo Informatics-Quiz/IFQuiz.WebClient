@@ -1,4 +1,4 @@
-import client from '../Client'
+import client from '../client'
 
 export async function uploadUserProfile(token, postData) {
 	const res = await client.post('/file/upload/profile-image', postData, {

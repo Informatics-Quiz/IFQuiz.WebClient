@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../Reducers/userReducer";
-import { ReactComponent as HomeSvg } from "../../Assets/svg/home.svg";
-import { ReactComponent as ActivitySvg } from "../../Assets/svg/activity.svg";
-import { ReactComponent as LogoutSvg } from "../../Assets/svg/logout.svg";
-import { ReactComponent as FindQuizSvg } from "../../Assets/svg/find_quiz.svg";
-import { ReactComponent as CreateQuizSvg } from "../../Assets/svg/create_quiz.svg";
+import { setUser } from "../../reducers/user";
+import { ReactComponent as HomeSvg } from "../../assets/svg/home.svg";
+import { ReactComponent as ActivitySvg } from "../../assets/svg/activity.svg";
+import { ReactComponent as LogoutSvg } from "../../assets/svg/logout.svg";
+import { ReactComponent as FindQuizSvg } from "../../assets/svg/find_quiz.svg";
+import { ReactComponent as CreateQuizSvg } from "../../assets/svg/create_quiz.svg";
 
-import "./Navbar.css";
+import "./style.css";
 
 const Navbar2 = () => {
   const dispatch = useDispatch();
@@ -23,12 +23,12 @@ const Navbar2 = () => {
   const authBlockNav = {
     "/login": true,
     "/signup": true,
-    "/login-email": true,
+    "/login/email": true,
     "/register": true
   };
 
   console.log(authBlockNav[window.location.pathname] )
-  if (window.location.pathname === "/Quiz/Take") return null;
+  if (window.location.pathname === "/quiz/take") return null;
   if (authBlockNav[window.location.pathname]) return null;
 
   return (
@@ -57,7 +57,7 @@ const Navbar2 = () => {
                 </button>
               </Link>
             </div>
-            <Link to="/find-quiz"
+            <Link to="/quiz/find"
               style={{ textDecoration: "none"}}
             >
               <div className="d-flex align-items-center mx-2">
@@ -68,7 +68,7 @@ const Navbar2 = () => {
               </div>
             </Link>
             <Link
-              to="/CreateQuiz"
+              to="/quiz/create"
               style={{ textDecoration: "none", color: "white" }}
             >
               <div className="d-flex align-items-center mx-2">
@@ -86,15 +86,15 @@ const Navbar2 = () => {
             </button>
           </div>
         </div>
-      ) : window.location.pathname == "/signup" ||
-        window.location.pathname == "/login" ? (
+      ) : window.location.pathname === "/signup" ||
+        window.location.pathname === "/login" ? (
         <div className="container-fluid py-2 px-4">
           <Link
             to="/"
             style={{ textDecoration: "none", color: "white" }}
           ></Link>
           <div className="d-flex align-items-center">
-            {window.location.pathname == "/signup" ? (
+            {window.location.pathname === "/signup" ? (
               <Link
                 to="/login"
                 className="login__btn"

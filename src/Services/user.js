@@ -1,4 +1,4 @@
-import client from '../Client'
+import client from '../client'
 
 export async function updateUserProfile(token, bodyRequest) {
 	const res = await client.patch('/accounts/edit', bodyRequest, {

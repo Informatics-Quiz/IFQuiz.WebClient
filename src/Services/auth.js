@@ -1,4 +1,4 @@
-import client from '../Client'
+import client from '../client'
 
 export async function registerAuthUser(requestBody) {
 	const res = await client.post('/auth/signup', requestBody)

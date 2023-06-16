@@ -1,26 +1,26 @@
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import Welcome from './Pages/Welcome/Welcome'
-import Login from './Pages/Login/Login'
-import Signup from './Pages/Signup/Signup'
-import Register from './Pages/Register/Register'
-import LoginEmail from './Pages/LoginEmail/LoginEmail'
-import CreateQuiz from './Pages/CreateQuiz/CreateQuiz'
-import RevealQuiz from './Pages/RevealQuiz/RevealQuiz.js'
-import Home from './Pages/Home/Home'
-import EditUserProfile from './Pages/EditUserProfile/EditUserProfile'
-import FindQuiz from './Pages/FindQuiz/FindQuiz'
-import TakeQuiz from './Pages/TakeQuiz'
-import Quiz from './Pages/Quiz/Quiz'
-import ActivitySelection from "./Pages/activity/selection/Selection"
-import Created from "./Pages/activity/created/Created"
-import Running from "./Pages/activity/running/Running"
-import Completed from "./Pages/activity/completed/Completed"
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Navbar from './Components/Navbar'
-
 import { useSelector } from 'react-redux'
+
+import Welcome from './pages/home/welcome'
+import Login from './pages/auth/login/selection'
+import LoginEmail from './pages/auth/login/email'
+import Signup from './pages/auth/signup/selection'
+import Register from './pages/auth/signup/email'
+import Home from "./pages/home/main"
+import EditUserProfile from "./pages/user/edit"
+import FindQuiz from "./pages/quiz/find"
+import CreateQuiz from "./pages/quiz/create"
+import RevealQuiz from "./pages/quiz/reveal"
+import TakeQuiz from "./pages/quiz/take"
+import Quiz from "./pages/quiz/main"
+import ActivitySelection from "./pages/activity/selection"
+import Created from "./pages/activity/created"
+import Running from "./pages/activity/running"
+import Completed from "./pages/activity/completed"
+
 
 function App() {
 	const isAuthenticated = useSelector((state) => state.user.authUser) === null ? false : true
@@ -29,21 +29,21 @@ function App() {
 		<div className="App">
 			<Routes>
 				<Route path="/" element={<Welcome />} />
-				<Route path="/login" element={<Login />} />
 				<Route path="/signup" element={<Signup />} />
 				<Route path="/register" element={<Register />} />
-				<Route path="/find-quiz" element={<FindQuiz />} />
-				<Route path="/login-email" element={<LoginEmail />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/login/email" element={<LoginEmail />} />
+				<Route path="RevealQuiz" element={<RevealQuiz />} />
 				<Route path="/activity" element={<ActivitySelection/>} />
 				<Route path="/activity/created" element={<Created/>} />
 				<Route path="/activity/running" element={<Running/>} />
 				<Route path="/activity/completed" element={<Completed/>} />
-				<Route path="/CreateQuiz" element={<CreateQuiz />} />
-				<Route path="RevealQuiz" element={<RevealQuiz />} />
 				<Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-				<Route path="/edit-user-profile" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="/login" />} />
-				<Route path="/Quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
-				<Route path="/Quiz/Take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />
+				<Route path="/user/edit" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="/login" />} />
+				<Route path="/quiz/find" element={<FindQuiz />} />
+				<Route path="/quiz/create" element={<CreateQuiz />} />
+				<Route path="/quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
+				<Route path="/quiz/take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />
 			</Routes>
 		</div>
 	)

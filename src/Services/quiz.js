@@ -1,4 +1,4 @@
-import client from '../Client'
+import client from '../client'
 
 export async function uploadQuiz(token, requestBody) {
 	const res = await client.post('/quizzes/create', requestBody, {

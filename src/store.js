@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import userReducer from './Reducers/userReducer'
-import quizReducer from './Reducers/quizReducer'
+import userReducer from './reducers/user'
+import quizReducer from './reducers/quiz'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
 

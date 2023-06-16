@@ -1,6 +1,6 @@
 
 import './index.css'
-import { ReactComponent as WhatHappenSvg } from '../../Assets/svg/what_happen.svg'
+import { ReactComponent as WhatHappenSvg } from '../../assets/svg/what_happen.svg'
 export default function Notify({show, title, handleClose, message}) {
     return show ? (
         <div className='notify__container' onClick={handleClose}>
