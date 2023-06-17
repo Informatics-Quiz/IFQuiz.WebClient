@@ -19,7 +19,7 @@ import Navbar from "../../../components/navbar";
 
 const Home = () => {
   const onErrorQuizImageUrl =
-    "https://media.discordapp.net/attachments/1115338683671908462/1118138703580237844/image.png";
+    "https://media.discordapp.net/attachments/1115338683671908462/1119589308291096586/image.png";
   const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
     const anonymousFullName = "Anonymous";
 

@@ -63,7 +63,7 @@ const Navbar2 = () => {
               <div className="d-flex align-items-center mx-2">
                 <button className="mx-xl-1">
                   <FindQuizSvg className="home__nav__svg" />
-                  Find Quiz
+                  Join Quiz
                 </button>
               </div>
             </Link>

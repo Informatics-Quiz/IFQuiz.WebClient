@@ -8,8 +8,12 @@ import { ReactComponent as PointsSvg } from "../../../assets/svg/./points.svg";
 import { ReactComponent as CategorySvg } from "../../../assets/svg/category.svg";
 import { ReactComponent as ContainsSvg } from "../../../assets/svg/contains.svg";
 import { ReactComponent as ExactlySvg } from "../../../assets/svg/exactly.svg";
+import { ReactComponent as TimerWhiteSvg } from "../../../assets/svg/timer_white.svg";
+import { ReactComponent as TaskSvg } from "../../../assets/svg/task.svg";
+import { ReactComponent as SaveQuizSvg } from "../../../assets/svg/save_quiz.svg";
+import { ReactComponent as BackSvg } from "../../../assets/svg/back.svg";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import { uploadQuiz } from "../../../services/quiz";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +22,14 @@ import Navbar from "../../../components/navbar";
 import InputTextAreaFillBlank from "../../../components/input/text-area-fill-blank";
 import InputTextAreaChoice from "../../../components/input/text-area-choice";
 import Notify from "../../../components/notify";
+import { config } from "@fortawesome/fontawesome-svg-core";
 
 const CreateQuiz = () => {
   const user = useSelector((state) => state.user.authUser);
   const navigate = useNavigate();
+
+  const quizNameRef = useRef();
+  const quizDescriptionRef = useRef();
 
   const [editingQuizDetail, setEditingQuizDetail] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
@@ -39,14 +47,61 @@ const CreateQuiz = () => {
 
   const [questionList, setQuestionList] = useState([emptyQuestion]);
   const [quiz, setQuiz] = useState({
-    name: "",
-    description: "something like this in the future",
+    name: null,
+    description: null,
     imageUrl: "",
+    points: 0,
+    duration: {
+      hours: 0,
+      minutes: 1,
+    },
     hideCorrectAnswer: false,
     questions: questionList,
   });
 
+  function validateDuration(duration) {
+    // Check if `hours` and `minutes` are not null
+    if (duration.hours !== null && duration.minutes !== null) {
+      // Check if `minutes` is greater than or equal to 1
+      if (duration.minutes >= 1) {
+        return true; // Duration is valid
+      } else {
+        showNotify("Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
+        return false; // Minutes must be at least 1
+      }
+    } else {
+      showNotify("Are you serious?", "Hours and Minutes can't be empty."); // Hours and minutes must not be null
+      return false; // Hours and minutes must not be null
+    }
+  }
+
+  function validateQuiz(){
+    
+    if(quizNameRef.current.value.length < 3){
+      showNotify("Are you serious?", "Quiz name must be at least 3 characters.")
+      return false
+    }
+
+    if(quizDescriptionRef.current.value.length < 3){
+      showNotify("Are you serious?", "Quiz description must be at least 3 characters.")
+      return false
+    }
+
+    if(!validateDuration(quiz.duration))return false
+
+    return true
+
+  }
+  function saveQuiz(){
+    if(!validateQuiz())return
+    // TO DO UPLOAD QUIZ
+    // TO DO UPLOAD IMAGE
+  }
+
+
+
   function validateAllQuestion() {
+    let totalPoints = 0;
     for (let questionId = 0; questionId < questionList.length; questionId++) {
       const question = questionList[questionId];
 
@@ -91,6 +146,7 @@ const CreateQuiz = () => {
         setSelectedQuestion(questionId);
         return false;
       }
+      totalPoints += question.points;
 
       // validate question answer
       if (question.type === "fill-choice") {
@@ -124,17 +180,6 @@ const CreateQuiz = () => {
       ) {
         let foundOneCorrectAnswer = false;
         for (const answer of question.answer.correctAnswer) {
-          if (answer.explain.length < 1) {
-            showNotify(
-              "Are you serious?",
-              `Question (${questionId + 1}) answer must not be empty`,
-              () => {
-                setSelectedQuestion(questionId);
-              }
-            );
-            setSelectedQuestion(questionId);
-            return false;
-          }
           if (answer.checked) {
             foundOneCorrectAnswer = true;
             break;
@@ -150,9 +195,25 @@ const CreateQuiz = () => {
           );
           return false;
         }
+
+        // validate question answer explanation
+        for (const answer of question.answer.correctAnswer) {
+          if (answer.explain.length < 1) {
+            showNotify(
+              "Are you serious?",
+              `Question (${questionId + 1}) answer must not be empty`,
+              () => {
+                setSelectedQuestion(questionId);
+              }
+            );
+            setSelectedQuestion(questionId);
+            return false;
+          }
+        }
       }
     }
 
+    setQuiz({ ...quiz, points: totalPoints });
     return true;
   }
 
@@ -330,6 +391,15 @@ const CreateQuiz = () => {
     textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
   }
 
+  function resizeDescription() {
+    var textarea = document.getElementById("quizDescriptionTextArea");
+    textarea.style.height = "auto"; // Reset height to allow scrollHeight calculation
+    textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+  }
+
+
+  
+
   async function handleSubmit() {
     // const newQuestionList = quiz.questions.map((obj) => {
     //   if (obj.type === "fill-choice") {
@@ -386,6 +456,65 @@ const CreateQuiz = () => {
     });
   }
 
+  function validateNumber(value){
+    const pattern = /^[0-9]+$/;
+    return pattern.test(value);
+  }
+
+  function onChangeHours(e){
+    let value = e.target.value
+    const newQuiz = {...quiz}
+    if(value == ""){
+      newQuiz.duration.hours = 0
+      if(newQuiz.duration.minutes < 1){
+        newQuiz.duration.minutes = 1
+      }
+      setQuiz(newQuiz)
+      return
+    }
+    if(!validateNumber(value)){
+      return
+    }
+    const hours = parseInt(value)
+    newQuiz.duration.hours = hours
+    if(newQuiz.duration.hours < 1 && newQuiz.duration.minutes < 1){
+      newQuiz.duration.minutes = 1
+    }
+    setQuiz(newQuiz)
+  }
+
+  function onChangeMinutes(e){
+    let value = e.target.value
+    const newQuiz = {...quiz}
+
+    if(value == ""){
+      if(newQuiz.duration?.hours > 0){
+        newQuiz.duration.minutes = 0
+      } else{
+        newQuiz.duration.minutes = 1
+      }
+      setQuiz(newQuiz)
+      return
+    }
+
+    if(!validateNumber(value)){
+      return
+    }
+    const minutes = parseInt(value)
+    newQuiz.duration.minutes = minutes
+    if(newQuiz.duration.minutes < 1){
+      if(newQuiz.duration?.hours > 0){
+        newQuiz.duration.minutes = 0
+      } else{
+        newQuiz.duration.minutes = 1
+      }
+      setQuiz(newQuiz)
+      return
+    }
+    newQuiz.duration.minutes = newQuiz.duration.minutes > 59 ? 59 : newQuiz.duration.minutes
+    setQuiz(newQuiz)
+  }
+
   useEffect(() => {
     setQuiz({ ...quiz, questions: questionList });
     // eslint-disable-next-line
@@ -405,8 +534,84 @@ const CreateQuiz = () => {
 
       {editingQuizDetail ? (
         <>
-        
-          TODO EDIT QUIZ DETAIL
+          <div className="bottom__action__edit__quiz">
+            <button className="edit__detail"
+            onClick={saveQuiz}>
+              Save Quiz
+              <SaveQuizSvg />
+            </button>
+
+            <button
+              className="edit__detail__left"
+              onClick={() => {
+                setEditingQuizDetail(false);
+              }}
+            >
+              <BackSvg />
+              Edit question
+            </button>
+          </div>
+
+          <div className="edit__detail__quiz__main">
+            <div className="edit__quiz__detail__container">
+              <div className="cover__image__container">
+                <div className="image__cover">
+                  <img src="https://media.discordapp.net/attachments/1115338683671908462/1119589308291096586/image.png"></img>
+                </div>
+                <label htmlFor="file-upload" className="custom-file-upload">
+                  Upload Quiz Cover Image
+                </label>
+                <input id="file-upload" type="file" accept="image/*" />
+              </div>
+              <div className="quiz__detail__content">
+                <div className="quiz__name">
+                  <div className="title">Quiz Name</div>
+                  <input ref={quizNameRef} placeholder="Please enter the name for your quiz here."></input>
+                </div>
+                <div className="quiz__detail__description">
+                  <div className="title">Description</div>
+                  <textarea
+                    ref={quizDescriptionRef}
+                    id="quizDescriptionTextArea"
+                    placeholder="Please enter the description for your quiz here."
+                    onInput={resizeDescription}
+                  ></textarea>
+                </div>
+                <div className="quiz__duration">
+                  <div className="title">
+                    <TimerWhiteSvg />
+                    Durations
+                  </div>
+                  <div className="form">
+                  <div className="field">
+                      <input type="text" value={quiz.duration.hours == null ? "" : quiz.duration.hours} onChange={onChangeHours} placeholder="0" /> 
+                      Hours
+                    </div>
+                    <div className="field">
+                    <input type="text" value={quiz.duration.minutes == null ? "" : quiz.duration.minutes} onChange={onChangeMinutes} placeholder="1" />
+                      Minutes
+                    </div>
+                  </div>
+                </div>
+                <div className="quiz__short__info">
+                  <div className="item">
+                    <div className="header">
+                      <PointsSvg />
+                      Total Score
+                    </div>
+                    {quiz.points}
+                  </div>
+                  <div className="item">
+                    <div className="header">
+                      <TaskSvg />
+                      Tasks
+                    </div>
+                    {quiz.questions.length}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       ) : (
         <div className="create__main__continer">
@@ -507,7 +712,7 @@ const CreateQuiz = () => {
               onChange={changeQuestionExplanation}
               placeholder="Write your question here... "
             ></textarea>
-            {JSON.stringify(quiz)}
+            {/* {JSON.stringify(quiz)} */}
             {questionList[selectedQuestion].type === "fill-choice" ? (
               <>
                 <div className="explanation__type">
