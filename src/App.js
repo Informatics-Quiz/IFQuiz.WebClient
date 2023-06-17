@@ -20,6 +20,7 @@ import ActivitySelection from "./pages/activity/selection"
 import Created from "./pages/activity/created"
 import Running from "./pages/activity/running"
 import Completed from "./pages/activity/completed"
+import EditQuiz from "./pages/quiz/edit"
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
 				<Route path="/quiz/find" element={<FindQuiz />} />
 				<Route path="/quiz/create" element={<CreateQuiz />} />
 				<Route path="/quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
+				<Route path="/quiz/edit/:id" element={isAuthenticated ? <EditQuiz /> : <Navigate to="/login" />} />
 				<Route path="/quiz/take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />
 			</Routes>
 		</div>

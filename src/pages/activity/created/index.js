@@ -1,26 +1,22 @@
 import "./style.css";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStatus } from "../../../reducers/user";
+import { getUserProfile, updateUserStatus } from "../../../services/user";
+import { getOwnedQuiz, getQuizCoverImage } from "../../../services/quiz";
+
+
 import ModalStatus from "../../../components/modals/edit-status";
 import Navbar from "../../../components/navbar";
-import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
-import { ReactComponent as TaskSvg } from "../../../assets/svg/task.svg";
-import { ReactComponent as CodeQuizSvg } from "../../../assets/svg/code_quiz.svg";
-import { ReactComponent as HideSvg } from "../../../assets/svg/hide.svg";
-import { ReactComponent as ShowSvg } from "../../../assets/svg/show.svg";
-import { ReactComponent as TimerWhiteSvg } from "../../../assets/svg/timer_white.svg";
+import Notify from "../../../components/notify";
+import QuizCard from "../../../components/quiz-card";
 
 const Created = () => {
-  const onErrorQuizImageUrl =
-    "https://media.discordapp.net/attachments/1115338683671908462/1118138703580237844/image.png";
-  const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
-    const anonymousFullName = "Anonymous";
 
   const user = useSelector((state) => state.user);
+  const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
   const [profileImageUrl, setProfileImageUrl] = useState("")
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,67 +33,103 @@ const Created = () => {
   }
 
   async function handleEditStatus() {
-    const authToken = user.authUser.token;
-    const response = await axios.patch(
-      "http://localhost:3000/accounts/status",
-      { status: editstatus },
-      {
-        headers: {
-          Authorization: "Bearer " + authToken,
-        },
-      }
-    );
-
+    const response = await updateUserStatus(user.authUser.token, editstatus);
     dispatch(setStatus(response.data.status));
     handleClose();
   }
 
   useEffect(() => {
   	async function onGetProfileImage() {
-  		let headersList = {
-  			Accept: '*/*',
-  			Authorization: `Bearer ${user.authUser.token}`,
-  		}
-
-  		let reqOptions = {
-  			responseType: 'arraybuffer',
-  			url: 'http://localhost:3000/file/get/profile-image',
-  			method: 'GET',
-  			headers: headersList,
-  		}
-
   		try {
-  			let response = await axios.request(reqOptions)
-  			const blob = new Blob([response.data], { type: response.headers['Content-Type'] })
+        const res = await getUserProfile(user.authUser.token)
+  			const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
   			const url = URL.createObjectURL(blob)
-  			setProfileImageUrl(response.data.byteLength === 0 ? null : url)
+  			setProfileImageUrl(res.data.byteLength === 0 ? null : url)
   		} catch (error) {
-  			console.log(error)
+        showNotify("Something went wrong?", error.response.data.message)
   		}
   	}
 
   	onGetProfileImage()
   }, [user])
 
+
+  async function setImageCoverQuizzes(quizzes){
+    let initializedQuiz = quizzes
+    for(let quiz of initializedQuiz){
+      if(quiz.imageUrl != null && quiz.imageUrl != ""){
+        const res = await getQuizCoverImage(quiz.imageUrl)
+        const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
+  			const url = URL.createObjectURL(blob)
+        quiz.imageUrl = res.data.byteLength === 0 ? null : url
+      }
+    }
+    return initializedQuiz
+  }
   useEffect(() => {
     async function onGetQuizzes() {
-      const response = await axios.get(`http://localhost:3000/quizzes?owned=${user.authUser._id}`);
-      console.log(response)
-      setQuizzesCreated(response.data);
+      const response = await getOwnedQuiz(user.authUser.token)
+      const initializedQuiz = await setImageCoverQuizzes(response.data)
+      setQuizzesCreated(initializedQuiz);
     }
     onGetQuizzes();
   }, []);
 
+
+
+  // Notify
+	const [notify, setNotify] = useState({
+		show: false,
+		title: "",
+		message: ""
+	  }); 
+	  function showNotify(title, message) {
+		setNotify({
+			title: title,
+			show: true,
+			message: message
+		})
+	  }
+	  function closeNotify() {
+		setNotify({
+			title: "",
+			show: false,
+			message: ""
+		})
+	}
+
+
+  
+  function editHandler(quiz){
+    const quizId = quiz._id
+    if(!quizId){
+      showNotify("Something went wrong?", "Quiz not found!")
+      return
+    }
+    navigate('/quiz/edit/' + quizId)
+  }
+
+  function deployHandler(quizId){
+    
+  }
+
   return (
     <>
-        <Navbar />
-        <ModalStatus
+    <Notify
+				show={notify.show}
+				title={notify.title}
+				handleClose={closeNotify}
+				message={notify.message}
+			/>
+      <ModalStatus
           show={show}
           handleClose={handleClose}
           status={user.authUser.status}
           setEditStatus={setEditStatus}
           handleEditStatus={handleEditStatus}
         />
+        <Navbar />
+        
       <div className="home__container">
         <div className="profile__container">
           <div className="profile__image">
@@ -119,92 +151,12 @@ const Created = () => {
         </div>
         <div className="quizzes__container">
           {quizzesCreated.map((quiz, index) => {
-            if (index === 0) {
-              return (
-                <div
-                  className="first__card"
-                >
-                  <div className="quiz__image">
-                    <img src={quiz.imageUrl || onErrorQuizImageUrl}></img>
-                  </div>
-                  <div className="quiz__info">
-                    <p className="quiz__title">{quiz.name}</p>
-                    <p className="quiz__description">{quiz.description}</p>
-                    <div className="quiz__deep__info">
-                      <div className="author">
-                        <UserSvg />
-                        {quiz.user?.fullname || anonymousFullName}
-                      </div>
-                      <div className="total__task">
-                        <TaskSvg />
-                        {quiz.questions.length} Tasks
-                      </div>
-                      <div className="join__code">
-                        <CodeQuizSvg />
-                        {quiz.codeJoin || "S8DXE7"}
-                      </div>
-                      {quiz.hideCorrectAnswer ? (
-                        <div className="hide__show__correct__answer">
-                          <HideSvg />
-                          Hide Correct Answers
-                        </div>
-                      ) : (
-                        <div className="hide__show__correct__answer">
-                          <ShowSvg />
-                          Show Correct Answers
-                        </div>
-                      )}
-                      <div className="timer__info">
-                        <TimerWhiteSvg />
-                        1 Hours
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-            return (
-              <div
-                className="quiz__card"
-              >
-                <div className="quiz__image">
-                  <img src={quiz.imageUrl || onErrorQuizImageUrl}></img>
-                </div>
-                <div className="quiz__info">
-                  <p className="quiz__title">{quiz.name}</p>
-                  <p className="quiz__description">{quiz.description}</p>
-                  <div className="quiz__deep__info">
-                    <div className="author">
-                      <UserSvg />
-                      {quiz.user?.fullname || anonymousFullName}
-                    </div>
-                    <div className="total__task">
-                      <TaskSvg />
-                      {quiz.questions.length} Tasks
-                    </div>
-                    <div className="join__code">
-                      <CodeQuizSvg />
-                      {quiz.codeJoin || "S8DXE7"}
-                    </div>
-                    {quiz.hideCorrectAnswer ? (
-                      <div className="hide__show__correct__answer">
-                        <HideSvg />
-                        Hide Correct Answers
-                      </div>
-                    ) : (
-                      <div className="hide__show__correct__answer">
-                        <ShowSvg />
-                        Show Correct Answers
-                      </div>
-                    )}
-                    <div className="timer__info">
-                        <TimerWhiteSvg />
-                        2 Hours 30 Minutes
-                      </div>
-                  </div>
-                </div>
-              </div>
-            );
+            return <QuizCard
+              index={index}
+              quiz={quiz}
+              editHandler={editHandler}
+              deployHandler={deployHandler}
+            />
           })}
         </div>
       </div>

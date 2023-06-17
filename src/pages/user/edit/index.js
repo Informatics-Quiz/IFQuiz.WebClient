@@ -54,7 +54,7 @@ const EditUserProfile = () => {
       dispatch(setUser({ ...user, ...userProfile }));
       navigate("/home");
     } catch (error) {
-      console.error(error);
+      showNotify("Something went wrong?", error.response.data.message);
     }
   }
 

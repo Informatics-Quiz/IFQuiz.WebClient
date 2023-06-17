@@ -13,6 +13,7 @@ import { ReactComponent as ShowSvg } from "../../../assets/svg/show.svg";
 import { ReactComponent as BookSvg } from "../../../assets/svg/book.svg";
 import { ReactComponent as TimerBlueSvg } from "../../../assets/svg/timer_blue.svg";
 import Navbar from "../../../components/navbar";
+import Notify from "../../../components/notify";
 
 export default function Quiz() {
   const onErrorQuizImageUrl =
@@ -30,10 +31,9 @@ export default function Quiz() {
       if (!id) return;
       try {
         const res = await getQuizById(id);
-        console.log(res.data);
         setQuiz(res.data);
       } catch (error) {
-        console.log(error);
+        showNotify("Something went wrong?", error.response.data.message)
       }
     }
 
@@ -45,9 +45,35 @@ export default function Quiz() {
     navigate(`/quiz/take`);
   };
 
+  const [notify, setNotify] = useState({
+    show: false,
+    title: "",
+    message: "",
+  });
+  function showNotify(title, message) {
+    setNotify({
+      title: title,
+      show: true,
+      message: message,
+    });
+  }
+  function closeNotify() {
+    setNotify({
+      title: "",
+      show: false,
+      message: "",
+    });
+  }
+
   if (!quiz) return null;
   return (
     <>
+      <Notify
+				show={notify.show}
+				title={notify.title}
+				handleClose={closeNotify}
+				message={notify.message}
+			/>
       <Navbar/>
       <div className="quiz__detail__container">
         <div className="quiz__detail__top">

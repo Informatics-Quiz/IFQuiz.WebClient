@@ -13,20 +13,25 @@ import { ReactComponent as TaskSvg } from "../../../assets/svg/task.svg";
 import { ReactComponent as SaveQuizSvg } from "../../../assets/svg/save_quiz.svg";
 import { ReactComponent as BackSvg } from "../../../assets/svg/back.svg";
 
-import React, { useState, useEffect, useRef  } from "react";
-import { uploadQuiz } from "../../../services/quiz";
+import React, { useState, useEffect  } from "react";
+import { getQuizCoverImage, uploadQuiz } from "../../../services/quiz";
 import { uploadQuizCoverImage } from "../../../services/upload";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getQuizByIdForEdit } from "../../../services/quiz";
 
 import Navbar from "../../../components/navbar";
 import InputTextAreaFillBlank from "../../../components/input/text-area-fill-blank";
 import InputTextAreaChoice from "../../../components/input/text-area-choice";
 import Notify from "../../../components/notify";
 
-const CreateQuiz = () => {
-  const user = useSelector((state) => state.user.authUser);
-  const navigate = useNavigate();
+const EditQuiz = () => {
+    const { id } = useParams()
+    const user = useSelector((state) => state.user.authUser);
+    const navigate = useNavigate();
+  const dispatch = useDispatch();
+
 
 
   const [editingQuizDetail, setEditingQuizDetail] = useState(false);
@@ -43,17 +48,8 @@ const CreateQuiz = () => {
   };
 
   const [questionList, setQuestionList] = useState([emptyQuestion]);
-  const [quiz, setQuiz] = useState({
-    name: null,
-    description: null,
-    points: 0,
-    duration: {
-      hours: 0,
-      minutes: 1,
-    },
-    hideCorrectAnswer: false,
-    questions: questionList,
-  });
+  const [quiz, setQuiz] = useState(null);
+
 
   function setQuizName(e){
     const quizName = e.target.value
@@ -546,14 +542,34 @@ const CreateQuiz = () => {
   }
 
   useEffect(() => {
+    async function onGetQuiz() {
+      if (!id) return;
+      try {
+        const res = await getQuizByIdForEdit(id, user.token);
+        setQuiz(res.data);
+        setQuestionList(res.data.questions);
+        if(res.data.imageUrl != null && res.data.imageUrl != ""){
+            const resImage = await getQuizCoverImage(res.data.imageUrl);
+            const blob = new Blob([resImage.data], { type: resImage.headers['Content-Type'] })
+  			const url = URL.createObjectURL(blob)
+            setQuizCoverImage(resImage.data.byteLength === 0 ? null : url)
+        }
+      } catch (error) {
+        showNotify("Something went wrong?", error.response.data.message)
+      }
+    }
+
+    onGetQuiz();
+  }, [id, dispatch]);
+  
+  useEffect(() => {
     setQuiz({ ...quiz, questions: questionList });
     // eslint-disable-next-line
   }, [questionList]);
 
 
+  if(!quiz)return null
  
-
-
   return (
     <>
       <Notify
@@ -816,4 +832,4 @@ const CreateQuiz = () => {
   );
 };
 
-export default CreateQuiz;
+export default EditQuiz;

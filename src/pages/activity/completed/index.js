@@ -5,14 +5,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStatus } from "../../../reducers/user";
-import ModalStatus from "../../../components/modals/edit-status";
-import Navbar from "../../../components/navbar";
 import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
 import { ReactComponent as TaskSvg } from "../../../assets/svg/task.svg";
 import { ReactComponent as CodeQuizSvg } from "../../../assets/svg/code_quiz.svg";
 import { ReactComponent as HideSvg } from "../../../assets/svg/hide.svg";
 import { ReactComponent as ShowSvg } from "../../../assets/svg/show.svg";
 import { ReactComponent as TimerWhiteSvg } from "../../../assets/svg/timer_white.svg";
+
+import ModalStatus from "../../../components/modals/edit-status";
+import Navbar from "../../../components/navbar";
+import Notify from "../../../components/notify";
 
 const Completed = () => {
   const onErrorQuizImageUrl =
@@ -72,7 +74,7 @@ const Completed = () => {
   			const url = URL.createObjectURL(blob)
   			setProfileImageUrl(response.data.byteLength === 0 ? null : url)
   		} catch (error) {
-  			console.log(error)
+        showNotify("Something went wrong?", error.response.data.message)
   		}
   	}
 
@@ -87,8 +89,35 @@ const Completed = () => {
     onGetQuizzes();
   }, []);
 
+  // Notify
+	const [notify, setNotify] = useState({
+		show: false,
+		title: "",
+		message: ""
+	  }); 
+	  function showNotify(title, message) {
+		setNotify({
+			title: title,
+			show: true,
+			message: message
+		})
+	  }
+	  function closeNotify() {
+		setNotify({
+			title: "",
+			show: false,
+			message: ""
+		})
+	  }
+
   return (
     <>
+    <Notify
+        show={notify.show}
+        title={notify.title}
+        handleClose={closeNotify}
+        message={notify.message}
+      />
         <Navbar />
         <ModalStatus
           show={show}

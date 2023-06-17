@@ -1,3 +1,4 @@
+import axios from 'axios'
 import client from '../client'
 
 export async function updateUserProfile(token, bodyRequest) {
@@ -23,6 +24,28 @@ export async function deleteUserAccount(token) {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
+	})
+	return res
+}
+
+export async function getUserProfile(token) {
+	const res = await client.get('/file/get/profile-image', {
+		responseType: 'arraybuffer',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	return res
+}
+
+export async function updateUserStatus(token, status) {
+	const res = await client.patch('/accounts/status', {
+		status: status
+	},
+	{
+		headers: {
+			Authorization:`Bearer ${token}`
+		}
 	})
 	return res
 }
