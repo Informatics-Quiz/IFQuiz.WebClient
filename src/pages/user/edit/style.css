@@ -111,23 +111,38 @@
     transition: .3s;
 	animation: slide-right .8s;
 }
+
+.back__home__button__right {
+    position: fixed;
+    display: flex;
+    bottom: 10px;
+    text-align: center;
+    right: 30px;
+    transition: .3s;
+	animation: slide-left .8s;
+}
+
 .back__home__button:hover,
+.back__home__button__right:hover,
 .svg__with__button:hover {
     transform: scale(1.05);
     opacity: .7;
 }
 .back__home__button:active,
+.back__home__button__right:active,
 .svg__with__button:active,
 .save__button:active {
     transform: scale(0.95);
     opacity: 1;
 }
-.back__home__button svg {
+.back__home__button svg,
+.back__home__button__right svg {
     margin-right: 10px;
     margin-top: 8px;
 }
 
-.back__home__button p {
+.back__home__button p,
+.back__home__button__right p {
     font-size: 24px;
 }
 
