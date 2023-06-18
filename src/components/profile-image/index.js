@@ -4,12 +4,11 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { uploadUserProfile } from "../../services/upload";
+import { onErrorProfileImageUrl } from "../../config/constraints";
 
 export default function ProfileImage({notify}) {
   const [renderImage, setRenderImage] = useState(null);
   const user = useSelector((state) => state.user.authUser);
-  const onErrorProfileImageUrl =
-    "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png";
   const [profileImageUrl, setProfileImageUrl] = useState("");
   async function onImageChange(e) {
     const file = e.target.files[0];

@@ -1,6 +1,7 @@
 
 import './index.css'
-import { ReactComponent as WhatHappenSvg } from '../../assets/svg/what_happen.svg'
+import { svgMap } from '../../config/constraints'
+
 export default function Notify({show, title, handleClose, message, cb}) {
     return show ? (
         <div className='notify__container' onClick={()=> {
@@ -12,7 +13,7 @@ export default function Notify({show, title, handleClose, message, cb}) {
             }
         }}>
             <div className='notify__header'>
-                <WhatHappenSvg />
+                {svgMap.what_happen}
             </div>
             <div className='notify__body'>
                 <div className='notify__title__container'>

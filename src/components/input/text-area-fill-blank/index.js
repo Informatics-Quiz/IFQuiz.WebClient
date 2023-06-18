@@ -1,10 +1,8 @@
 import "./style.css";
 
-import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
 import { ReactComponent as ContainsUnActiveSvg } from "../../../assets/svg/contains_unactive.svg";
 import { ReactComponent as ExactlyUnActiveSvg } from "../../../assets/svg/exactly_unactive.svg";
-import { ReactComponent as ContainsActiveSvg } from "../../../assets/svg/contains.svg";
-import { ReactComponent as ExactlyActiveSvg } from "../../../assets/svg/exactly.svg";
+import { svgMap } from "../../../config/constraints";
 
 export default function InputTextAreaFillBlank({
   index,
@@ -35,7 +33,9 @@ export default function InputTextAreaFillBlank({
       <div className="action">
         <div className="type_btn">
           {type === "contains" ? (
-            <ContainsActiveSvg/>
+            <>
+              {svgMap.contains}
+            </>
           ) : (
             <ContainsUnActiveSvg
               onClick={() => {
@@ -46,7 +46,9 @@ export default function InputTextAreaFillBlank({
         </div>
         <div className="type_btn">
           {type === "is-exactly" ? (
-            <ExactlyActiveSvg/>
+            <>
+              {svgMap.exactly}
+            </>
           ) : (
             <ExactlyUnActiveSvg
               onClick={() => {
@@ -55,12 +57,12 @@ export default function InputTextAreaFillBlank({
             />
           )}
         </div>
-        <div className="type_btn_big">
-          <DeleteSvg
-            onClick={() => {
+        <div className="type_btn_big" onClick={() => {
               deleteItem(index);
-            }}
-          />
+            }}>
+          <>
+              {svgMap.delete}
+          </>
         </div>
       </div>
     </div>

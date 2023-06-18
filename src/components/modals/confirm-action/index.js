@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { ReactComponent as TrashBinSvg } from "../../../assets/svg/trash_bin.svg";
+import { svgMap } from "../../../config/constraints";
 
 export default function ModalConfirmAction({
   show,
@@ -12,14 +12,12 @@ export default function ModalConfirmAction({
   handleConfirm,
   handleCancel,
 }) {
-  const mapSvgs = {
-    TRASH_BIN: <TrashBinSvg />,
-  };
+
   return show ? (
     <>
       <div className="modal__confirm__action__container">
         <div className="modal__header__container">
-          <div className="modal__header__svg">{mapSvgs[svgEnum]}</div>
+          <div className="modal__header__svg">{svgMap[svgEnum]}</div>
           <div className="modal__header__text__container">
             <p className="modal__header__title">{title}</p>
             <p className="modal__header__description">{description}</p>

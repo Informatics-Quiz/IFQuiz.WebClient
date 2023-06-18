@@ -1,5 +1,5 @@
 import './style.css'
-import { ReactComponent as ThinkingSvg } from '../../../assets/svg/thinking.svg'
+import { svgMap } from '../../../config/constraints'
 import { ReactComponent as TrueSvg } from '../../../assets/svg/true.svg'
 
 export default function ModalStatus({ show, handleClose, status, setEditStatus, handleEditStatus }) {
@@ -7,7 +7,7 @@ export default function ModalStatus({ show, handleClose, status, setEditStatus, 
 		<div className='modal__container'>
 			<div className='modal__info'>
 				<div className='status__svg'>
-					<ThinkingSvg />
+					{svgMap.thinking}
 				</div>
 				<div className='status__edit__form'>
 					<div className='status__label__container'>

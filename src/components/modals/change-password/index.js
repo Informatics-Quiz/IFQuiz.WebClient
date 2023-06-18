@@ -1,14 +1,14 @@
 import './style.css'
 
-import { ReactComponent as ChangePassword } from '../../../assets/svg/change_password.svg'
 import { ReactComponent as TrueSvg } from '../../../assets/svg/true.svg'
+import { svgMap } from '../../../config/constraints'
 
 export default function ModalChangePassword({ show, handleClose, handleChangePassword, handleChangeConfirmPassword, handleClickUpdatePassword }) {
 	return show ? (
 		<div className='modal__container'>
 			<div className='modal__info'>
 				<div className='status__svg'>
-					<ChangePassword />
+					{svgMap.change_password}
 				</div>
 				<div className='status__edit__form'>
 					<div className='status__label__container'>

@@ -1,8 +1,6 @@
 import "./style.css";
 
-import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
-import { ReactComponent as CorrectChoiceSvg } from "../../../assets/svg/correct_choice.svg";
-import { ReactComponent as InCorrectChoiceSvg } from "../../../assets/svg/incorrect_choice.svg";
+import { svgMap } from "../../../config/constraints";
 
 export default function InputTextAreaChoice({
   index,
@@ -31,19 +29,17 @@ export default function InputTextAreaChoice({
         placeholder="Answer here... "
       ></textarea>
       <div className="action">
-        <div className="type_btn">
+        <div className="type_btn" onClick={()=> {setCorrectAnswer(index)}}>
           {checked ? (
-            <CorrectChoiceSvg onClick={()=> {setCorrectAnswer(index)}}/>
+            svgMap["correct_choice"]
           ) : (
-           <InCorrectChoiceSvg onClick={()=> {setCorrectAnswer(index)}}/>
+            svgMap["incorrect_choice"]
           )}
         </div>
-        <div className="type_btn_big">
-          <DeleteSvg
-            onClick={() => {
+        <div className="type_btn_big" onClick={() => {
               deleteItem(index);
-            }}
-          />
+            }}>
+              {svgMap["delete"]}
         </div>
       </div>
     </div>
