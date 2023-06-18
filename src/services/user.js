@@ -1,4 +1,3 @@
-import axios from 'axios'
 import client from '../client'
 
 export async function updateUserProfile(token, bodyRequest) {

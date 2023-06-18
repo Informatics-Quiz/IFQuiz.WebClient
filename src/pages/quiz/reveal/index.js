@@ -162,10 +162,10 @@ const RevealQuiz = () => {
                 <div className='question__reveal__answer__grid__odd'>
                     <div className='uncorrect__answer'>perpendicular bisector of its diameter</div>
                     <div className='correct__answer'>
-                        <img src={correctAnswerImageUrl}/>
+                        <img src={correctAnswerImageUrl} alt='correct-answer'/>
                     </div>
                     <div className='uncorrect__answer'>
-                        <img src={correctAnswerImageUrl}/>
+                        <img src={correctAnswerImageUrl} alt='uncorrect-answer'/>
                     </div>
                     <div className='uncorrect__answer'>perpendicular bisector of its diameter</div>
                     <div className='uncorrect__answer'>perpendicular bisector of its diameter</div>

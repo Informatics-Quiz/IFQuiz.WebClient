@@ -50,7 +50,7 @@ export default function QuizCard({
       onClick={takeQuizHandler ? takeQuizHandler : () => {}}
     >
       <div className="quiz__image">
-        <img src={quiz.imageUrl || onErrorQuizImageUrl}></img>
+        <img src={quiz.imageUrl || onErrorQuizImageUrl} alt="quiz-image"></img>
       </div>
       <div className="quiz__info">
         <p className="quiz__title">{quiz.name}</p>
@@ -114,7 +114,7 @@ export default function QuizCard({
       onClick={takeQuizHandler ? takeQuizHandler : () => {}}
     >
       <div className="quiz__image">
-        <img src={quiz.imageUrl || onErrorQuizImageUrl}></img>
+        <img src={quiz.imageUrl || onErrorQuizImageUrl} alt="quiz-image"></img>
       </div>
       <div className="quiz__info">
         <p className="quiz__title">{quiz.name}</p>

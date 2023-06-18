@@ -57,7 +57,7 @@ const Running = () => {
   async function setImageCoverQuizzes(quizzes){
     let initializedQuiz = quizzes
     for(let quiz of initializedQuiz){
-      if(quiz.imageUrl != null && quiz.imageUrl != ""){
+      if(quiz.imageUrl !== null && quiz.imageUrl !== ""){
         const res = await getQuizCoverImage(quiz.imageUrl)
         const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
   			const url = URL.createObjectURL(blob)
@@ -172,14 +172,14 @@ const Running = () => {
             svg={"book"}
             label={"Running"}
           />
-          {quizzesRunning.map((quiz, index) => {
+          {/* {quizzesRunning.map((quiz, index) => {
             return <QuizCard
               index={index}
               quiz={quiz}
               editHandler={editHandler}
               deployHandler={deployHandler}
             />
-          })}
+          })} */}
         </div>
       </div>
     </>

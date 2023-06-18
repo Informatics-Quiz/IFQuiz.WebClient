@@ -8,7 +8,6 @@ import { ReactComponent as CorrectChoiceSvg } from "../assets/svg/correct_choice
 import { ReactComponent as InCorrectChoiceSvg } from "../assets/svg/incorrect_choice.svg";
 import { ReactComponent as ChangePassword } from '../assets/svg/change_password.svg'
 import { ReactComponent as ThinkingSvg } from '../assets/svg/thinking.svg'
-import { ReactComponent as ContainsActiveSvg } from "../assets/svg/contains.svg";
 import { ReactComponent as ExactlyActiveSvg } from "../assets/svg/exactly.svg";
 import { ReactComponent as WhatHappenSvg } from '../assets/svg/what_happen.svg'
 import { ReactComponent as UserSvg } from "../assets/svg/user.svg";
@@ -51,7 +50,6 @@ export const svgMap = {
     incorrect_choice: <InCorrectChoiceSvg />,
     change_password: <ChangePassword />,
     thinking: <ThinkingSvg />,
-    contains: <ContainsActiveSvg />,
     exactly: <ExactlyActiveSvg />,
     what_happen: <WhatHappenSvg />,
     user: <UserSvg />,

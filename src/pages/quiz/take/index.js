@@ -20,7 +20,7 @@ export default function TakeQuiz() {
   const [score, setScore] = useState(0);
 
   const [timer, setTimer] = useState(600)
-  const [isTimeup, setIsTimeUp] = useState(false)
+  // const [isTimeup, setIsTimeUp] = useState(false)
 
   const [userAnswers, setUserAnswers] = useState([]);
   const [isFinished, setIsFinished] = useState(false);
@@ -35,7 +35,7 @@ export default function TakeQuiz() {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
           clearInterval(interval);
-          setIsTimeUp(true);
+          // setIsTimeUp(true);
           return prevTimer;
         }
         return prevTimer - 1;

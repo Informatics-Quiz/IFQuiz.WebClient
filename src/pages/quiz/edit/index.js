@@ -537,7 +537,7 @@ const EditQuiz = () => {
         const res = await getQuizByIdForEdit(id, user.token);
         setQuiz(res.data);
         setQuestionList(res.data.questions);
-        if(res.data.imageUrl != null && res.data.imageUrl != ""){
+        if(res.data.imageUrl !== null && res.data.imageUrl !== ""){
             const resImage = await getQuizCoverImage(res.data.imageUrl);
             const blob = new Blob([resImage.data], { type: resImage.headers['Content-Type'] })
   			const url = URL.createObjectURL(blob)

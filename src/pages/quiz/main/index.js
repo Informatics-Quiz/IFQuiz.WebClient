@@ -25,7 +25,7 @@ export default function Quiz() {
   async function setImageCoverQuiz(quiz) {
     let initializedQuiz = quiz;
     try {
-      if (initializedQuiz.imageUrl != null && initializedQuiz.imageUrl != "") {
+      if (initializedQuiz.imageUrl !== null && initializedQuiz.imageUrl !== "") {
         const res = await getQuizCoverImage(initializedQuiz.imageUrl);
         const blob = new Blob([res.data], {
           type: res.headers["Content-Type"],
