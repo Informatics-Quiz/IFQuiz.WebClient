@@ -121,8 +121,7 @@ const EditUserProfile = () => {
     });
   };
   function validateStrongPassword(password) {
-    const passwordPattern =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordPattern = /^.{1,7}$/;
 
     return passwordPattern.test(password);
   }
