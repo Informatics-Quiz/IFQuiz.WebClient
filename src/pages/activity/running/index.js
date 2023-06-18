@@ -14,10 +14,6 @@ import QuizCard from "../../../components/quiz-card";
 import { ActivityHeader } from "../../../components/activity-header";
 import { onErrorProfileImageUrl } from "../../../config/constraints";
 
-import ModalStatus from "../../../components/modals/edit-status";
-import Navbar from "../../../components/navbar";
-import Notify from "../../../components/notify";
-
 const Running = () => {
 
   const user = useSelector((state) => state.user);
