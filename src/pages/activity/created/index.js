@@ -18,6 +18,7 @@ import { onErrorProfileImageUrl } from "../../../config/constraints";
 const Created = () => {
 
   const user = useSelector((state) => state.user);
+  const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
   const [profileImageUrl, setProfileImageUrl] = useState("")
   const dispatch = useDispatch();
   const navigate = useNavigate();
