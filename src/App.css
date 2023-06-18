@@ -15,6 +15,7 @@
 	--button-un-active-color: rgba(94, 94, 94, 1);
 	--card-bg: #262626;
 	--active-button-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
+	--success-button-color: linear-gradient(180deg, #73D382 0%, #3EA573 100%);;
 }
 
 .App {
