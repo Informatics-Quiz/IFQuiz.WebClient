@@ -33,6 +33,12 @@ import { ReactComponent as FindQuizSvg } from "../assets/svg/find_quiz.svg";
 import { ReactComponent as TimerBlueSvg } from "../assets/svg/timer_blue.svg";
 import { ReactComponent as EditUserSvg } from "../assets/svg/edit_user.svg";
 import { ReactComponent as SecuritySvg } from "../assets/svg/security.svg";
+import { ReactComponent as NotFoundSvg } from "../assets/svg/notfound.svg";
+import { ReactComponent as ErrorSvg } from "../assets/svg/error.svg";
+import { ReactComponent as SuccessSvg } from "../assets/svg/succses.svg";
+import { ReactComponent as TimeUpSvg } from "../assets/svg/time_up.svg";
+
+
 
 
 export const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
@@ -74,6 +80,9 @@ export const svgMap = {
     question: <QuestionSvg />,
     find_quiz: <FindQuizSvg />,
     edit_user: <EditUserSvg />,
-    security: <SecuritySvg />
-
+    security: <SecuritySvg />,
+    not_found: <NotFoundSvg />,
+    error: <ErrorSvg/>,
+    success: <SuccessSvg/>,
+    time_up: <TimeUpSvg/>
 }

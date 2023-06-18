@@ -50,7 +50,7 @@ export default function Quiz() {
         setTimerLabel(getTimerLabel(finalQuiz.expiredAt))
 
       } catch (error) {
-        showNotify("Something went wrong?", error.response.data.message, ()=>{
+        showNotify(null, "Something went wrong?", error.response.data.message, ()=>{
           navigate("/home");
         });
       }
@@ -69,8 +69,9 @@ export default function Quiz() {
     title: "",
     message: "",
   });
-  function showNotify(title, message, cb) {
+  function showNotify(svg, title, message, cb) {
     setNotify({
+      svg: svg,
       title: title,
       show: true,
       message: message,
@@ -79,6 +80,7 @@ export default function Quiz() {
   }
   function closeNotify() {
     setNotify({
+      svg: null,
       title: "",
       show: false,
       message: "",
@@ -87,11 +89,17 @@ export default function Quiz() {
   }
 
 
+  function forceExitHandler(){
+    showNotify("time_up", "Time's up!", "You can't take this quiz anymore.", ()=>{
+      navigate("/home");
+    });
+  }
+
   useEffect(() => {
     let intervalId;
 
     intervalId = setInterval(() => {
-      setTimerLabel(getTimerLabel(quiz?.expiredAt));
+      setTimerLabel(getTimerLabel(quiz?.expiredAt, forceExitHandler));
     }, 1000);
 
     return () => {
@@ -102,6 +110,7 @@ export default function Quiz() {
   return (
     <>
       <Notify
+      svg={notify.svg}
         show={notify.show}
         title={notify.title}
         handleClose={closeNotify}

@@ -13,6 +13,7 @@ import Notify from "../../../components/notify";
 import QuizCard from "../../../components/quiz-card";
 import { ActivityHeader } from "../../../components/activity-header";
 import { onErrorProfileImageUrl } from "../../../config/constraints";
+import BottomButton from "../../../components/button/bottom";
 
 const Running = () => {
 
@@ -46,7 +47,7 @@ const Running = () => {
   			const url = URL.createObjectURL(blob)
   			setProfileImageUrl(res.data.byteLength === 0 ? null : url)
   		} catch (error) {
-        showNotify("Something went wrong?", error.response.data.message)
+        showNotify(null, "Something went wrong?", error.response.data.message)
   		}
   	}
 
@@ -85,8 +86,9 @@ const Running = () => {
 		message: "",
     cb: null
 	  }); 
-	  function showNotify(title, message, cb) {
+	  function showNotify(svg, title, message, cb) {
 		setNotify({
+      svg: svg,
 			title: title,
 			show: true,
 			message: message,
@@ -95,6 +97,7 @@ const Running = () => {
 	  }
 	  function closeNotify() {
 		setNotify({
+      svg: null,
 			title: "",
 			show: false,
 			message: "",
@@ -107,7 +110,7 @@ const Running = () => {
   function editHandler(quiz){
     const quizId = quiz._id
     if(!quizId){
-      showNotify("Something went wrong?", "Quiz not found!")
+      showNotify("not_found", "Something went wrong?", "Quiz not found!")
       return
     }
     navigate('/quiz/edit/' + quizId)
@@ -116,17 +119,17 @@ const Running = () => {
   async function deployHandler(quiz){
     const quizId = quiz._id
     if(!quizId){
-      showNotify("Something went wrong?", "Quiz not found!")
+      showNotify("not_found", "Something went wrong?", "Quiz not found!")
       return
     }
     try{
       const response = await deployQuiz(quizId, user.authUser.token)
-      showNotify("Deployed!", "Your quiz is now available for everyone to play!", ()=> {
+      showNotify("true", "Deployed!", "Your quiz is now available for everyone to play!", ()=> {
         navigate('/quiz/' + response.data._id)
       })
 
     }catch(error){
-      showNotify("Something went wrong?", error.response.data.message)
+      showNotify(null, "Something went wrong?", error.response.data.message)
     }
   }
 
@@ -147,6 +150,12 @@ const Running = () => {
           handleEditStatus={handleEditStatus}
         />
         <Navbar />
+        <BottomButton
+            svgName="back"
+            position="left"
+            label={"Back"}
+            cb={() => { navigate(-1) }}
+        />
         
       <div className="home__container">
         <div className="profile__container">

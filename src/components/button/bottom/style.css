@@ -1,0 +1,58 @@
+.back__home__button {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    bottom: 20px;
+    left: 30px;
+    transition: .3s;
+	animation: slide-right .8s;
+    z-index: 999;
+}
+
+.back__home__button__right {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    bottom: 20px;
+    right: 30px;
+    transition: .3s;
+	animation: slide-right .8s;
+    z-index: 999;
+}
+
+.back__home__button > .svg_image{
+    width: 26px;
+    height: 26px;
+    margin-bottom: 2px;
+    margin-right: 10px;
+}
+
+.back__home__button__right > .svg_image{
+    width: 26px;
+    height: 26px;
+    margin-bottom: 2px;
+    margin-left: 10px;
+}
+
+
+
+.back__home__button:hover,
+.back__home__button__right:hover,
+.svg__with__button:hover {
+    transform: scale(1.05);
+    opacity: .7;
+}
+.back__home__button:active,
+.back__home__button__right:active {
+    transform: scale(0.95);
+    opacity: 1;
+}
+.back__home__button svg,
+.back__home__button__right svg {
+    width: 100%;
+    height: 100%;
+}
+.back__home__button div,
+.back__home__button__right div {
+    font-size: 24px;
+}

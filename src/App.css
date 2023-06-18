@@ -16,6 +16,8 @@
 	--card-bg: #262626;
 	--active-button-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
 	--success-button-color: linear-gradient(180deg, #73D382 0%, #3EA573 100%);;
+	--blur-background-color: rgba(6, 6, 6, 0.95);
+	--blur-background-pixel: 10px
 }
 
 .App {
@@ -289,7 +291,9 @@
 	50% {
 		opacity: 0;
 	}
-
+	99%{
+		opacity: 0;
+	}
 	100% {
 		opacity: 1;
 		-webkit-transform: translateY(0);

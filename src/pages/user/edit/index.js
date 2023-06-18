@@ -14,7 +14,7 @@ import ProfileImage from "../../../components/profile-image";
 import ModalChangePassword from "../../../components/modals/change-password";
 import ModalConfirmAction from "../../../components/modals/confirm-action";
 import Notify from "../../../components/notify";
-import HomeButton from "../../../components/button/home";
+import BottomButton from "../../../components/button/bottom";
 import Navbar from "../../../components/navbar";
 import { svgMap } from "../../../config/constraints";
 
@@ -50,22 +50,23 @@ const EditUserProfile = () => {
       dispatch(setUser({ ...user, ...userProfile }));
       navigate("/home");
     } catch (error) {
-      showNotify("Something went wrong?", error.response.data.message);
+      showNotify(null, "Something went wrong?", error.response.data.message);
     }
   }
 
   // Delete Account
-  const [deleteAccountSuccess, setDeleteAccountSuccess] = useState(false);
   const [deleteAccountShow, setDeleteAccountShow] = useState(false);
   async function handleTriggerDeleteAccount() {
     if (!user.token) return;
     try {
       const res = await deleteUserAccount(user.token);
       const { data } = res;
-      showNotify("Finally success your action!", data.message);
-      setDeleteAccountSuccess(true)
+      showNotify("success", "Finally success your action!", data.message, () => {
+        dispatch(setUser(null));
+        navigate("/");
+      });
     } catch (error) {
-      showNotify("Something went wrong?", error.response.data.message);
+      showNotify(null, "Something went wrong?", error.response.data.message);
     }
   }
 
@@ -75,32 +76,27 @@ const EditUserProfile = () => {
     title: "",
     message: "",
   });
-  const showNotify = (title, message) => {
+  const showNotify = (svg, title, message, cb) => {
     setNotify({
+      svg: svg,
       title: title,
       show: true,
       message: message,
+      cb: cb,
     });
   }
   function closeNotify() {
     setNotify({
+      svg: null,
       title: "",
       show: false,
       message: "",
+      cb: null,
     });
-    if (newPasswordUpdateSuccess) {
-      dispatch(setUser(null));
-      navigate("/login/email");
-    }
-    if(deleteAccountSuccess){
-      dispatch(setUser(null));
-      navigate("/");
-    }
+  
   }
 
   // Change Password
-  const [newPasswordUpdateSuccess, setNewPasswordUpdateSuccess] =
-    useState(false);
   const [changePasswordShow, setChangePasswordShow] = useState(false);
   const [newPassword, setNewPassword] = useState({
     password: null,
@@ -132,6 +128,7 @@ const EditUserProfile = () => {
     if (!newPassword.password || !newPasswordConfirm.password) {
       // pls input some text
       showNotify(
+        "error",
         "Something went wrong?",
         "Password must not be empty in both fields"
       );
@@ -139,12 +136,14 @@ const EditUserProfile = () => {
     }
     if (newPassword.password !== newPasswordConfirm.password) {
       // password not match
-      showNotify("Something went wrong?", "Password not match in both fields");
+       
+      showNotify("error", "Something went wrong?", "Password not match in both fields");
       return false;
     }
     if (!validateStrongPassword(newPassword.password)) {
       // password not strong
       showNotify(
+        "error", 
         "Something went wrong?",
         "Password must be at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character"
       );
@@ -163,16 +162,20 @@ const EditUserProfile = () => {
       const { data } = res;
       handleCloseChangePasswordShow();
       closeNotify();
-      setNewPasswordUpdateSuccess(true);
-      showNotify("Finally success your action!", data.message);
+      showNotify("success", "Changed password successful.", data.message, ()=> {
+        dispatch(setUser(null));
+        navigate("/login/email");
+      });
     } catch (error) {
-      showNotify("Something went wrong?", error.response.data.message);
+      showNotify(null, "Something went wrong?", error.response.data.message);
     }
   }
 
   return (
     <>
       <Notify
+        svg={notify.svg}
+        cb={notify.cb}
         show={notify.show}
         title={notify.title}
         handleClose={closeNotify}
@@ -197,6 +200,14 @@ const EditUserProfile = () => {
         handleConfirm={handleTriggerDeleteAccount}
         handleCancel={()=> setDeleteAccountShow(false)}
       />
+
+<BottomButton
+            svgName="back"
+            position="left"
+            label={"Back"}
+            cb={() => { navigate(-1) }}
+        />
+
       <Navbar />
 
       <div className="edit__profile__container">
@@ -278,9 +289,6 @@ const EditUserProfile = () => {
           </button>
         </div>
       </div>
-      <HomeButton
-          navigate={navigate}
-        />
     </>
   );
 };

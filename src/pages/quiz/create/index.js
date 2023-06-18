@@ -13,6 +13,7 @@ import InputTextAreaFillBlank from "../../../components/input/text-area-fill-bla
 import InputTextAreaChoice from "../../../components/input/text-area-choice";
 import Notify from "../../../components/notify";
 import { onErrorQuizImageUrl, svgMap } from "../../../config/constraints";
+import BottomButton from "../../../components/button/bottom";
 
 const CreateQuiz = () => {
   const user = useSelector((state) => state.user.authUser);
@@ -64,20 +65,20 @@ const CreateQuiz = () => {
         return true; // Duration is valid
       } else {
         if (duration.hours < 1) {
-          showNotify("Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
+          showNotify("error", "Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
           return false; // Minutes must be at least 1
         }
         return true; // Duration is valid
       }
     } else {
-      showNotify("Are you serious?", "Hours and Minutes can't be empty."); // Hours and minutes must not be null
+      showNotify("error", "Are you serious?", "Hours and Minutes can't be empty."); // Hours and minutes must not be null
       return false; // Hours and minutes must not be null
     }
   }
 
   function validateQuiz() {
     if (!quiz.name || quiz.name.length < 3) {
-      showNotify(
+      showNotify("error", 
         "Are you serious?",
         "Quiz name must be at least 3 characters."
       );
@@ -85,7 +86,7 @@ const CreateQuiz = () => {
     }
 
     if (!quiz.description || quiz.description.length < 3) {
-      showNotify(
+      showNotify("error", 
         "Are you serious?",
         "Quiz description must be at least 3 characters."
       );
@@ -104,7 +105,7 @@ const CreateQuiz = () => {
 
       // validate question explanation
       if (question.explanation.explain.length < 1) {
-        showNotify(
+        showNotify("error", 
           "Are you serious?",
           `Question (${questionId + 1}) explanation must not be empty`,
           () => {
@@ -120,7 +121,7 @@ const CreateQuiz = () => {
         question.type !== "single-choice" &&
         question.type !== "multiple-choice"
       ) {
-        showNotify(
+        showNotify("error", 
           "Are you serious?",
           `Question (${questionId + 1}) type must be in correct format`,
           () => {
@@ -133,7 +134,7 @@ const CreateQuiz = () => {
 
       // validate question points
       if (question.points < 1) {
-        showNotify(
+        showNotify("error", 
           "Are you serious?",
           `Question (${questionId + 1}) points must be greater than 0`,
           () => {
@@ -148,7 +149,7 @@ const CreateQuiz = () => {
       // validate question answer
       if (question.type === "fill-choice") {
         if (question.answer.length < 1) {
-          showNotify(
+          showNotify("error", 
             "Are you serious?",
             `Question (${questionId + 1}) must have at least 1 correct answer`,
             () => {
@@ -160,7 +161,7 @@ const CreateQuiz = () => {
         }
         for (const answer of question.answer) {
           if (answer.matchString.length < 1) {
-            showNotify(
+            showNotify("error", 
               "Are you serious?",
               `Question (${questionId + 1}) answer must not be empty`,
               () => {
@@ -183,7 +184,7 @@ const CreateQuiz = () => {
           }
         }
         if (!foundOneCorrectAnswer) {
-          showNotify(
+          showNotify("error", 
             "Are you serious?",
             `Question (${questionId + 1}) must have at least 1 correct answer`,
             () => {
@@ -196,7 +197,7 @@ const CreateQuiz = () => {
         // validate question answer explanation
         for (const answer of question.answer) {
           if (answer.explain.length < 1) {
-            showNotify(
+            showNotify("error", 
               "Are you serious?",
               `Question (${questionId + 1}) answer must not be empty`,
               () => {
@@ -242,13 +243,13 @@ const CreateQuiz = () => {
     if (newQuestion[selectedQuestion].type == "fill-choice") {
       if (newQuestion[selectedQuestion].answer.length < 2) {
         // Notify at least 1 choice
-        showNotify("Are you serious?", "Question must have at least 1 choice");
+        showNotify("error", "Are you serious?", "Question must have at least 1 choice");
         return;
       }
       newQuestion[selectedQuestion].answer.splice(index, 1);
     } else {
       if (newQuestion[selectedQuestion].answer.length < 2) {
-        showNotify("Are you serious?", "Question must have at least 1 choice");
+        showNotify("error", "Are you serious?", "Question must have at least 1 choice");
         return;
       }
       newQuestion[selectedQuestion].answer.splice(index, 1);
@@ -279,7 +280,7 @@ const CreateQuiz = () => {
       type != "multiple-choice"
     ) {
       // notify question type in correct
-      showNotify(
+      showNotify("error", 
         "Something went wrong?",
         "It's look like question type is incorrect."
       );
@@ -313,7 +314,7 @@ const CreateQuiz = () => {
       setQuestionList(newQuestion);
     } catch (e) {
       // notify points incorrect type
-      showNotify(
+      showNotify("error", 
         "Something went wrong?",
         "It's look like points is not a number."
       );
@@ -418,7 +419,7 @@ const CreateQuiz = () => {
       if (res.status === 201) {
         setQuiz(res.data);
         if (!quizImageFile) {
-          showNotify("Success", "Quiz saved successfully.", () => {
+          showNotify("success", "Success", "Quiz saved successfully.", () => {
             navigate("/activity/created");
           });
           return;
@@ -428,13 +429,13 @@ const CreateQuiz = () => {
         fd.append("quizId", res.data._id);
         const resUploadImageCover = await uploadQuizCoverImage(user.token, fd);
         if (resUploadImageCover.status === 201) {
-          showNotify("Success", "Quiz saved successfully.", () => {
+          showNotify("success", "Success", "Quiz saved successfully.", () => {
             navigate("/activity/created");
           });
         }
       }
     } catch (e) {
-      showNotify("Something went wrong?", e.response.data.message);
+      showNotify(null, "Something went wrong?", e.response.data.message);
     }
   }
 
@@ -444,27 +445,22 @@ const CreateQuiz = () => {
     title: "",
     message: "",
   });
-  function showNotify(title, message, cb) {
-    if (cb) {
-      setNotify({
-        title: title,
-        show: true,
-        message: message,
-        cb: cb,
-      });
-      return;
-    }
+  function showNotify(svg, title, message, cb) {
     setNotify({
+      svg: svg,
       title: title,
       show: true,
       message: message,
+      cb: cb,
     });
   }
   function closeNotify() {
     setNotify({
+      svg: null,
       title: "",
       show: false,
       message: "",
+      cb: null,
     });
   }
 
@@ -533,13 +529,10 @@ const CreateQuiz = () => {
     // eslint-disable-next-line
   }, [questionList]);
 
-
- 
-
-
   return (
     <>
       <Notify
+        svg={notify.svg}
         show={notify.show}
         title={notify.title}
         handleClose={closeNotify}
@@ -549,23 +542,35 @@ const CreateQuiz = () => {
 
       <Navbar />
 
+      {!editingQuizDetail ? (
+        <BottomButton
+          svgName="back"
+          position="left"
+          label={"Back"}
+          cb={() => {
+            navigate(-1);
+          }}
+        />
+      ) : null}
+
       {editingQuizDetail ? (
         <>
           <div className="bottom__action__edit__quiz">
-            <button className="edit__detail" onClick={saveQuiz}>
-              Save Quiz
-              {svgMap.save_quiz}
-            </button>
+            <BottomButton
+              svgName="next"
+              position="right"
+              label={"Save Quiz"}
+              cb={saveQuiz}
+            />
 
-            <button
-              className="edit__detail__left"
-              onClick={() => {
+            <BottomButton
+              svgName="back"
+              position="left"
+              label={"Edit question"}
+              cb={() => {
                 setEditingQuizDetail(false);
               }}
-            >
-              {svgMap.back}
-              Edit question
-            </button>
+            />
           </div>
 
           <div className="edit__detail__quiz__main">
@@ -706,10 +711,12 @@ const CreateQuiz = () => {
               </div>
             </div>
           </div>
-          <button className="edit__detail" onClick={editQuizDetail}>
-            Edit quiz detail
-            {svgMap.next}
-          </button>
+          <BottomButton
+            svgName="next"
+            position="right"
+            label={"Edit quiz detail"}
+            cb={editQuizDetail}
+          />
           <div className="question__content">
             <div className="settings">
               <div className="item">

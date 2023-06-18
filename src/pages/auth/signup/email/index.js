@@ -28,11 +28,11 @@ const Register = () => {
 
   function validatePassword() {
     if (!validateStrongPassword(password)) {
-      showNotify("Something went wrong?", "At least 8 characters in length\nContains at least one uppercase letter\nContains at least one lowercase letter\nContains at least one digit\nContains at least one special character (e.g., @$!%*?&)\n")
+      showNotify("error", "Something went wrong?", "At least 8 characters in length\nContains at least one uppercase letter\nContains at least one lowercase letter\nContains at least one digit\nContains at least one special character (e.g., @$!%*?&)\n")
       return false;
     }
     if (password !== password2) {
-      showNotify("Something went wrong?", "Password not match")
+      showNotify("error", "Something went wrong?", "Password not match")
       return false;
     }
     return true;
@@ -45,11 +45,11 @@ const Register = () => {
 
   function validateFullName() {
     if (!validateMinLength(firstname, 2)) {
-      showNotify("Something went wrong?", "Firstname must be at least 2 characters")
+      showNotify("error", "Something went wrong?", "Firstname must be at least 2 characters")
       return false;
     }
     if (!validateMinLength(lastname, 2)) {
-      showNotify("Something went wrong?", "Lastname must be at least 2 characters")
+      showNotify("error", "Something went wrong?", "Lastname must be at least 2 characters")
       return false;
     }
     return true;
@@ -73,7 +73,7 @@ const Register = () => {
       await registerAuthUser(bodyRequest);
       navigate("/login/email");
     } catch (error) {
-      showNotify("Something went wrong?", error.response.data.message)
+      showNotify(null, "Something went wrong?", error.response.data.message)
     }
   }
 
@@ -84,8 +84,10 @@ const Register = () => {
     title: "",
     message: "",
   });
-  function showNotify(title, message) {
+  function showNotify(svg, title, message, cb) {
     setNotify({
+      svg: svg,
+      cb: cb,
       title: title,
       show: true,
       message: message,
@@ -93,6 +95,8 @@ const Register = () => {
   }
   function closeNotify() {
     setNotify({
+      svg: null,
+      cb: null,
       title: "",
       show: false,
       message: "",
@@ -109,7 +113,7 @@ const Register = () => {
     const isValid = emailPattern.test(email);
     if (!isValid) {
       setIsEmailValid(false);
-      showNotify("Something went wrong?", "Email is not valid")
+      showNotify("error", "Something went wrong?", "Email is not valid")
     } else {
       setIsEmailValid(true);
     }
@@ -118,6 +122,8 @@ const Register = () => {
   return (
     <>
       <Notify
+        cb={notify.cb}
+        svg={notify.svg}
         show={notify.show}
         title={notify.title}
         handleClose={closeNotify}

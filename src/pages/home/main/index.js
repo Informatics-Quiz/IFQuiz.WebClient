@@ -23,7 +23,7 @@ const Home = () => {
 
   const [show, setShow] = useState(false);
   const [editstatus, setEditStatus] = useState("");
-  const [quizzesCreated, setQuizzesCreated] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -46,7 +46,7 @@ const Home = () => {
   			const url = URL.createObjectURL(blob)
   			setProfileImageUrl(res.data.byteLength === 0 ? null : url)
   		} catch (error) {
-        showNotify("Something went wrong?", error.response.data.message)
+        showNotify(null, "Something went wrong?", error.response.data.message)
   		}
   	}
 
@@ -70,7 +70,7 @@ const Home = () => {
     async function onGetQuizzes() {
       const response = await getDeployedQuizzes(user.authUser.token)
       const initializedQuiz = await setImageCoverQuizzes(response.data)
-      setQuizzesCreated(initializedQuiz);
+      setQuizzes(initializedQuiz);
     }
     onGetQuizzes();
   }, []);
@@ -83,8 +83,10 @@ const Home = () => {
 		title: "",
 		message: ""
 	  }); 
-	  function showNotify(title, message) {
+	  function showNotify(svg, title, message, cb) {
 		setNotify({
+      svg: svg,
+      cb: cb,
 			title: title,
 			show: true,
 			message: message
@@ -92,15 +94,25 @@ const Home = () => {
 	  }
 	  function closeNotify() {
 		setNotify({
+      svg: null,
+      cb: null,
 			title: "",
 			show: false,
 			message: ""
 		})
 	}
 
+  function deleteHandler(index){
+    const newQuizzes = [...quizzes]
+    newQuizzes.splice(index, 1)
+    setQuizzes(newQuizzes)
+  }
+
   return (
     <>
     <Notify
+        svg={notify.svg}
+        cb={notify.cb}
 				show={notify.show}
 				title={notify.title}
 				handleClose={closeNotify}
@@ -135,12 +147,15 @@ const Home = () => {
           </div>
         </div>
         <div className="quizzes__container">
-          {quizzesCreated.map((quiz, index) => {
+          {quizzes.map((quiz, index) => {
             return <QuizCard
               index={index}
               quiz={quiz}
               enableQuizTimer={true}
               takeQuizHandler={() => handleClickNavigate("/quiz/" + quiz._id)}
+              deleteHandler={()=> {
+                deleteHandler(index)
+              }}
             />
           })}
         </div>

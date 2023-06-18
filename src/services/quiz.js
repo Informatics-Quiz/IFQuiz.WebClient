@@ -31,7 +31,7 @@ export async function getDeployedQuizById(quizId, token){
 }
 
 export async function getDeployedQuizByCodeJoin(codeJoin, token){
-	const res = await client.get(`/quizzes/get-deployed?codeJoin=${codeJoin}`,{
+	const res = await client.get(`/quizzes/deployed?codeJoin=${codeJoin}`,{
 		headers: {
 			Authorization: `Bearer ${token}`,
 		}

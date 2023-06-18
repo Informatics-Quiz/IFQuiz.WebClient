@@ -11,6 +11,7 @@ export default function QuizCard({
   deployHandler,
   takeQuizHandler,
   enableQuizTimer,
+  deleteHandler
 }) {
 
 
@@ -26,7 +27,7 @@ export default function QuizCard({
   }
 
   const [timerLabel, setTimerLabel] = useState(
-    enableQuizTimer ? getTimerLabel(quiz.expiredAt) : getDurationLabel()
+    enableQuizTimer ? getTimerLabel(quiz.expiredAt, deleteHandler) : getDurationLabel()
   );
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function QuizCard({
 
     if (enableQuizTimer) {
       intervalId = setInterval(() => {
-        setTimerLabel(getTimerLabel(quiz.expiredAt));
+        setTimerLabel(getTimerLabel(quiz.expiredAt, deleteHandler));
       }, 1000);
     }
 

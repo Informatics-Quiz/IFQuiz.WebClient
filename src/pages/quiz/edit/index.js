@@ -2,7 +2,7 @@ import "./style.css";
 
 import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
 
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import { getQuizCoverImage, uploadQuiz } from "../../../services/quiz";
 import { uploadQuizCoverImage } from "../../../services/upload";
 import { useSelector } from "react-redux";
@@ -15,14 +15,13 @@ import InputTextAreaFillBlank from "../../../components/input/text-area-fill-bla
 import InputTextAreaChoice from "../../../components/input/text-area-choice";
 import Notify from "../../../components/notify";
 import { onErrorQuizImageUrl, svgMap } from "../../../config/constraints";
+import BottomButton from "../../../components/button/bottom";
 
 const EditQuiz = () => {
-    const { id } = useParams()
-    const user = useSelector((state) => state.user.authUser);
-    const navigate = useNavigate();
+  const { id } = useParams();
+  const user = useSelector((state) => state.user.authUser);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-
 
   const [editingQuizDetail, setEditingQuizDetail] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
@@ -32,27 +31,24 @@ const EditQuiz = () => {
     explanation: {
       explain: "",
     },
-    answer: [
-      { explain: "", checked: false }
-    ]
+    answer: [{ explain: "", checked: false }],
   };
 
   const [questionList, setQuestionList] = useState([emptyQuestion]);
   const [quiz, setQuiz] = useState(null);
 
-
-  function setQuizName(e){
-    const quizName = e.target.value
-    setQuiz(current => {
-      return {...current, name: quizName}
-    })
+  function setQuizName(e) {
+    const quizName = e.target.value;
+    setQuiz((current) => {
+      return { ...current, name: quizName };
+    });
   }
 
-  function setQuizDescription(e){
-    const quizDescription = e.target.value
-    setQuiz(current => {
-      return {...current, description: quizDescription}
-    })
+  function setQuizDescription(e) {
+    const quizDescription = e.target.value;
+    setQuiz((current) => {
+      return { ...current, description: quizDescription };
+    });
   }
 
   function validateDuration(duration) {
@@ -62,38 +58,39 @@ const EditQuiz = () => {
       if (duration.minutes >= 1) {
         return true; // Duration is valid
       } else {
-        if(duration.hours < 1){
-          showNotify("Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
+        if (duration.hours < 1) {
+          showNotify("error", "Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
           return false; // Minutes must be at least 1
         }
         return true; // Duration is valid
       }
     } else {
-      showNotify("Are you serious?", "Hours and Minutes can't be empty."); // Hours and minutes must not be null
+      showNotify("error", "Are you serious?", "Hours and Minutes can't be empty."); // Hours and minutes must not be null
       return false; // Hours and minutes must not be null
     }
   }
 
-  function validateQuiz(){
-    
-    if(!quiz.name || quiz.name.length < 3){
-      showNotify("Are you serious?", "Quiz name must be at least 3 characters.")
-      return false
+  function validateQuiz() {
+    if (!quiz.name || quiz.name.length < 3) {
+      showNotify("error", 
+        "Are you serious?",
+        "Quiz name must be at least 3 characters."
+      );
+      return false;
     }
 
-    if(!quiz.description || quiz.description.length < 3){
-      showNotify("Are you serious?", "Quiz description must be at least 3 characters.")
-      return false
+    if (!quiz.description || quiz.description.length < 3) {
+      showNotify("error", 
+        "Are you serious?",
+        "Quiz description must be at least 3 characters."
+      );
+      return false;
     }
 
-    if(!validateDuration(quiz.duration))return false
+    if (!validateDuration(quiz.duration)) return false;
 
-    return true
-
+    return true;
   }
-  
-
-
 
   function validateAllQuestion() {
     let totalPoints = 0;
@@ -102,7 +99,7 @@ const EditQuiz = () => {
 
       // validate question explanation
       if (question.explanation.explain.length < 1) {
-        showNotify(
+        showNotify("error", 
           "Are you serious?",
           `Question (${questionId + 1}) explanation must not be empty`,
           () => {
@@ -118,7 +115,7 @@ const EditQuiz = () => {
         question.type !== "single-choice" &&
         question.type !== "multiple-choice"
       ) {
-        showNotify(
+        showNotify("error", 
           "Are you serious?",
           `Question (${questionId + 1}) type must be in correct format`,
           () => {
@@ -131,7 +128,7 @@ const EditQuiz = () => {
 
       // validate question points
       if (question.points < 1) {
-        showNotify(
+        showNotify("error", 
           "Are you serious?",
           `Question (${questionId + 1}) points must be greater than 0`,
           () => {
@@ -146,7 +143,7 @@ const EditQuiz = () => {
       // validate question answer
       if (question.type === "fill-choice") {
         if (question.answer.length < 1) {
-          showNotify(
+          showNotify("error", 
             "Are you serious?",
             `Question (${questionId + 1}) must have at least 1 correct answer`,
             () => {
@@ -158,7 +155,7 @@ const EditQuiz = () => {
         }
         for (const answer of question.answer) {
           if (answer.matchString.length < 1) {
-            showNotify(
+            showNotify("error", 
               "Are you serious?",
               `Question (${questionId + 1}) answer must not be empty`,
               () => {
@@ -181,7 +178,7 @@ const EditQuiz = () => {
           }
         }
         if (!foundOneCorrectAnswer) {
-          showNotify(
+          showNotify("error", 
             "Are you serious?",
             `Question (${questionId + 1}) must have at least 1 correct answer`,
             () => {
@@ -194,7 +191,7 @@ const EditQuiz = () => {
         // validate question answer explanation
         for (const answer of question.answer) {
           if (answer.explain.length < 1) {
-            showNotify(
+            showNotify("error", 
               "Are you serious?",
               `Question (${questionId + 1}) answer must not be empty`,
               () => {
@@ -240,13 +237,13 @@ const EditQuiz = () => {
     if (newQuestion[selectedQuestion].type == "fill-choice") {
       if (newQuestion[selectedQuestion].answer.length < 2) {
         // Notify at least 1 choice
-        showNotify("Are you serious?", "Question must have at least 1 choice");
+        showNotify("error", "Are you serious?", "Question must have at least 1 choice");
         return;
       }
       newQuestion[selectedQuestion].answer.splice(index, 1);
     } else {
       if (newQuestion[selectedQuestion].answer.length < 2) {
-        showNotify("Are you serious?", "Question must have at least 1 choice");
+        showNotify("error", "Are you serious?", "Question must have at least 1 choice");
         return;
       }
       newQuestion[selectedQuestion].answer.splice(index, 1);
@@ -277,7 +274,7 @@ const EditQuiz = () => {
       type != "multiple-choice"
     ) {
       // notify question type in correct
-      showNotify(
+      showNotify("error", 
         "Something went wrong?",
         "It's look like question type is incorrect."
       );
@@ -298,7 +295,7 @@ const EditQuiz = () => {
         },
       ];
     } else {
-      newQuestion[selectedQuestion].answer =  [{ explain: "", checked: false }];
+      newQuestion[selectedQuestion].answer = [{ explain: "", checked: false }];
     }
     setQuestionList(newQuestion);
   }
@@ -311,7 +308,7 @@ const EditQuiz = () => {
       setQuestionList(newQuestion);
     } catch (e) {
       // notify points incorrect type
-      showNotify(
+      showNotify("error", 
         "Something went wrong?",
         "It's look like points is not a number."
       );
@@ -336,8 +333,7 @@ const EditQuiz = () => {
       console.log(`not found answer index ${index}`);
       return;
     }
-    newQuestion[selectedQuestion].answer[index].matchString =
-      text;
+    newQuestion[selectedQuestion].answer[index].matchString = text;
     setQuestionList(newQuestion);
   }
 
@@ -388,57 +384,53 @@ const EditQuiz = () => {
     textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
   }
 
-
-
   const [quizCoverImage, setQuizCoverImage] = useState(null);
   const [quizImageFile, setQuizImageFile] = useState(null);
 
-  function onSelectImageFromLocal(e){
-    const imageFile = e.target.files[0]
-    if(!imageFile){
-      return
+  function onSelectImageFromLocal(e) {
+    const imageFile = e.target.files[0];
+    if (!imageFile) {
+      return;
     }
-    setQuizImageFile(imageFile)
-    const renderImage = URL.createObjectURL(imageFile)
-    setQuizCoverImage(renderImage)
+    setQuizImageFile(imageFile);
+    const renderImage = URL.createObjectURL(imageFile);
+    setQuizCoverImage(renderImage);
   }
 
-  async function saveQuiz(){
-    if(!validateQuiz())return
+  async function saveQuiz() {
+    if (!validateQuiz()) return;
 
-    const saveQuiz = {}
-    saveQuiz._id = quiz?._id
-    saveQuiz.name = quiz.name
-    saveQuiz.description = quiz.description
-    saveQuiz.points = quiz.points
-    saveQuiz.duration = quiz.duration
-    saveQuiz.questions = quiz.questions
-    
-    
-    try{
+    const saveQuiz = {};
+    saveQuiz._id = quiz?._id;
+    saveQuiz.name = quiz.name;
+    saveQuiz.description = quiz.description;
+    saveQuiz.points = quiz.points;
+    saveQuiz.duration = quiz.duration;
+    saveQuiz.questions = quiz.questions;
+
+    try {
       const res = await uploadQuiz(user.token, saveQuiz);
       if (res.status === 201) {
-        setQuiz(res.data)
-        if(!quizImageFile){
-          showNotify("Success", "Quiz saved successfully.", ()=> {
+        setQuiz(res.data);
+        if (!quizImageFile) {
+          showNotify("success", "Success", "Quiz saved successfully.", () => {
             navigate("/activity/created");
-          })
-          return
+          });
+          return;
         }
-        const fd = new FormData()
-        fd.append("quiz-cover-image", quizImageFile)
-        fd.append("quizId",  res.data._id)
-        const resUploadImageCover = await uploadQuizCoverImage(user.token, fd)
-        if(resUploadImageCover.status === 201){
-          showNotify("Success", "Quiz saved successfully.", ()=> {
+        const fd = new FormData();
+        fd.append("quiz-cover-image", quizImageFile);
+        fd.append("quizId", res.data._id);
+        const resUploadImageCover = await uploadQuizCoverImage(user.token, fd);
+        if (resUploadImageCover.status === 201) {
+          showNotify("success", "Success", "Quiz saved successfully.", () => {
             navigate("/activity/created");
-          })
+          });
         }
       }
-    }catch(e){
-      showNotify("Something went wrong?", e.response.data.message);
+    } catch (e) {
+      showNotify(null, "Something went wrong?", e.response.data.message);
     }
-    
   }
 
   // Notify
@@ -447,87 +439,83 @@ const EditQuiz = () => {
     title: "",
     message: "",
   });
-  function showNotify(title, message, cb) {
-    if (cb) {
-      setNotify({
-        title: title,
-        show: true,
-        message: message,
-        cb: cb,
-      });
-      return;
-    }
+  function showNotify(svg, title, message, cb) {
     setNotify({
+      svg: svg,
       title: title,
       show: true,
       message: message,
+      cb: cb,
     });
   }
   function closeNotify() {
     setNotify({
+      svg: null,
       title: "",
       show: false,
       message: "",
+      cb: null,
     });
   }
 
-  function validateNumber(value){
+  function validateNumber(value) {
     const pattern = /^[0-9]+$/;
     return pattern.test(value);
   }
 
-  function onChangeHours(e){
-    let value = e.target.value
-    const newQuiz = {...quiz}
-    if(value == ""){
-      newQuiz.duration.hours = 0
-      if(newQuiz.duration.minutes < 1){
-        newQuiz.duration.minutes = 1
+  function onChangeHours(e) {
+    let value = e.target.value;
+    const newQuiz = { ...quiz };
+    if (value == "") {
+      newQuiz.duration.hours = 0;
+      if (newQuiz.duration.minutes < 1) {
+        newQuiz.duration.minutes = 1;
       }
-      setQuiz(newQuiz)
-      return
+      setQuiz(newQuiz);
+      return;
     }
-    if(!validateNumber(value)){
-      return
+    if (!validateNumber(value)) {
+      return;
     }
-    const hours = parseInt(value)
-    newQuiz.duration.hours = hours
-    if(newQuiz.duration.hours < 1 && newQuiz.duration.minutes < 1){
-      newQuiz.duration.minutes = 1
+    const hours = parseInt(value);
+    newQuiz.duration.hours = hours;
+    if (newQuiz.duration.hours < 1 && newQuiz.duration.minutes < 1) {
+      newQuiz.duration.minutes = 1;
     }
-    setQuiz(newQuiz)
+    setQuiz(newQuiz);
   }
 
-  function onChangeMinutes(e){
-    let value = e.target.value
-    const newQuiz = {...quiz}
+  function onChangeMinutes(e) {
+    let value = e.target.value;
+    const newQuiz = { ...quiz };
 
-    if(value == ""){
-      if(newQuiz.duration?.hours > 0){
-        newQuiz.duration.minutes = 0
-      } else{
-        newQuiz.duration.minutes = 1
+    if (value == "") {
+      if (newQuiz.duration?.hours > 0) {
+        newQuiz.duration.minutes = 0;
+      } else {
+        newQuiz.duration.minutes = 1;
       }
-      setQuiz(newQuiz)
-      return
+      setQuiz(newQuiz);
+      return;
     }
 
-    if(!validateNumber(value)){
-      return
+    if (!validateNumber(value)) {
+      return;
     }
-    const minutes = parseInt(value)
-    newQuiz.duration.minutes = minutes
-    if(newQuiz.duration.minutes < 1){
-      if(newQuiz.duration?.hours > 0){
-        newQuiz.duration.minutes = 0
-      } else{
-        newQuiz.duration.minutes = 1
+    const minutes = parseInt(value);
+    newQuiz.duration.minutes = minutes;
+    if (newQuiz.duration.minutes < 1) {
+      if (newQuiz.duration?.hours > 0) {
+        newQuiz.duration.minutes = 0;
+      } else {
+        newQuiz.duration.minutes = 1;
       }
-      setQuiz(newQuiz)
-      return
+      setQuiz(newQuiz);
+      return;
     }
-    newQuiz.duration.minutes = newQuiz.duration.minutes > 59 ? 59 : newQuiz.duration.minutes
-    setQuiz(newQuiz)
+    newQuiz.duration.minutes =
+      newQuiz.duration.minutes > 59 ? 59 : newQuiz.duration.minutes;
+    setQuiz(newQuiz);
   }
 
   useEffect(() => {
@@ -537,31 +525,33 @@ const EditQuiz = () => {
         const res = await getQuizByIdForEdit(id, user.token);
         setQuiz(res.data);
         setQuestionList(res.data.questions);
-        if(res.data.imageUrl !== null && res.data.imageUrl !== ""){
-            const resImage = await getQuizCoverImage(res.data.imageUrl);
-            const blob = new Blob([resImage.data], { type: resImage.headers['Content-Type'] })
-  			const url = URL.createObjectURL(blob)
-            setQuizCoverImage(resImage.data.byteLength === 0 ? null : url)
+        if (res.data.imageUrl !== null && res.data.imageUrl !== "") {
+          const resImage = await getQuizCoverImage(res.data.imageUrl);
+          const blob = new Blob([resImage.data], {
+            type: resImage.headers["Content-Type"],
+          });
+          const url = URL.createObjectURL(blob);
+          setQuizCoverImage(resImage.data.byteLength === 0 ? null : url);
         }
       } catch (error) {
-        showNotify("Something went wrong?", error.response.data.message)
+        showNotify(null, "Something went wrong?", error.response.data.message);
       }
     }
 
     onGetQuiz();
   }, [id, dispatch]);
-  
+
   useEffect(() => {
     setQuiz({ ...quiz, questions: questionList });
     // eslint-disable-next-line
   }, [questionList]);
 
+  if (!quiz) return null;
 
-  if(!quiz)return null
- 
   return (
     <>
       <Notify
+        svg={notify.svg}
         show={notify.show}
         title={notify.title}
         handleClose={closeNotify}
@@ -570,47 +560,68 @@ const EditQuiz = () => {
       />
 
       <Navbar />
+      {!editingQuizDetail ? (
+        <BottomButton
+          svgName="back"
+          position="left"
+          label={"Back"}
+          cb={() => {
+            navigate(-1);
+          }}
+        />
+      ) : null}
 
       {editingQuizDetail ? (
         <>
           <div className="bottom__action__edit__quiz">
-            <button className="edit__detail"
-            onClick={saveQuiz}>
-              Save Quiz
-              {svgMap.save_quiz}
-            </button>
+            <BottomButton
+              svgName="next"
+              position="right"
+              label={"Save Quiz"}
+              cb={saveQuiz}
+            />
 
-            <button
-              className="edit__detail__left"
-              onClick={() => {
+            <BottomButton
+              svgName="back"
+              position="left"
+              label={"Edit question"}
+              cb={() => {
                 setEditingQuizDetail(false);
               }}
-            >
-              {svgMap.back}
-              Edit question
-            </button>
+            />
           </div>
 
           <div className="edit__detail__quiz__main">
             <div className="edit__quiz__detail__container">
               <div className="cover__image__container">
                 <div className="image__cover">
-                  <img src={ quizCoverImage ? quizCoverImage : onErrorQuizImageUrl}></img>
+                  <img
+                    src={quizCoverImage ? quizCoverImage : onErrorQuizImageUrl}
+                  ></img>
                 </div>
                 <label htmlFor="file-upload" className="custom-file-upload">
                   Upload Quiz Cover Image
                 </label>
-                <input id="file-upload" type="file" accept="image/*" onChange={onSelectImageFromLocal} />
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={onSelectImageFromLocal}
+                />
               </div>
               <div className="quiz__detail__content">
                 <div className="quiz__name">
                   <div className="title">Quiz Name</div>
-                  <input onChange={setQuizName} value={quiz.name} placeholder="Please enter the name for your quiz here."></input>
+                  <input
+                    onChange={setQuizName}
+                    value={quiz.name}
+                    placeholder="Please enter the name for your quiz here."
+                  ></input>
                 </div>
                 <div className="quiz__detail__description">
                   <div className="title">Description</div>
                   <textarea
-                  value={quiz.description}
+                    value={quiz.description}
                     onChange={setQuizDescription}
                     id="quizDescriptionTextArea"
                     placeholder="Please enter the description for your quiz here."
@@ -623,12 +634,28 @@ const EditQuiz = () => {
                     Durations
                   </div>
                   <div className="form">
-                  <div className="field">
-                      <input type="text" value={quiz.duration.hours == null ? "" : quiz.duration.hours} onChange={onChangeHours} placeholder="0" /> 
+                    <div className="field">
+                      <input
+                        type="text"
+                        value={
+                          quiz.duration.hours == null ? "" : quiz.duration.hours
+                        }
+                        onChange={onChangeHours}
+                        placeholder="0"
+                      />
                       Hours
                     </div>
                     <div className="field">
-                    <input type="text" value={quiz.duration.minutes == null ? "" : quiz.duration.minutes} onChange={onChangeMinutes} placeholder="1" />
+                      <input
+                        type="text"
+                        value={
+                          quiz.duration.minutes == null
+                            ? ""
+                            : quiz.duration.minutes
+                        }
+                        onChange={onChangeMinutes}
+                        placeholder="1"
+                      />
                       Minutes
                     </div>
                   </div>
@@ -658,9 +685,7 @@ const EditQuiz = () => {
           <div className="create__container">
             <div className="question__container">
               <div className="header">
-                <div className="img">
-                  {svgMap.question}
-                </div>
+                <div className="img">{svgMap.question}</div>
                 <div className="title">Question</div>
               </div>
               <div className="items">
@@ -704,15 +729,17 @@ const EditQuiz = () => {
               </div>
             </div>
           </div>
-          <button className="edit__detail" onClick={editQuizDetail}>
-            Edit quiz detail
-            {svgMap.next}
-          </button>
+          <BottomButton
+            svgName="next"
+            position="right"
+            label={"Edit quiz detail"}
+            cb={editQuizDetail}
+          />
           <div className="question__content">
             <div className="settings">
               <div className="item">
                 <div className="header">
-                      {svgMap.points}
+                  {svgMap.points}
                   <div className="label">Points</div>
                 </div>
                 <select
@@ -782,7 +809,7 @@ const EditQuiz = () => {
                   )}
                   <div className="add__choice">
                     <button onClick={addChoice}>
-                  {svgMap.add_button}
+                      {svgMap.add_button}
                       Add Choice
                     </button>
                   </div>
@@ -807,7 +834,7 @@ const EditQuiz = () => {
                   )}
                   <div className="add__choice">
                     <button onClick={addChoice}>
-                  {svgMap.add_button}
+                      {svgMap.add_button}
                       Add Choice
                     </button>
                   </div>

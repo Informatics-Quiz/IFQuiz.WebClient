@@ -3,14 +3,20 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar";
 import { svgMap } from "../../../config/constraints";
+import BottomButton from "../../../components/button/bottom";
 
 const ActivitySelection = () => {
-  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   return (
     <>
         <Navbar />
+        <BottomButton
+            svgName="back"
+            position="left"
+            label={"Back"}
+            cb={() => { navigate(-1) }}
+        />
         <div className="activity__selection__container">
             <div className="header">
                 <div className="image">

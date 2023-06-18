@@ -27,7 +27,7 @@ const LoginEmail = () => {
 			dispatch(setUser(res.data))
 			navigate('/home')
 		} catch (error) {
-			showNotify("Something went wrong?", error.response.data.message)
+			showNotify(null, "Something went wrong?", error.response.data.message)
 		}
 	}
 
@@ -37,8 +37,9 @@ const LoginEmail = () => {
 		title: "",
 		message: ""
 	  }); 
-	  function showNotify(title, message) {
+	  function showNotify(svg, title, message) {
 		setNotify({
+			svg: svg,
 			title: title,
 			show: true,
 			message: message
@@ -46,6 +47,7 @@ const LoginEmail = () => {
 	  }
 	  function closeNotify() {
 		setNotify({
+			svg: null,
 			title: "",
 			show: false,
 			message: ""

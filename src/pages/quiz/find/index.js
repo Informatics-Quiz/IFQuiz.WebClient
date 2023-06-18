@@ -3,19 +3,25 @@ import "./style.css";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getQuizByCode } from "../../../services/quiz";
+import { useSelector } from "react-redux";
+
+
+import { getDeployedQuizByCodeJoin } from "../../../services/quiz";
 
 import Navbar from "../../../components/navbar";
 import Notify from "../../../components/notify";
 import { svgMap } from "../../../config/constraints";
+import BottomButton from "../../../components/button/bottom";
 
 const FindQuiz = () => {
+  const user = useSelector((state) => state.user.authUser);
   const navigate = useNavigate();
   const [findQuizCode, setFindQuizCode] = useState("");
 
   function validateQuizCode() {
     if (findQuizCode.length !== 6) {
       showNotify(
+        "not_found",
         "Invalid quiz join code.",
         "Quiz join code must be 6 characters long."
       );
@@ -30,13 +36,13 @@ const FindQuiz = () => {
     }
 
     try {
-      const res = await getQuizByCode(findQuizCode);
-      console.log(res.data);
+      console.log(findQuizCode)
+      const res = await getDeployedQuizByCodeJoin(findQuizCode, user.token);
       if (res.data.length > 0) {
         navigate(`/quiz/${res.data[0]._id}`);
       }
     } catch (error) {
-      showNotify("Something went wrong?", error.response.data.message);
+      showNotify(null, "Something went wrong?", error.response.data.message);
     }
   }
 
@@ -46,29 +52,41 @@ const FindQuiz = () => {
     title: "",
     message: "",
   });
-  const showNotify = (title, message) => {
+  const showNotify = (svg, title, message, cb) => {
     setNotify({
+      svg: svg,
       title: title,
       show: true,
       message: message,
+      cb: cb,
     });
   };
   function closeNotify() {
     setNotify({
+      svg: null,
       title: "",
       show: false,
       message: "",
+      cb: null,
     });
   }
   return (
     <>
       <Notify
+        svg={notify.svg}
+        cb={notify.cb}
         show={notify.show}
         title={notify.title}
         handleClose={closeNotify}
         message={notify.message}
       />
       <Navbar />
+      <BottomButton
+            svgName="back"
+            position="left"
+            label={"Back"}
+            cb={() => { navigate(-1) }}
+        />
       <div className="find__quiz__container">
         <div className="header">
           <div className="header__content">

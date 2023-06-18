@@ -3,14 +3,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 999;
-	backdrop-filter: blur(3px);
-    background: rgba(6, 6, 6, 0.8);
-    -webkit-animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: slide-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-
+    
+    animation: fade-in .4s;
 }
 
 .modal__info {
@@ -63,21 +61,51 @@
     transition: .25s;
 }
 
-.status__edit__field svg:hover, .tap__close:hover {
+.status__edit__field svg:hover {
     transform: scale(1.2);
 
 }
 
-.status__edit__field svg:active, .tap__close:active {
+.status__edit__field svg:active {
     opacity: 0.4;
     transform: scale(0.99);
 }
 
-.tap__close {
+.tap__close__stataus {
     position: absolute;
-    font-size: 18px;
-    margin-top: 300px;
-    color: var(--alpha-color);
-    transition: .26s;
+    font-size: 32px;
+    color: white;
+    width: 100vw;
+    height: 100vh;
+    z-index: -10;
+    background: var(--blur-background-color);
+	backdrop-filter: blur(var(--blur-background-pixel));
+    animation: fade-in .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.tap__close__stataus:hover > .tap__close__status__label,
+.tap__close__stataus:hover > .tap__close__status__label2 {
+    opacity: 1;
+}
+
+.tap__close__status__label {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    margin-top: 300px;
+    margin-right: 50px;
+    opacity: 0;
+    transition: .4s;
+}
+
+.tap__close__status__label2 {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    margin-top: 450px;
+    opacity: 0;
+    transition: .4s;
+}
