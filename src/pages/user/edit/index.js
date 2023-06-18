@@ -48,7 +48,7 @@ const EditUserProfile = () => {
         soundEffect: data.soundEffect,
       };
       dispatch(setUser({ ...user, ...userProfile }));
-      navigate("/home");
+      navigate(-1);
     } catch (error) {
       showNotify(null, "Something went wrong?", error.response.data.message);
     }
