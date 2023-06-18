@@ -48,7 +48,9 @@ const EditUserProfile = () => {
         soundEffect: data.soundEffect,
       };
       dispatch(setUser({ ...user, ...userProfile }));
-      navigate(-1);
+      showNotify("edit_user", "Updated your profile.", "We will back to page you came from.", () => {
+        navigate(-1);
+      });
     } catch (error) {
       showNotify(null, "Something went wrong?", error.response.data.message);
     }

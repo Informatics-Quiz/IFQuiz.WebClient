@@ -10,8 +10,8 @@ export default function Notify({ svg, show, title, handleClose, message, cb }) {
           handleClose();
           if (cb) {
             setTimeout(() => {
-              cb(true);
-            }, 100);
+              cb();
+            }, 400);
           }
         }}
       >
@@ -22,8 +22,8 @@ export default function Notify({ svg, show, title, handleClose, message, cb }) {
           handleClose();
           if (cb) {
             setTimeout(() => {
-              cb(true);
-            }, 100);
+              cb();
+            }, 400);
           }
         }}
       >
