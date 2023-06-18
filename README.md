@@ -1,7 +1,6 @@
-Developer
-Jakkrit Chaopron (62160246)
-Earthworldiox
-Danny
+Jakkrit Chaopron (62160246) / 
+Earthworldiox / 
+Danny /
 
 
 ![image](https://github.com/idontknowtoobrother/IFQuiz.WebServer/assets/84304475/17e0b6a3-357e-4630-8db4-594f16b62fee)
