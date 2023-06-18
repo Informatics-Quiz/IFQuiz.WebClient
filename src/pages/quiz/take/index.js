@@ -137,7 +137,7 @@ export default function TakeQuiz() {
       setIsFinished(true);
       setIsOpenSuccessModal(true);
     } catch (error) {
-      console.log("eror : " + error);
+      console.log(error)
     }
   }
 
@@ -278,7 +278,7 @@ export default function TakeQuiz() {
                 </h5>
                 <br />
                 <div className="fill__choice">
-                  {currentQuiz.questions[number].answer.correctAnswer.map(
+                  {currentQuiz.questions[number].answer.map(
                     (answer, index) => (
                       <button
                         key={index}

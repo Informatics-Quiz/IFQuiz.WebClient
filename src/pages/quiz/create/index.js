@@ -1,20 +1,10 @@
 import "./style.css";
 
-import { ReactComponent as QuestionSvg } from "../../../assets/svg/question.svg";
-import { ReactComponent as AddButtonSvg } from "../../../assets/svg/add_button.svg";
 import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
-import { ReactComponent as NextSvg } from "../../../assets/svg/next.svg";
-import { ReactComponent as PointsSvg } from "../../../assets/svg/./points.svg";
-import { ReactComponent as CategorySvg } from "../../../assets/svg/category.svg";
-import { ReactComponent as ContainsSvg } from "../../../assets/svg/contains.svg";
-import { ReactComponent as ExactlySvg } from "../../../assets/svg/exactly.svg";
-import { ReactComponent as TimerWhiteSvg } from "../../../assets/svg/timer_white.svg";
-import { ReactComponent as TaskSvg } from "../../../assets/svg/task.svg";
-import { ReactComponent as SaveQuizSvg } from "../../../assets/svg/save_quiz.svg";
-import { ReactComponent as BackSvg } from "../../../assets/svg/back.svg";
 
-import React, { useState, useEffect, useRef  } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { uploadQuiz } from "../../../services/quiz";
+import { uploadQuizCoverImage } from "../../../services/upload";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -22,14 +12,11 @@ import Navbar from "../../../components/navbar";
 import InputTextAreaFillBlank from "../../../components/input/text-area-fill-blank";
 import InputTextAreaChoice from "../../../components/input/text-area-choice";
 import Notify from "../../../components/notify";
-import { config } from "@fortawesome/fontawesome-svg-core";
+import { onErrorQuizImageUrl, svgMap } from "../../../config/constraints";
 
 const CreateQuiz = () => {
   const user = useSelector((state) => state.user.authUser);
   const navigate = useNavigate();
-
-  const quizNameRef = useRef();
-  const quizDescriptionRef = useRef();
 
   const [editingQuizDetail, setEditingQuizDetail] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(0);
@@ -38,18 +25,14 @@ const CreateQuiz = () => {
     points: 1,
     explanation: {
       explain: "",
-      imageUrl: "",
     },
-    answer: {
-      correctAnswer: [{ explain: "", checked: false }],
-    },
+    answer: [{ explain: "", checked: false }],
   };
 
   const [questionList, setQuestionList] = useState([emptyQuestion]);
   const [quiz, setQuiz] = useState({
     name: null,
     description: null,
-    imageUrl: "",
     points: 0,
     duration: {
       hours: 0,
@@ -59,6 +42,20 @@ const CreateQuiz = () => {
     questions: questionList,
   });
 
+  function setQuizName(e) {
+    const quizName = e.target.value;
+    setQuiz((current) => {
+      return { ...current, name: quizName };
+    });
+  }
+
+  function setQuizDescription(e) {
+    const quizDescription = e.target.value;
+    setQuiz((current) => {
+      return { ...current, description: quizDescription };
+    });
+  }
+
   function validateDuration(duration) {
     // Check if `hours` and `minutes` are not null
     if (duration.hours !== null && duration.minutes !== null) {
@@ -66,8 +63,11 @@ const CreateQuiz = () => {
       if (duration.minutes >= 1) {
         return true; // Duration is valid
       } else {
-        showNotify("Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
-        return false; // Minutes must be at least 1
+        if (duration.hours < 1) {
+          showNotify("Are you serious?", "Duration must be at least 1 minute."); // Minutes must be at least 1
+          return false; // Minutes must be at least 1
+        }
+        return true; // Duration is valid
       }
     } else {
       showNotify("Are you serious?", "Hours and Minutes can't be empty."); // Hours and minutes must not be null
@@ -75,30 +75,27 @@ const CreateQuiz = () => {
     }
   }
 
-  function validateQuiz(){
-    
-    if(quizNameRef.current.value.length < 3){
-      showNotify("Are you serious?", "Quiz name must be at least 3 characters.")
-      return false
+  function validateQuiz() {
+    if (!quiz.name || quiz.name.length < 3) {
+      showNotify(
+        "Are you serious?",
+        "Quiz name must be at least 3 characters."
+      );
+      return false;
     }
 
-    if(quizDescriptionRef.current.value.length < 3){
-      showNotify("Are you serious?", "Quiz description must be at least 3 characters.")
-      return false
+    if (!quiz.description || quiz.description.length < 3) {
+      showNotify(
+        "Are you serious?",
+        "Quiz description must be at least 3 characters."
+      );
+      return false;
     }
 
-    if(!validateDuration(quiz.duration))return false
+    if (!validateDuration(quiz.duration)) return false;
 
-    return true
-
+    return true;
   }
-  function saveQuiz(){
-    if(!validateQuiz())return
-    // TO DO UPLOAD QUIZ
-    // TO DO UPLOAD IMAGE
-  }
-
-
 
   function validateAllQuestion() {
     let totalPoints = 0;
@@ -150,7 +147,7 @@ const CreateQuiz = () => {
 
       // validate question answer
       if (question.type === "fill-choice") {
-        if (question.answer.correctAnswer.length < 1) {
+        if (question.answer.length < 1) {
           showNotify(
             "Are you serious?",
             `Question (${questionId + 1}) must have at least 1 correct answer`,
@@ -161,7 +158,7 @@ const CreateQuiz = () => {
           setSelectedQuestion(questionId);
           return false;
         }
-        for (const answer of question.answer.correctAnswer) {
+        for (const answer of question.answer) {
           if (answer.matchString.length < 1) {
             showNotify(
               "Are you serious?",
@@ -179,7 +176,7 @@ const CreateQuiz = () => {
         question.type === "multiple-choice"
       ) {
         let foundOneCorrectAnswer = false;
-        for (const answer of question.answer.correctAnswer) {
+        for (const answer of question.answer) {
           if (answer.checked) {
             foundOneCorrectAnswer = true;
             break;
@@ -197,7 +194,7 @@ const CreateQuiz = () => {
         }
 
         // validate question answer explanation
-        for (const answer of question.answer.correctAnswer) {
+        for (const answer of question.answer) {
           if (answer.explain.length < 1) {
             showNotify(
               "Are you serious?",
@@ -243,18 +240,18 @@ const CreateQuiz = () => {
   function deleteChoice(index) {
     const newQuestion = [...questionList];
     if (newQuestion[selectedQuestion].type == "fill-choice") {
-      if (newQuestion[selectedQuestion].answer.correctAnswer.length < 2) {
+      if (newQuestion[selectedQuestion].answer.length < 2) {
         // Notify at least 1 choice
         showNotify("Are you serious?", "Question must have at least 1 choice");
         return;
       }
-      newQuestion[selectedQuestion].answer.correctAnswer.splice(index, 1);
+      newQuestion[selectedQuestion].answer.splice(index, 1);
     } else {
-      if (newQuestion[selectedQuestion].answer.correctAnswer.length < 2) {
+      if (newQuestion[selectedQuestion].answer.length < 2) {
         showNotify("Are you serious?", "Question must have at least 1 choice");
         return;
       }
-      newQuestion[selectedQuestion].answer.correctAnswer.splice(index, 1);
+      newQuestion[selectedQuestion].answer.splice(index, 1);
     }
     setQuestionList(newQuestion);
   }
@@ -262,12 +259,12 @@ const CreateQuiz = () => {
   function addChoice() {
     const newQuestion = [...questionList];
     if (newQuestion[selectedQuestion].type == "fill-choice") {
-      newQuestion[selectedQuestion].answer.correctAnswer.push({
+      newQuestion[selectedQuestion].answer.push({
         type: "contains",
         matchString: "",
       });
     } else {
-      newQuestion[selectedQuestion].answer.correctAnswer.push({
+      newQuestion[selectedQuestion].answer.push({
         explain: "",
         checked: false,
       });
@@ -296,18 +293,14 @@ const CreateQuiz = () => {
     const newQuestion = [...questionList];
     newQuestion[selectedQuestion].type = questionType;
     if (questionType == "fill-choice") {
-      newQuestion[selectedQuestion].answer = {
-        correctAnswer: [
-          {
-            type: "contains",
-            matchString: "",
-          },
-        ],
-      };
+      newQuestion[selectedQuestion].answer = [
+        {
+          type: "contains",
+          matchString: "",
+        },
+      ];
     } else {
-      newQuestion[selectedQuestion].answer = {
-        correctAnswer: [{ explain: "", checked: false }],
-      };
+      newQuestion[selectedQuestion].answer = [{ explain: "", checked: false }];
     }
     setQuestionList(newQuestion);
   }
@@ -331,32 +324,31 @@ const CreateQuiz = () => {
   function changeTypeFillChoice(index, type) {
     if (type !== "contains" && type !== "is-exactly") return;
     const newQuestion = [...questionList];
-    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
+    if (!newQuestion[selectedQuestion].answer[index]) {
       console.log(`not found answer index ${index}`);
       return;
     }
-    newQuestion[selectedQuestion].answer.correctAnswer[index].type = type;
+    newQuestion[selectedQuestion].answer[index].type = type;
     setQuestionList(newQuestion);
   }
 
   function changeAnswerTextFillChoice(index, text) {
     const newQuestion = [...questionList];
-    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
-      console.log(`not found correctAnswer index ${index}`);
+    if (!newQuestion[selectedQuestion].answer[index]) {
+      console.log(`not found answer index ${index}`);
       return;
     }
-    newQuestion[selectedQuestion].answer.correctAnswer[index].matchString =
-      text;
+    newQuestion[selectedQuestion].answer[index].matchString = text;
     setQuestionList(newQuestion);
   }
 
   function changeAnswerTextSelectChoice(index, text) {
     const newQuestion = [...questionList];
-    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
-      console.log(`not found correctAnswer index ${index}`);
+    if (!newQuestion[selectedQuestion].answer[index]) {
+      console.log(`not found answer index ${index}`);
       return;
     }
-    newQuestion[selectedQuestion].answer.correctAnswer[index].explain = text;
+    newQuestion[selectedQuestion].answer[index].explain = text;
     setQuestionList(newQuestion);
   }
 
@@ -368,19 +360,19 @@ const CreateQuiz = () => {
 
   function changeCorrectAnswerSelectChoice(index) {
     const newQuestion = [...questionList];
-    if (!newQuestion[selectedQuestion].answer.correctAnswer[index]) {
-      console.log(`not found correctAnswer index ${index}`);
+    if (!newQuestion[selectedQuestion].answer[index]) {
+      console.log(`not found answer index ${index}`);
       return;
     }
 
     if (newQuestion[selectedQuestion].type === "single-choice") {
-      for (let answer of newQuestion[selectedQuestion].answer.correctAnswer) {
-        answer.checked = false;
+      for (let ans of newQuestion[selectedQuestion].answer) {
+        ans.checked = false;
       }
-      newQuestion[selectedQuestion].answer.correctAnswer[index].checked = true;
+      newQuestion[selectedQuestion].answer[index].checked = true;
     } else if (newQuestion[selectedQuestion].type === "multiple-choice") {
-      newQuestion[selectedQuestion].answer.correctAnswer[index].checked =
-        !newQuestion[selectedQuestion].answer.correctAnswer[index].checked;
+      newQuestion[selectedQuestion].answer[index].checked =
+        !newQuestion[selectedQuestion].answer[index].checked;
     }
     setQuestionList(newQuestion);
   }
@@ -397,33 +389,53 @@ const CreateQuiz = () => {
     textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
   }
 
+  const [quizCoverImage, setQuizCoverImage] = useState(null);
+  const [quizImageFile, setQuizImageFile] = useState(null);
 
-  
+  function onSelectImageFromLocal(e) {
+    const imageFile = e.target.files[0];
+    if (!imageFile) {
+      return;
+    }
+    setQuizImageFile(imageFile);
+    const renderImage = URL.createObjectURL(imageFile);
+    setQuizCoverImage(renderImage);
+  }
 
-  async function handleSubmit() {
-    // const newQuestionList = quiz.questions.map((obj) => {
-    //   if (obj.type === "fill-choice") {
-    //     return { ...obj };
-    //   }
-    //   const { selectAnswers, ...rest } = obj.answer;
-    //   const newSelectAnswers = selectAnswers.map(
-    //     ({ checked, ...rest }) => rest
-    //   );
-    //   return { ...obj, answer: { ...rest, selectAnswers: newSelectAnswers } };
-    // });
-    // let data = { ...quiz, questions: newQuestionList };
-    // let arrs = [];
-    // // eslint-disable-next-line
-    // data.questions.map((quest, index) => {
-    //   if (quest.type !== "") {
-    //     arrs.push(quest);
-    //   }
-    // });
-    // data.questions = arrs;
-    // const res = await uploadQuiz(user.token, data);
-    // if (res.status === 201) {
-    //   navigate("/activity/created");
-    // }
+  async function saveQuiz() {
+    if (!validateQuiz()) return;
+
+    const saveQuiz = {};
+    saveQuiz._id = quiz?._id;
+    saveQuiz.name = quiz.name;
+    saveQuiz.description = quiz.description;
+    saveQuiz.points = quiz.points;
+    saveQuiz.duration = quiz.duration;
+    saveQuiz.questions = quiz.questions;
+
+    try {
+      const res = await uploadQuiz(user.token, saveQuiz);
+      if (res.status === 201) {
+        setQuiz(res.data);
+        if (!quizImageFile) {
+          showNotify("Success", "Quiz saved successfully.", () => {
+            navigate("/activity/created");
+          });
+          return;
+        }
+        const fd = new FormData();
+        fd.append("quiz-cover-image", quizImageFile);
+        fd.append("quizId", res.data._id);
+        const resUploadImageCover = await uploadQuizCoverImage(user.token, fd);
+        if (resUploadImageCover.status === 201) {
+          showNotify("Success", "Quiz saved successfully.", () => {
+            navigate("/activity/created");
+          });
+        }
+      }
+    } catch (e) {
+      showNotify("Something went wrong?", e.response.data.message);
+    }
   }
 
   // Notify
@@ -456,63 +468,64 @@ const CreateQuiz = () => {
     });
   }
 
-  function validateNumber(value){
+  function validateNumber(value) {
     const pattern = /^[0-9]+$/;
     return pattern.test(value);
   }
 
-  function onChangeHours(e){
-    let value = e.target.value
-    const newQuiz = {...quiz}
-    if(value == ""){
-      newQuiz.duration.hours = 0
-      if(newQuiz.duration.minutes < 1){
-        newQuiz.duration.minutes = 1
+  function onChangeHours(e) {
+    let value = e.target.value;
+    const newQuiz = { ...quiz };
+    if (value == "") {
+      newQuiz.duration.hours = 0;
+      if (newQuiz.duration.minutes < 1) {
+        newQuiz.duration.minutes = 1;
       }
-      setQuiz(newQuiz)
-      return
+      setQuiz(newQuiz);
+      return;
     }
-    if(!validateNumber(value)){
-      return
+    if (!validateNumber(value)) {
+      return;
     }
-    const hours = parseInt(value)
-    newQuiz.duration.hours = hours
-    if(newQuiz.duration.hours < 1 && newQuiz.duration.minutes < 1){
-      newQuiz.duration.minutes = 1
+    const hours = parseInt(value);
+    newQuiz.duration.hours = hours;
+    if (newQuiz.duration.hours < 1 && newQuiz.duration.minutes < 1) {
+      newQuiz.duration.minutes = 1;
     }
-    setQuiz(newQuiz)
+    setQuiz(newQuiz);
   }
 
-  function onChangeMinutes(e){
-    let value = e.target.value
-    const newQuiz = {...quiz}
+  function onChangeMinutes(e) {
+    let value = e.target.value;
+    const newQuiz = { ...quiz };
 
-    if(value == ""){
-      if(newQuiz.duration?.hours > 0){
-        newQuiz.duration.minutes = 0
-      } else{
-        newQuiz.duration.minutes = 1
+    if (value == "") {
+      if (newQuiz.duration?.hours > 0) {
+        newQuiz.duration.minutes = 0;
+      } else {
+        newQuiz.duration.minutes = 1;
       }
-      setQuiz(newQuiz)
-      return
+      setQuiz(newQuiz);
+      return;
     }
 
-    if(!validateNumber(value)){
-      return
+    if (!validateNumber(value)) {
+      return;
     }
-    const minutes = parseInt(value)
-    newQuiz.duration.minutes = minutes
-    if(newQuiz.duration.minutes < 1){
-      if(newQuiz.duration?.hours > 0){
-        newQuiz.duration.minutes = 0
-      } else{
-        newQuiz.duration.minutes = 1
+    const minutes = parseInt(value);
+    newQuiz.duration.minutes = minutes;
+    if (newQuiz.duration.minutes < 1) {
+      if (newQuiz.duration?.hours > 0) {
+        newQuiz.duration.minutes = 0;
+      } else {
+        newQuiz.duration.minutes = 1;
       }
-      setQuiz(newQuiz)
-      return
+      setQuiz(newQuiz);
+      return;
     }
-    newQuiz.duration.minutes = newQuiz.duration.minutes > 59 ? 59 : newQuiz.duration.minutes
-    setQuiz(newQuiz)
+    newQuiz.duration.minutes =
+      newQuiz.duration.minutes > 59 ? 59 : newQuiz.duration.minutes;
+    setQuiz(newQuiz);
   }
 
   useEffect(() => {
@@ -535,10 +548,9 @@ const CreateQuiz = () => {
       {editingQuizDetail ? (
         <>
           <div className="bottom__action__edit__quiz">
-            <button className="edit__detail"
-            onClick={saveQuiz}>
+            <button className="edit__detail" onClick={saveQuiz}>
               Save Quiz
-              <SaveQuizSvg />
+              {svgMap.save_quiz}
             </button>
 
             <button
@@ -547,7 +559,7 @@ const CreateQuiz = () => {
                 setEditingQuizDetail(false);
               }}
             >
-              <BackSvg />
+              {svgMap.back}
               Edit question
             </button>
           </div>
@@ -556,22 +568,34 @@ const CreateQuiz = () => {
             <div className="edit__quiz__detail__container">
               <div className="cover__image__container">
                 <div className="image__cover">
-                  <img src="https://media.discordapp.net/attachments/1115338683671908462/1119589308291096586/image.png"></img>
+                  <img
+                    src={quizCoverImage ? quizCoverImage : onErrorQuizImageUrl}
+                  ></img>
                 </div>
                 <label htmlFor="file-upload" className="custom-file-upload">
                   Upload Quiz Cover Image
                 </label>
-                <input id="file-upload" type="file" accept="image/*" />
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={onSelectImageFromLocal}
+                />
               </div>
               <div className="quiz__detail__content">
                 <div className="quiz__name">
                   <div className="title">Quiz Name</div>
-                  <input ref={quizNameRef} placeholder="Please enter the name for your quiz here."></input>
+                  <input
+                    onChange={setQuizName}
+                    value={quiz.name}
+                    placeholder="Please enter the name for your quiz here."
+                  ></input>
                 </div>
                 <div className="quiz__detail__description">
                   <div className="title">Description</div>
                   <textarea
-                    ref={quizDescriptionRef}
+                    value={quiz.description}
+                    onChange={setQuizDescription}
                     id="quizDescriptionTextArea"
                     placeholder="Please enter the description for your quiz here."
                     onInput={resizeDescription}
@@ -579,16 +603,32 @@ const CreateQuiz = () => {
                 </div>
                 <div className="quiz__duration">
                   <div className="title">
-                    <TimerWhiteSvg />
+                    {svgMap.timer_white}
                     Durations
                   </div>
                   <div className="form">
-                  <div className="field">
-                      <input type="text" value={quiz.duration.hours == null ? "" : quiz.duration.hours} onChange={onChangeHours} placeholder="0" /> 
+                    <div className="field">
+                      <input
+                        type="text"
+                        value={
+                          quiz.duration.hours == null ? "" : quiz.duration.hours
+                        }
+                        onChange={onChangeHours}
+                        placeholder="0"
+                      />
                       Hours
                     </div>
                     <div className="field">
-                    <input type="text" value={quiz.duration.minutes == null ? "" : quiz.duration.minutes} onChange={onChangeMinutes} placeholder="1" />
+                      <input
+                        type="text"
+                        value={
+                          quiz.duration.minutes == null
+                            ? ""
+                            : quiz.duration.minutes
+                        }
+                        onChange={onChangeMinutes}
+                        placeholder="1"
+                      />
                       Minutes
                     </div>
                   </div>
@@ -596,14 +636,14 @@ const CreateQuiz = () => {
                 <div className="quiz__short__info">
                   <div className="item">
                     <div className="header">
-                      <PointsSvg />
+                      {svgMap.points}
                       Total Score
                     </div>
                     {quiz.points}
                   </div>
                   <div className="item">
                     <div className="header">
-                      <TaskSvg />
+                      {svgMap.task}
                       Tasks
                     </div>
                     {quiz.questions.length}
@@ -618,9 +658,7 @@ const CreateQuiz = () => {
           <div className="create__container">
             <div className="question__container">
               <div className="header">
-                <div className="img">
-                  <QuestionSvg />
-                </div>
+                <div className="img">{svgMap.question}</div>
                 <div className="title">Question</div>
               </div>
               <div className="items">
@@ -658,7 +696,7 @@ const CreateQuiz = () => {
               </div>
               <div className="action">
                 <button onClick={addMoreQuestion} className="add">
-                  <AddButtonSvg />
+                  {svgMap.add_button}
                   Add Question
                 </button>
               </div>
@@ -666,13 +704,13 @@ const CreateQuiz = () => {
           </div>
           <button className="edit__detail" onClick={editQuizDetail}>
             Edit quiz detail
-            <NextSvg />
+            {svgMap.next}
           </button>
           <div className="question__content">
             <div className="settings">
               <div className="item">
                 <div className="header">
-                  <PointsSvg />
+                  {svgMap.points}
                   <div className="label">Points</div>
                 </div>
                 <select
@@ -690,7 +728,7 @@ const CreateQuiz = () => {
               </div>
               <div className="item">
                 <div className="header">
-                  <CategorySvg />
+                  {svgMap.category}
                   <div className="label2">Type</div>
                 </div>
                 <select
@@ -717,16 +755,16 @@ const CreateQuiz = () => {
               <>
                 <div className="explanation__type">
                   <div className="item">
-                    <ContainsSvg />
+                    {svgMap.contains}
                     Contains
                   </div>
                   <div className="item">
-                    <ExactlySvg />
+                    {svgMap.exactly}
                     Exactly
                   </div>
                 </div>
                 <div className="answers">
-                  {quiz.questions[selectedQuestion].answer.correctAnswer.map(
+                  {quiz.questions[selectedQuestion].answer.map(
                     (data, index) => {
                       return (
                         <InputTextAreaFillBlank
@@ -742,7 +780,7 @@ const CreateQuiz = () => {
                   )}
                   <div className="add__choice">
                     <button onClick={addChoice}>
-                      <AddButtonSvg />
+                      {svgMap.add_button}
                       Add Choice
                     </button>
                   </div>
@@ -751,7 +789,7 @@ const CreateQuiz = () => {
             ) : (
               <>
                 <div className="answers">
-                  {quiz.questions[selectedQuestion].answer.correctAnswer.map(
+                  {quiz.questions[selectedQuestion].answer.map(
                     (data, index) => {
                       return (
                         <InputTextAreaChoice
@@ -767,7 +805,7 @@ const CreateQuiz = () => {
                   )}
                   <div className="add__choice">
                     <button onClick={addChoice}>
-                      <AddButtonSvg />
+                      {svgMap.add_button}
                       Add Choice
                     </button>
                   </div>

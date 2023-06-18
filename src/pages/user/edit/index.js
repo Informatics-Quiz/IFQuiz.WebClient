@@ -1,10 +1,5 @@
 import "./style.css";
 
-import { ReactComponent as EditUserSvg } from "../../../assets/svg/edit_user.svg";
-import { ReactComponent as SecuritySvg } from "../../../assets/svg/security.svg";
-import { ReactComponent as ChangePasswordSvg } from "../../../assets/svg/change_password.svg";
-import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
-
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../reducers/user";
@@ -21,6 +16,7 @@ import ModalConfirmAction from "../../../components/modals/confirm-action";
 import Notify from "../../../components/notify";
 import HomeButton from "../../../components/button/home";
 import Navbar from "../../../components/navbar";
+import { svgMap } from "../../../config/constraints";
 
 const EditUserProfile = () => {
   const user = useSelector((state) => state.user.authUser);
@@ -54,7 +50,7 @@ const EditUserProfile = () => {
       dispatch(setUser({ ...user, ...userProfile }));
       navigate("/home");
     } catch (error) {
-      console.error(error);
+      showNotify("Something went wrong?", error.response.data.message);
     }
   }
 
@@ -194,7 +190,7 @@ const EditUserProfile = () => {
       <ModalConfirmAction
         show={deleteAccountShow}
         colorStyle={"error_color"}
-        svgEnum={"TRASH_BIN"}
+        svgEnum={"trash_bin"}
         title={"Account deletion request"}
         description={"You will loss of all associated data"}
         buttonConfirmLabel={"SURE, DELETE IT"}
@@ -206,7 +202,7 @@ const EditUserProfile = () => {
       <div className="edit__profile__container">
         <div className="page__header">
           <div className="page__svg">
-            <EditUserSvg />
+            {svgMap.edit_user}
           </div>
           <div className="page__info">
             <p className="page__title">Editing your profile</p>
@@ -252,13 +248,13 @@ const EditUserProfile = () => {
           </div>
           <div className="settings__security__form">
             <div className="security__header">
-              <SecuritySvg />
+              {svgMap.security}
               <p>Security</p>
             </div>
             <div className="button__action__contianer">
               <div className="svg__with__button">
                 <div className="svg__icon">
-                  <ChangePasswordSvg />
+                  {svgMap.change_password}
                 </div>
                 <div
                   className="button__label"
@@ -269,7 +265,7 @@ const EditUserProfile = () => {
               </div>
               <div className="svg__with__button">
                 <div className="svg__icon">
-                  <DeleteSvg />
+                  {svgMap.delete}
                 </div>
                 <div className="button__label"
                   onClick={() => setDeleteAccountShow(true)}

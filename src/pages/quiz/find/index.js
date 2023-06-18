@@ -1,7 +1,5 @@
 import "./style.css";
 
-import { ReactComponent as FindQuizSvg } from "../../../assets/svg/find_quiz.svg";
-import { ReactComponent as CodeQuizSvg } from "../../../assets/svg/code_quiz.svg";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +7,7 @@ import { getQuizByCode } from "../../../services/quiz";
 
 import Navbar from "../../../components/navbar";
 import Notify from "../../../components/notify";
+import { svgMap } from "../../../config/constraints";
 
 const FindQuiz = () => {
   const navigate = useNavigate();
@@ -73,7 +72,7 @@ const FindQuiz = () => {
       <div className="find__quiz__container">
         <div className="header">
           <div className="header__content">
-            <FindQuizSvg />
+            {svgMap.find_quiz}
             <div className="label">
               <div className="title">Find a quiz and join it</div>
               <div className="description">Use code of quiz to find below</div>
@@ -81,7 +80,7 @@ const FindQuiz = () => {
           </div>
         </div>
         <div className="search__content">
-          <CodeQuizSvg />
+          {svgMap.code_quiz}
           <input
             type="text"
             placeholder="Input quiz code here."

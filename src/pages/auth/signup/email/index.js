@@ -1,12 +1,12 @@
 import "./style.css";
 
-import { ReactComponent as CreateUserSvg } from "../../../../assets/svg/create__user.svg";
 
 import { useState } from "react";
 import { registerAuthUser } from "../../../../services/auth";
 import { useNavigate } from "react-router-dom";
 
 import Notify from "../../../../components/notify";
+import { svgMap } from "../../../../config/constraints";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -126,7 +126,7 @@ const Register = () => {
       {!isEmailValid ? (
         <div className="register__container">
           <div className="register__info">
-            <CreateUserSvg />
+            {svgMap.create__user}
             <div className="register__info__row">
               <div className="register__title">
                 Signup into Informatics Quiz
@@ -158,7 +158,7 @@ const Register = () => {
       ) : (
         <div className="register__container">
           <div className="register__info">
-            <CreateUserSvg />
+            {svgMap.create__user}
             <div className="register__info__row">
               <div className="register__title">
                 Signup into Informatics Quiz
