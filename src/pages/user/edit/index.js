@@ -16,7 +16,7 @@ import ModalConfirmAction from "../../../components/modals/confirm-action";
 import Notify from "../../../components/notify";
 import BottomButton from "../../../components/button/bottom";
 import Navbar from "../../../components/navbar";
-import { svgMap } from "../../../config/constraints";
+import { regexPassword, svgMap } from "../../../config/constraints";
 
 const EditUserProfile = () => {
   const user = useSelector((state) => state.user.authUser);
@@ -121,7 +121,7 @@ const EditUserProfile = () => {
     });
   };
   function validateStrongPassword(password) {
-    const passwordPattern = /^.{1,7}$/;
+    const passwordPattern = regexPassword;
 
     return passwordPattern.test(password);
   }

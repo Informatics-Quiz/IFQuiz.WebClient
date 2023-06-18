@@ -6,7 +6,7 @@ import { registerAuthUser } from "../../../../services/auth";
 import { useNavigate } from "react-router-dom";
 
 import Notify from "../../../../components/notify";
-import { svgMap } from "../../../../config/constraints";
+import { regexPassword, svgMap } from "../../../../config/constraints";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Register = () => {
 
   // Validate everything
   function validateStrongPassword(password) {
-    const passwordPattern = /^.{1,7}$/;
+    const passwordPattern = regexPassword;
 
     return passwordPattern.test(password);
   }
