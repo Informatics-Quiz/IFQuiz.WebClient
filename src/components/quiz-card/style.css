@@ -1,45 +1,114 @@
-.quiz-card-container {
-	width: 320px;
-	height: 230px;
-	background-color: #0d1117;
-	border-radius: 16px;
-}
-
-.quiz-card-container:not(:last-child) {
-	margin-right: 16px;
-}
-
-.quiz-card-image-container {
-	width: 100%;
-	height: 145px;
-}
-
-.quiz-card-image-container img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	border-radius: 16px 16px 0 36px;
-}
-
-.quiz-card-content {
+.first__card {
 	display: flex;
-	flex-direction: column;
-	padding: 8px 16px;
+	background: var(--card-bg);
+	border-radius: 5px;
+	margin-right: 2vw;
+	height: 195px;
+	width: 70vw;
+	margin-top: 0;
+	transition: .26s;
+}
+
+.quiz__card {
+	display: flex;
+	background: var(--card-bg);
+	border-radius: 5px;
+	margin-right: 2vw;
+	height: 195px;
+	width: 70vw;
+	margin-top: 20px;
+	transition: .26s;
+}
+
+
+.quiz__image {
+	margin-right: 1vw;
+}
+.quiz__image img {
+	height: 195px;
+	width: 298px;
+	object-fit: cover;
+	border-radius: 5px;
+}
+
+.quiz__info {
+	margin-top: 9px;
+}
+
+.quiz__info p {
+	margin:0;
+	padding: 0;
+}
+
+.quiz__title {
+	font-weight: bold;
+	font-size: 24px;
+	width: 970px;
+	padding-bottom: 10px;
+	white-space: nowrap; 
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.quiz__description {
+	font-size: 0.75vw;
+	height: 102px;
+	width: 800px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+
+.quiz__deep__info {
 	position: relative;
+	display: flex;
+	margin-top: 18px;
 }
 
-.quiz-card-content h5 {
-	font-weight: 400;
+
+.quiz__deep__info div {
+	display: flex;
+	justify-content: center;
+	margin-right: 15px;
+	align-items: center;
 }
 
-.quiz-card-content p {
-	color: rgba(201, 209, 217, 0.8);
+.quiz__deep__info div svg {
+	width: 18px;
+	height: 18px;
+	margin-right: 5px;
 }
 
-.quiz-card-content span {
+
+
+
+.quiz__card:hover, .first__card:hover {
+    transform: scale(1.01);
+}
+
+.quiz__card:active, .first__card:active {
+    opacity: 0.4;
+    transform: scale(0.99);
+}
+
+
+.action__button {
 	position: absolute;
-	bottom: 12px;
-	right: 12px;
-	color: rgba(201, 209, 217, 0.8);
-	font-size: 14px;
+	right: 0;
+	bottom: 3px;
+}
+
+.action__button > button {
+	border-radius: 5px;
+	font-size: 15px;
+	padding: 4px 50px 4px 50px;
+	margin-left: 9px;
+}
+
+.action__button__edit {
+	background: var(--active-button-color);
+}
+
+.action__button__delete {
+	background: var(--success-button-color);
 }
