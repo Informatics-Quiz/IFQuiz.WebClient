@@ -27,14 +27,16 @@ export async function deleteUserAccount(token) {
 	return res
 }
 
-export async function getUserProfile(token) {
+export async function getUserProfileImage(token, handlerSetUserImageUrl) {
 	const res = await client.get('/file/get/profile-image', {
 		responseType: 'arraybuffer',
 		headers: {
 			Authorization: `Bearer ${token}`,
 		}
 	})
-	return res
+	const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
+	const url = URL.createObjectURL(blob)
+	handlerSetUserImageUrl(url)
 }
 
 export async function updateUserStatus(token, status) {
