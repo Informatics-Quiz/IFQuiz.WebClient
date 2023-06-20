@@ -1,0 +1,18 @@
+.question__selection > .task > button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 3px;
+}
+
+.current-task-button {
+    background: var(--active-button-color);
+}
+
+.done-task-button {
+    background: var(--done-task-button-color);
+}
+
+.unselect-button {
+    background: var(--button-un-active-color);
+}
