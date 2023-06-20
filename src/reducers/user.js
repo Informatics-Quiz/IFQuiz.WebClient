@@ -23,8 +23,11 @@ const userSlice = createSlice({
 		setStatus: (state, action) => {
 			state.authUser.status = action.payload
 		},
+		setUserImageUrl:(state, action) => {
+			state.authUser.imageUrl = action.payload
+		}
 	},
 })
 
 export default userSlice.reducer
-export const { setUser, setStatus, setToken } = userSlice.actions
+export const { setUser, setStatus, setToken, setUserImageUrl } = userSlice.actions
