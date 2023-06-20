@@ -1,358 +1,209 @@
+// Resources
 import "./style.css";
+import { onErrorProfileImageUrl, svgMap } from "../../../config/constraints";
 
-import { BsCheckCircle } from "react-icons/bs";
+// React Router | Components | Redux
 import { useNavigate } from "react-router";
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FcNext, FcPrevious } from "react-icons/fc";
-import ReactRouterPrompt from "react-router-prompt";
 
-import PreventDialog from "../../../components/prevent-dialog";
-import { setCurrentQuiz } from "../../../reducers/quiz";
-import { sendQuiz } from "../../../services/quiz";
+// Reducers
+import { setUserImageUrl } from "../../../reducers/user";
+import { setSelectedQuestionId, setTakingQuiz, setSelectedChoiceId, setSelectedMultipleChoice } from "../../../reducers/take";
+
+// Services
+import { getUserProfileImage } from "../../../services/user";
+
+// Utils
+import { getTimerLabel } from "../../../utils/functions/timer";
+
+// Ours Components
+import NavbarTakeQuiz from "../../../components/take-quiz-navbar";
+import QuestionSelector from "../../../components/question.selector";
+import SingleChoice from "../../../components/choice/single";
+import MultipleChoice from "../../../components/choice/multiple";
+import Notify from "../../../components/notify";
+import { updateTakeQuizAnswers } from "../../../services/quiz";
+import { useRef } from "react";
+
 
 export default function TakeQuiz() {
-  const currentQuiz = useSelector((state) => state.quiz.current);
-  const user = useSelector((state) => state.user.authUser);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const quiz = useSelector((state) => state.take.quiz);
+	const user = useSelector((state) => state.user.authUser);
+	const updatingAnswersRef = useRef(false)
 
-  const [number, setNumber] = useState(0);
-  const [score, setScore] = useState(0);
+	const [timerLabel, setTimerLabel] = useState(getTimerLabel(quiz?.copyof?.expiredAt) || null); // [label, setLabel
+	const [notify, setNotify] = useState({
+		show: false,
+		title: "",
+		message: "",
+	});
 
-  const [timer, setTimer] = useState(600)
-  // const [isTimeup, setIsTimeUp] = useState(false)
-
-  const [userAnswers, setUserAnswers] = useState([]);
-  const [isFinished, setIsFinished] = useState(false);
-  const [isOpenSuccessModal, setIsOpenSuccessModal] = useState(false);
-
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  function startTimer() {
-    const interval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(interval);
-          // setIsTimeUp(true);
-          return prevTimer;
-        }
-        return prevTimer - 1;
-      });
-    }, 1000);
-
-    return interval;
-  }
-
-  useEffect(() => {
-    const interval = startTimer();
-
-    return () => {
-      clearInterval(interval); // Clear the interval when the component unmounts
-    };
-  }, []);
-
-  function formatTime(seconds) {
-    const days = Math.floor(seconds / 86400);
-    const hours = Math.floor((seconds % 86400) / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
-
-    if (days > 0) {
-      return `${days}D [ ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")} ]`;
-    } else if (hours > 0) {
-      return `${hours}H ${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
-    } else {
-      return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-    }
-  }
-
-  function handleChangeUserAnswers(e, index, type) {
-    const { value } = e.target;
-
-    if (type === "single-choice") {
-      const newUserAnswers = [...userAnswers];
-      if (newUserAnswers[index] === value) {
-        newUserAnswers.splice(index, 1);
-        setUserAnswers(newUserAnswers);
-        return;
-      }
-      newUserAnswers[index] = +value;
-      setUserAnswers(newUserAnswers);
-    } else if (type === "fill-choice") {
-      const newUserAnswers = [...userAnswers];
-      newUserAnswers[index] = value;
-      setUserAnswers(newUserAnswers);
-    } else if (type === "multiple-choice") {
-      if (!userAnswers[index]) {
-        const newUserAnswers = [...userAnswers];
-        newUserAnswers[index] = [+value];
-        setUserAnswers(newUserAnswers);
-        return;
-      }
-      if (userAnswers[index].includes(+value)) {
-        const newUserAnswers = [...userAnswers];
-        newUserAnswers[index] = newUserAnswers[index].filter(
-          (item) => item !== +value
-        );
-        setUserAnswers(newUserAnswers);
-      } else {
-        const newUserAnswers = [...userAnswers];
-        newUserAnswers[index] = [...newUserAnswers[index], +value];
-        setUserAnswers(newUserAnswers);
-      }
-    }
-  }
-
-  function isLastQuestion() {
-    // eslint-disable-next-line
-    return number === currentQuiz.questions.length - 1;
-  }
-
-  function changeQuestion(number) {
-    setNumber(number);
-  }
-
-  function nextButton() {
-    if (number + 1 < currentQuiz.questions.length) {
-      setNumber((number + 1))
-    }
-  }
-
-  function previousButton() {
-    if (number !== 0) {
-      setNumber((number - 1))
-    }
-  }
-
-  async function handleSubmit() {
-    try {
-      const requestBody = {
-        userAnswers: userAnswers,
-        roomInformation: currentQuiz,
-      };
-      const res = await sendQuiz(user.token, requestBody);
-      setScore(res.data.score);
-      setIsFinished(true);
-      setIsOpenSuccessModal(true);
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  function getChoiceTypeLabel(type) {
-    // eslint-disable-next-line
-    if (type == "multiple-choice") return "Multiple Choice";
-    // eslint-disable-next-line
-    if (type == "single-choice") return "Single Choice";
-    return "Fill Choice";
-  }
-
-  function isMultipleSelect(choiceId) {
-    if (!userAnswers[number]) return false;
-    for (const answerId of userAnswers[number]) {
-      if (answerId === choiceId) return true;
-    }
-    return false;
-  }
-
-  function onLeavingPage(isActive, onConfirm) {
-    onConfirm(isActive);
-    dispatch(setCurrentQuiz(null));
-  }
-
-  function getScoreOfQuiz() {
-    let score = 0;
-    for (const question of currentQuiz.questions) {
-      score += question.points;
-    }
-    return score;
-  }
-
-  if (!currentQuiz) return null;
-
-  return (
-    <div className="flex flex-col">
-      <ReactRouterPrompt when={!isFinished}>
-        {({ isActive, onConfirm, onCancel }) =>
-          isActive && (
-            <PreventDialog
-              isActive={isActive}
-              onConfirm={() => onLeavingPage(isActive, onConfirm)}
-              onCancel={onCancel}
-            />
-          )
-        }
-      </ReactRouterPrompt>
-      <div className="flex justify-between bg-[#0d1117] py-2 px-6">
-        <span style={{ marginLeft: "90px" }}>
-          ยินดีต้อนรับ : {user.fullname}
-        </span>
-      </div>
-
-      {isOpenSuccessModal ? (
-        <div className="w-[600px] bg-[#0d1117] mt-20 mx-auto flex flex-col items-center py-12 rounded">
-          <h4>ระบบได้ทำการตรวจคะเเนนข้อสอบของท่านเรียบร้อยเเล้ว</h4>
-          <BsCheckCircle className="text-[100px] my-12" />
-          <h1>
-            {score} / {getScoreOfQuiz()}
-          </h1>
-          <button
-            onClick={() => navigate("/home")}
-            className="bg-[#171b21] px-3 py-2 rounded shadow mt-5"
-          >
-            กลับสู่หน้าหลัก
-          </button>
-        </div>
-      ) : (
-        <div
-          className="flex flex-col py-3 w-[1000px]"
-          style={{ marginLeft: "35%" }}
-
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-
-            <button onClick={previousButton}><FcPrevious style={{ width: '55px', height: '55px' }} /></button>
-            <button onClick={nextButton}><FcNext style={{ width: '55px', height: '55px' }} /></button>
-          </div>
-
-          <div>
-            <div className="question">
-              <h4>Questions</h4>
-            </div>
-            <div className="timer">
-              <h1>{formatTime(timer)}</h1>
-            </div>
-            <div className="select__question">
-              {currentQuiz.questions.map((question, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => changeQuestion(e.target.value)}
-                  value={index}
-                  className={
-                    // eslint-disable-next-line
-                    index == number
-                      ? "selected__question__button"
-                      : "select__question__button"
-                  }
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-[#0d1117] flex items-center justify-center rounded mb-4">
-            <h2 className="m-0 py-2">{currentQuiz.name}</h2>
-          </div>
-
-          <div
-            className="bg-[#0d1117]"
-            style={{
-              width: "100%",
-              height: "400px",
-              borderRadius: "15px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              overflow: "hidden",
-              padding: "2.5%",
-            }}
-          >
-            <h1 style={{ display: "inline", fontSize: "1.15vw" }}>
-              {currentQuiz.questions[number].explanation.explain}
-            </h1>
+	function showNotify(svg, title, message, cb) {
+		setNotify({
+			svg: svg,
+			title: title,
+			show: true,
+			message: message,
+			cb: cb
+		});
+	}
+	function closeNotify() {
+		setNotify({
+			svg: null,
+			title: "",
+			show: false,
+			message: "",
+			cb: null
+		})
+	}
 
 
 
-          </div>
-          <div
-            className="choice"
-            style={{ width: "100%", height: "285px", marginTop: "20px" }}
-          >
-            {currentQuiz.questions[number].type !== "fill-choice" ? (
-              <div>
-                <h5 style={{ marginTop: "10px" }}>
-                  {getChoiceTypeLabel(currentQuiz.questions[number].type)}
-                </h5>
-                <br />
-                <div className="fill__choice">
-                  {currentQuiz.questions[number].answer.map(
-                    (answer, index) => (
-                      <button
-                        key={index}
-                        onClick={(e) =>
-                          handleChangeUserAnswers(
-                            e,
-                            number,
-                            currentQuiz.questions[number].type
-                          )
-                        }
-                        value={index}
-                        className={
-                          currentQuiz.questions[number].type ===
-                            "multiple-choice"
-                            ? isMultipleSelect(index)
-                              ? "fill__choice__selected"
-                              : "fill__choice__unselect"
-                            : userAnswers[number] === index
-                              ? "fill__choice__selected"
-                              : "fill__choice__unselect"
-                        }
-                      >
-                        {answer.explain}
-                      </button>
-                    )
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div>
-                <h5 style={{ marginTop: "10px" }}>
-                  {getChoiceTypeLabel(currentQuiz.questions[number].type)}
-                </h5>
-                <br />
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    color: "white",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Type your answer..."
-                    className="w-full border border-[#585e65] bg-inherit outline-none py-2 px-6 rounded"
-                    value={userAnswers[number] || ""}
-                    onChange={(e) =>
-                      handleChangeUserAnswers(
-                        e,
-                        number,
-                        currentQuiz.questions[number].type
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+	useEffect(() => {
 
-          {isLastQuestion() ? (
-            <button
-              className="bg-[#238636] rounded py-2 mt-3"
-              onClick={handleSubmit}
-            >
-              SUBMIT
-            </button>
-          ) : (
-            <div></div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+		if (!quiz) {
+			showNotify('error', 'You have to take quiz first.', 'We will redirect you to home page.', () => navigate('/home'))
+			return
+		}
+
+		async function fetchProfileImage() {
+			await getUserProfileImage(user.token, (url) => {
+				dispatch(setUserImageUrl(url));
+			});
+		}
+
+		return ()=> fetchProfileImage(); // call once
+
+	}, [])
+
+	useEffect(()=> {
+		const intervalId = setInterval(() => {
+			setTimerLabel(getTimerLabel(quiz?.copyof?.expiredAt, () => {
+				showNotify('success', 'Time is up!', 'We will redirect you to result page.', () => {
+					dispatch(setTakingQuiz(null))
+					navigate('/activity/completed')
+				})
+			}))
+		}, 1000);
+
+		return () => {
+			clearInterval(intervalId); // call once
+		};
+	})
+
+	async function updateAnswers() {
+
+		if (quiz?.copyof?._id && quiz?.answers) {
+			console.log('updating...', quiz)
+			const res = await updateTakeQuizAnswers(user.token, {
+				quizId: quiz.copyof._id,
+				answers: quiz.answers
+			})
+			if (res?.quiz) {
+				console.log('updated', res.quiz)
+			}
+		}
+	}
+
+	function handlerSelectQuestion(index) {
+		dispatch(setSelectedQuestionId(index))
+	}
+
+	function handlerSelectSingleChoice(answerId) {
+		dispatch(setSelectedChoiceId(answerId))
+		updateAnswers()
+	}
+
+	function handlerMultipleChoice(handler, selectId) {
+		dispatch(setSelectedMultipleChoice({
+			handler: handler,
+			selectId: selectId
+		}))
+		updateAnswers()
+
+	}
+
+
+	useEffect(() => {
+		if(updatingAnswersRef.current)return
+		updatingAnswersRef.current = true
+		updateAnswers()
+	}, [quiz])
+
+
+	return (
+		<>
+			<Notify
+				svg={notify.svg}
+				title={notify.title}
+				show={notify.show}
+				message={notify.message}
+				handleClose={closeNotify}
+				cb={notify.cb}
+			/>
+			{quiz ? (
+
+				<div className="take__quiz__main__container">
+					<NavbarTakeQuiz
+						imageUrl={user?.imageUrl || onErrorProfileImageUrl}
+						fullname={user.fullname}
+						quizName={quiz.copyof.name}
+					/>
+					<div className="take__quiz__container">
+						<div className="question__selection">
+							<div className="header">
+								<div className="icon">
+									{svgMap.question}
+								</div>
+								Question
+							</div>
+							<QuestionSelector
+								answers={quiz.answers}
+								selectedQuestionId={quiz.selectedQuestionId}
+								handlerSelectQuestion={handlerSelectQuestion}
+							/>
+						</div>
+						<div className="question__timer">
+							<div className="icon">
+								{svgMap.timer_blue}
+							</div>
+							{timerLabel}
+						</div>
+					</div>
+					<div className="block-space-center">
+						<div className="task__take__container">
+							<div className="question">
+								{quiz.questions[quiz.selectedQuestionId].explanation.explain}
+							</div>
+
+							{
+								quiz.questions[quiz.selectedQuestionId].type === 'single-choice' ? (
+									<SingleChoice
+										choices={quiz.questions[quiz.selectedQuestionId].answer}
+										selectedId={quiz.answers[quiz.selectedQuestionId].selectedId}
+										handlerSelectSingleChoice={handlerSelectSingleChoice}
+									/>
+								) : quiz.questions[quiz.selectedQuestionId].type === 'multiple-choice' ? (
+									<MultipleChoice
+										choices={quiz.questions[quiz.selectedQuestionId].answer}
+										selectedIds={quiz.answers[quiz.selectedQuestionId].selectedIds}
+										handlerMultipleChoice={handlerMultipleChoice}
+									/>
+								) : quiz.questions[quiz.selectedQuestionId].type === 'fill-choice' ? (
+									// Fill Choice
+									<></>
+								) : null
+							}
+
+						</div>
+					</div>
+
+				</div>
+			) : null}
+
+		</>
+	);
 }

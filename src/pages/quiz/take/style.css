@@ -1,18 +1,169 @@
-.question {
-    position: absolute;
-    top: 6.425%;
-    left: 2.15%;
+.take__quiz__main__container {
+    display: flex;
+    flex-direction: column;
+    animation: fade-in 0.5s;
 }
 
-.timer {
-	position: absolute;
-	top: 27.5%;
-	left: 2.15%;
-	width: 350px;
-	height: 100px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border: solid var(--border-line) 2px;
-	border-radius: 5px;
+.block-top {
+    width: 100%;
+    height: 100px;
+    background: blue;
 }
+
+.take__quiz__container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding: 0 30px;
+}
+
+.question__selection {
+    display: flex;
+    flex-direction: column;
+    max-width: 257px;
+}
+
+.question__selection > .header {
+    display: flex;
+    align-items: center;
+    font-size: 26px;
+    margin-bottom: 7px;
+}
+
+.question__selection > .header > .icon {
+    width: 25px;
+    margin-right: 8px;
+}
+
+.question__selection > .task {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: 10px;
+}
+
+.question__selection > .task > button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 3px;
+}
+
+.current-task-button {
+    background: var(--active-button-color);
+}
+
+.done-task-button {
+    background: var(--done-task-button-color);
+}
+
+.unselect-button {
+    background: var(--button-un-active-color);
+}
+
+.question__timer {
+    display: flex;
+    align-items: center;
+    font-size: 50px;
+    color: var(--font-blue);
+    margin-top: -60px;
+    width: 252px;
+}
+
+.question__timer > .icon {
+    width: 45px;
+    height: 45px;
+    margin-right: 15px;
+}
+
+
+@media (max-width: 768px) {
+    .question__timer > .icon {
+        width: 35px; /* Adjust the value as needed */
+        margin-right: 10px; /* Adjust the value as needed */
+    }
+}
+
+@media (max-width: 480px) {
+    .question__timer > .icon {
+        width: 25px; /* Adjust the value as needed */
+        margin-right: 5px; /* Adjust the value as needed */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .question__timer {
+        width: 190px;
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .question__timer {
+        width: 100px;
+        font-size: 20px;
+    }
+}
+
+.icon > svg {
+    width: 100%;
+    height: 100%;
+}
+
+.block-space-center {
+    position: absolute;
+    margin-top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.task__take__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.task__take__container > .question {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 20px;
+    min-height: 600px;
+}
+
+
+
+/* Media Queries */
+
+@media (max-width: 1024px) {
+    .question__selection {
+        max-width: 200px;
+    }
+
+    .question__selection > .header {
+        font-size: 20px;
+    }
+
+    .question__selection > .task > button {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .question__timer {
+        font-size: 40px;
+    }
+}
+
+
+
+/* Add more media queries as necessary for different screen sizes */
