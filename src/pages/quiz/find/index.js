@@ -36,11 +36,8 @@ const FindQuiz = () => {
     }
 
     try {
-      console.log(findQuizCode)
       const res = await getDeployedQuizByCodeJoin(findQuizCode, user.token);
-      if (res.data.length > 0) {
-        navigate(`/quiz/${res.data[0]._id}`);
-      }
+      navigate(`/quiz/${res.data._id}`);
     } catch (error) {
       showNotify(null, "Something went wrong?", error.response.data.message);
     }
