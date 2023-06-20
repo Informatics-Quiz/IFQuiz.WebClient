@@ -4,7 +4,9 @@ export function getTimerLabel(timestamp, deleteHandler) {
   const diff = Math.abs(now - targetDate);
 
   if (now >= targetDate) {
-    deleteHandler()
+    if(deleteHandler){
+      deleteHandler()
+    }
     return `Expired`
   }
 
