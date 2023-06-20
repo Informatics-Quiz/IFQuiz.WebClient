@@ -43,7 +43,8 @@ import { ReactComponent as TimeUpSvg } from "../assets/svg/time_up.svg";
 
 export const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
 export const onErrorQuizImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118138703580237844/image.png";
-export const anonymousFullName = "Anonymous";
+export const anonymousFullName = "Anonymous User";
+export const anonymousQuizName = "Anonymous Quiz";
 export const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export const svgMap = {
