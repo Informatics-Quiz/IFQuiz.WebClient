@@ -19,6 +19,7 @@ export default function InputTextAreaChoice({
   return (
     <div className="item">
       <textarea
+				key={`${index}-area-choice-${index}`}
         type="text"
         onInput={adjustTextareaHeight}
         value={value}

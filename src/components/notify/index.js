@@ -2,6 +2,7 @@ import "./index.css";
 import { svgMap } from "../../config/constraints";
 
 export default function Notify({ svg, show, title, handleClose, message, cb }) {
+  
   return show ? (
     <>
       <div

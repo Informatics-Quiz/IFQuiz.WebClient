@@ -1,4 +1,4 @@
-import "./style.css";
+import '../global.style.css'
 
 import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
 
@@ -273,7 +273,6 @@ const EditQuiz = () => {
       type !== "single-choice" &&
       type != "multiple-choice"
     ) {
-      // notify question type in correct
       showNotify("error", 
         "Something went wrong?",
         "It's look like question type is incorrect."
@@ -307,7 +306,6 @@ const EditQuiz = () => {
       newQuestion[selectedQuestion].points = points;
       setQuestionList(newQuestion);
     } catch (e) {
-      // notify points incorrect type
       showNotify("error", 
         "Something went wrong?",
         "It's look like points is not a number."
@@ -689,8 +687,8 @@ const EditQuiz = () => {
                 <div className="title">Question</div>
               </div>
               <div className="items">
-                {questionList.map((_, i) => (
-                  <div className="item">
+                {questionList.map((question, i) => (
+                  <div key={question.type + i} className="item">
                     <button
                       onClick={() => setSelectedQuestion(i)}
                       className={
