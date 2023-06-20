@@ -36,6 +36,7 @@ export async function getDeployedQuizByCodeJoin(codeJoin, token){
 			Authorization: `Bearer ${token}`,
 		}
 	})
+
 	
 	return res
 }
@@ -94,4 +95,24 @@ export async function getQuizCoverImage(imageUrl){
 		responseType: 'arraybuffer',
 	})
 	return res
+}
+
+export async function takeQuiz(deployedQuizId, token){
+	const res = await client.get(`/quizzes/take?quizId=${deployedQuizId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+
+	return res.data
+}
+
+export async function updateTakeQuizAnswers(token, requestBody){
+	const res = await client.post(`/quizzes/take/update-answer`,requestBody, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+
+	return res.data
 }
