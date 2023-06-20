@@ -1,0 +1,26 @@
+.select__choice {
+    display: flex;
+    align-items: center;
+}
+
+.select__choice > .grid-choice {
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 10px;
+    margin-right: 50px;
+    vertical-align: top;
+}
+
+.select__choice > .grid-choice > button {
+    padding: 5px 0px 4px 0px;
+    width: 450px;
+    border-radius: 5px;
+}
+
+.selected-choice {
+    background: var(--active-button-color);
+}
+
+.un-selected-choice {
+    background: var(--button-un-active-color);
+}
