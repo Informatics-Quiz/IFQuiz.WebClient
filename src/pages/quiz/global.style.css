@@ -1,0 +1,418 @@
+.create__main__continer {
+    animation: fade-in 0.8s;
+  }
+  
+  .create__container {
+    position: relative;
+    width: 100vw;
+  }
+  
+  .question__content {
+    position: relative;
+    width: 1205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 50px auto;
+    margin-left: calc((100vw - 1205px) / 1.75);
+  }
+  
+  .question__content > .settings {
+    display: flex;
+    justify-content: flex-end;
+    height: 120px;
+  }
+  
+  .question__content > .settings > .item {
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+  }
+  .question__content > .settings > .item > .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+  
+  .question__content > .settings > .item > .header > .label {
+      font-size: 24px;
+    }
+  
+    .question__content > .settings > .item > .header > .label2 {
+      font-size: 24px;
+      margin-left: 3px;
+    }
+  
+  .question__content > .settings > .item > .header > svg {
+    margin-right: 6px;
+  }
+  
+  .question__content > textarea {
+    background: transparent;
+    font-size: 28px;
+    white-space: normal;
+    text-align: justify;
+    min-height: 378px;
+    -moz-text-align-last: center; /* Firefox 12+ */
+    text-align-last: center;
+    resize: none;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .explanation__type {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .explanation__type > .item {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    margin-right: 45px;
+  }
+  
+  .explanation__type > .item > svg {
+    margin-right: 8px;
+  }
+  
+  select {
+    background: transparent;
+    border-bottom: 1px solid var(--button-un-active-color);
+  }
+  
+  select option {
+    background: var(--button-un-active-color);
+    border-bottom: 1px solid var(--button-un-active-color);
+  }
+  
+  
+  
+  .answers > .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .answers > .item > .action {
+    display: flex;
+  }
+  
+  .type_btn,
+  .type_btn_big {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin-right: 13px;
+  }
+  
+  .type_btn > svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .type_btn_big > svg {
+    transform: scale(1.2);
+  }
+  
+  .edit__detail {
+    cursor: pointer;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 10px;
+    right: 30px;
+    font-size: 24px;
+  }
+  
+  .edit__detail__left {
+    cursor: pointer;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 10px;
+    left: 30px;
+    font-size: 24px;
+  }
+  
+  .edit__detail > svg {
+    width: 26px;
+    height: 26px;
+    margin-left: 8px;
+  }
+  
+  .edit__detail__left > svg {
+    width: 26px;
+    height: 26px;
+    margin-right: 8px;
+  }
+  
+  
+  
+  .question__container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+  }
+  
+  .question__container > .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+  }
+  
+  .question__container > .header > .title {
+    font-size: 26px;
+    margin: 0;
+  }
+  
+  .question__container > .header > .img {
+    width: 25px;
+    height: 25px;
+    margin-right: 8px;
+  }
+  
+  .question__container > .header > .img > svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .question__container > .items {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 230px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  .question__container > .items > .item {
+    position: relative;
+    display: flex;
+    margin-bottom: 7px;
+  }
+  
+  .question__container > .items > .item > button {
+    font-size: 20px;
+    margin-right: 6px;
+    padding: 5px 18px 5px 18px;
+    border-radius: 5px;
+    width: 190px;
+    white-space: nowrap; /* Prevent line breaks */
+    overflow: hidden; /* Hide overflowing content */
+    text-overflow: ellipsis; /* Display ellipsis for overflow */
+  }
+  
+  .question__container > .items > .item > svg {
+    cursor: pointer;
+    position: absolute;
+    right: -0px;
+    top: 2.8px;
+    transition: 0.25s;
+  }
+  
+  .question__container > .action {
+    display: flex;
+    justify-content: center;
+    padding-right: 20px;
+  }
+  
+  .question__container > .action > .add {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+  
+  .question__container > .action > .add > svg {
+    margin-right: 8px;
+  }
+  
+  .add__choice {
+    display: flex;
+    justify-content: flex-end;
+    width: 905px;
+  }
+  
+  .add__choice > button {
+    display: flex;
+    align-items: center;
+  }
+  .add__choice > button > svg {
+    margin-right: 8px;
+  }
+  
+  .has__explanation {
+    color: white;
+  }
+  
+  .not__has__explanation {
+    color: var(--alpha-color);
+  }
+  
+  .question__unactive {
+    background: var(--button-un-active-color);
+  }
+  .question__active {
+    background: var(--active-button-color);
+  }
+  
+  button {
+    transition: transform 0.25s;
+    transform-origin: center center;
+  }
+  
+  button:hover,
+  .question__container > .items > .item > svg:hover {
+    opacity: 0.7;
+  }
+  
+  button:active,
+  .question__container > .items > .item > svg:active {
+    transform: scale(0.92);
+  }
+  
+  
+  .edit__detail__quiz__main {
+    animation: slide-right .5s;
+  }
+  .bottom__action__edit__quiz {
+    animation: fade-in .8s;
+  }
+  
+  
+  .edit__quiz__detail__container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 130px auto;
+  }
+  
+  .cover__image__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 35px;
+  }
+  
+  .cover__image__container > label {
+    max-width: 425px;
+    padding-left: 85px;
+    padding-right: 85px;
+    font-size: 20px;
+  }
+  
+  
+  .image__cover {
+    width: 578px;
+    height: 550px;
+    border-radius: 25px;
+  }
+  .image__cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 25px;
+  }
+  
+  .quiz__detail__content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  .quiz__detail__content > .quiz__name > .title {
+    font-size: 35px;
+    margin: 0;
+  }
+  .quiz__detail__content > .quiz__name > input {
+    font-size: 28px;
+    background: transparent;
+    width: 817px;
+    margin-bottom: 20px;
+    color: var(--alpha-color);
+  }
+  
+  
+  .quiz__detail__content > .quiz__detail__description > .title {
+    font-size: 35px;
+  }
+  
+  .quiz__detail__content > .quiz__detail__description > textarea {
+    font-size: 18px;
+    width: 100%;
+    resize: none;
+    min-height: 162px;
+    background: transparent;
+    max-height: 162px;
+    color: var(--alpha-color);
+  }
+  
+  
+  .quiz__duration {
+    margin-bottom: 55px;
+  }
+  
+  .quiz__duration > .title {
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .quiz__duration > .title > svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 3px;
+    margin-right: 5px;
+  }
+  
+  .quiz__duration > .form {
+    display: flex;
+  }
+  .quiz__duration > .form input {
+    background: transparent;
+    margin-right: 2px;
+    padding: 4px 4px 4px 4px;
+    max-width: 93px;
+    border-bottom: 1px solid var(--button-un-active-color);
+  }
+  
+  .quiz__duration > .form > .field {
+    display: flex;
+    align-items: baseline;
+    margin-right: 30px;
+  }
+  .quiz__short__info {
+    display: flex;
+  }
+  
+  
+  
+  .quiz__short__info > .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 23px;
+    color: var(--alpha-color);
+    margin-right: 40px;
+  }
+  
+  .quiz__short__info > .item > .header {
+    display: flex;
+    color: white;
+    font-size: 25px;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  
+  .quiz__short__info > .item > .header > svg {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+  }
