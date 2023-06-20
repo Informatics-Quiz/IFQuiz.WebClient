@@ -13,7 +13,9 @@
 	--error-color: #ea4949;
 	--alpha-color: #c9d1d9;
 	--button-un-active-color: rgba(94, 94, 94, 1);
+	--done-task-button-color: #1C1C1C;
 	--card-bg: #262626;
+	--font-blue: #3D7FA1;
 	--active-button-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
 	--success-button-color: linear-gradient(180deg, #73D382 0%, #3EA573 100%);;
 	--blur-background-color: rgba(6, 6, 6, 0.95);
