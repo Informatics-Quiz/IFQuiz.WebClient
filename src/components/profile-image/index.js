@@ -1,15 +1,13 @@
 import "./style.css";
 
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { uploadUserProfile } from "../../services/upload";
 import { onErrorProfileImageUrl } from "../../config/constraints";
 
 export default function ProfileImage({notify}) {
   const [renderImage, setRenderImage] = useState(null);
   const user = useSelector((state) => state.user.authUser);
-  const [profileImageUrl, setProfileImageUrl] = useState("");
   async function onImageChange(e) {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -25,42 +23,12 @@ export default function ProfileImage({notify}) {
     }
   }
 
-  useEffect(() => {
-    async function onGetProfileImage() {
-      let headersList = {
-        Accept: "*/*",
-        Authorization: `Bearer ${user.token}`,
-      };
-
-      let reqOptions = {
-        responseType: "arraybuffer",
-        url: "http://localhost:3000/file/get/profile-image",
-        method: "GET",
-        headers: headersList,
-      };
-
-      try {
-        let response = await axios.request(reqOptions);
-        const blob = new Blob([response.data], {
-          type: response.headers["Content-Type"],
-        });
-        const url = URL.createObjectURL(blob);
-        setProfileImageUrl(response.data.byteLength === 0 ? null : url);
-      } catch (error) {
-		notify("Something went wrong?", error.response.data.message)
-      }
-    }
-
-    onGetProfileImage();
-  }, [user]);
-
-
   return (
     <>
       <div className="profile-image-container">
         <div className="image-container">
           <img
-            src={renderImage || profileImageUrl || onErrorProfileImageUrl}
+            src={renderImage || user.imageUrl || onErrorProfileImageUrl}
             alt="profile"
           />
         </div>

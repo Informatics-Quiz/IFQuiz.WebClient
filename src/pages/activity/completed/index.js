@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setStatus } from "../../../reducers/user";
-import { getUserProfile, updateUserStatus } from "../../../services/user";
+import { setStatus, setUserImageUrl } from "../../../reducers/user";
+import { getUserProfile, getUserProfileImage, updateUserStatus } from "../../../services/user";
 import { getOwnedQuiz, getQuizCoverImage, deployQuiz } from "../../../services/quiz";
 
 
@@ -19,171 +19,130 @@ import { onErrorProfileImageUrl } from "../../../config/constraints";
 
 const Completed = () => {
 
-  const user = useSelector((state) => state.user);
-  const [profileImageUrl, setProfileImageUrl] = useState("")
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+	const user = useSelector((state) => state.user.authUser);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-  const [show, setShow] = useState(false);
-  const [editstatus, setEditStatus] = useState("");
-  const [quizzesCompleted, setQuizzesCompleted] = useState([]);
+	const [show, setShow] = useState(false);
+	const [editstatus, setEditStatus] = useState("");
+	const [quizzesCompleted, setQuizzesCompleted] = useState([]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
-  function handleClickNavigate(url) {
-    navigate(url);
-  }
+	function handleClickNavigate(url) {
+		navigate(url);
+	}
 
-  async function handleEditStatus() {
-    const response = await updateUserStatus(user.authUser.token, editstatus);
-    dispatch(setStatus(response.data.status));
-    handleClose();
-  }
+	async function handleEditStatus() {
+		const response = await updateUserStatus(user.token, editstatus);
+		dispatch(setStatus(response.data.status));
+		handleClose();
+	}
 
-  useEffect(() => {
-  	async function onGetProfileImage() {
-  		try {
-        const res = await getUserProfile(user.authUser.token)
-  			const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
-  			const url = URL.createObjectURL(blob)
-  			setProfileImageUrl(res.data.byteLength === 0 ? null : url)
-  		} catch (error) {
-        showNotify(null, "Something went wrong?", error.response.data.message)
-  		}
-  	}
+	async function setImageCoverQuizzes(quizzes) {
+		let initializedQuiz = quizzes
+		for (let quiz of initializedQuiz) {
+			if (quiz.imageUrl !== null && quiz.imageUrl !== "") {
+				const res = await getQuizCoverImage(quiz.imageUrl)
+				const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
+				const url = URL.createObjectURL(blob)
+				quiz.imageUrl = res.data.byteLength === 0 ? null : url
+			}
+		}
+		return initializedQuiz
+	}
 
-  	onGetProfileImage()
-  }, [user])
+	async function onGetQuizzes() {
+		const response = await getOwnedQuiz(user.token)
+		const initializedQuiz = await setImageCoverQuizzes(response.data)
+		setQuizzesCompleted(initializedQuiz);
+	}
 
-
-  async function setImageCoverQuizzes(quizzes){
-    let initializedQuiz = quizzes
-    for(let quiz of initializedQuiz){
-      if(quiz.imageUrl !== null && quiz.imageUrl !== ""){
-        const res = await getQuizCoverImage(quiz.imageUrl)
-        const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
-  			const url = URL.createObjectURL(blob)
-        quiz.imageUrl = res.data.byteLength === 0 ? null : url
-      }
-    }
-    return initializedQuiz
-  }
-  useEffect(() => {
-    async function onGetQuizzes() {
-      const response = await getOwnedQuiz(user.authUser.token)
-      const initializedQuiz = await setImageCoverQuizzes(response.data)
-      setQuizzesCompleted(initializedQuiz);
-    }
-    onGetQuizzes();
-  }, []);
+	useEffect(() => {
+		onGetQuizzes();
+	}, []);
 
 
 
-  // Notify
+	// Notify
 	const [notify, setNotify] = useState({
 		show: false,
 		title: "",
 		message: "",
-    cb: null
-	  }); 
-	  function showNotify(svg, title, message, cb) {
+		cb: null
+	});
+	function showNotify(svg, title, message, cb) {
 		setNotify({
-      svg: svg,
+			svg: svg,
 			title: title,
 			show: true,
 			message: message,
-      cb: cb
+			cb: cb
 		})
-	  }
-	  function closeNotify() {
+	}
+	function closeNotify() {
 		setNotify({
-      svg: null,
+			svg: null,
 			title: "",
 			show: false,
 			message: "",
-      cb: null
+			cb: null
 		})
 	}
 
 
-  
-  function editHandler(quiz){
-    const quizId = quiz._id
-    if(!quizId){
-      showNotify("not_found", "Something went wrong?", "Quiz not found!")
-      return
-    }
-    navigate('/quiz/edit/' + quizId)
-  }
 
-  async function deployHandler(quiz){
-    const quizId = quiz._id
-    if(!quizId){
-      showNotify("not_found", "Quiz not found!")
-      return
-    }
-    try{
-      const response = await deployQuiz(quizId, user.authUser.token)
-      showNotify("true", "Deployed!", "Your quiz is now available for everyone to play!", ()=> {
-        navigate('/quiz/' + response.data._id)
-      })
-
-    }catch(error){
-      showNotify("not_found", "Something went wrong?", error.response.data.message)
-    }
-  }
-
-  return (
-    <>
-    <Notify
-    svg={notify.svg}
+	return (
+		<>
+			<Notify
+				svg={notify.svg}
 				show={notify.show}
 				title={notify.title}
 				handleClose={closeNotify}
 				message={notify.message}
-        cb={notify.cb}
+				cb={notify.cb}
 			/>
-      <ModalStatus
-          show={show}
-          handleClose={handleClose}
-          status={user.authUser.status}
-          setEditStatus={setEditStatus}
-          handleEditStatus={handleEditStatus}
-        />
-        <Navbar />
-        <BottomButton
-            svgName="back"
-            position="left"
-            label={"Back"}
-            cb={() => { navigate(-1) }}
-        />
-        
-      <div className="home__container">
-        <div className="profile__container">
-          <div className="profile__image">
-            <img
-              src={profileImageUrl || onErrorProfileImageUrl}
-              alt="profile"
-            />
-          </div>
-          <div className="profile__info">
-            <p className="profile__info__fullname">{user.authUser.fullname}</p>
-            <p className="profile__info__status">{user.authUser.status.length < 1 ? "Think nothing..." : user.authUser.status}</p>
-            <div className="profile__info__settings">
-              <button onClick={() => handleClickNavigate("/user/edit")}>
-                Edit Profile
-              </button>
-              <button onClick={handleShow}>Edit Status</button>
-            </div>
-          </div>
-        </div>
-        <div className="quizzes__container">
-          <ActivityHeader
-            svg={"true"}
-            label={"Completed"}
-          />
-          {/* {quizzesCompleted.map((quiz, index) => {
+			<ModalStatus
+				show={show}
+				handleClose={handleClose}
+				status={user.status}
+				setEditStatus={setEditStatus}
+				handleEditStatus={handleEditStatus}
+			/>
+			<Navbar />
+			<BottomButton
+				svgName="back"
+				position="left"
+				label={"Back"}
+				cb={() => { navigate(-1) }}
+			/>
+
+			<div className="home__container">
+				<div className="profile__container">
+					<div className="profile__image">
+						<img
+							src={user.imageUrl || onErrorProfileImageUrl}
+							alt="profile"
+						/>
+					</div>
+					<div className="profile__info">
+						<p className="profile__info__fullname">{user.fullname}</p>
+						<p className="profile__info__status">{user.status.length < 1 ? "Think nothing..." : user.status}</p>
+						<div className="profile__info__settings">
+							<button onClick={() => handleClickNavigate("/user/edit")}>
+								Edit Profile
+							</button>
+							<button onClick={handleShow}>Edit Status</button>
+						</div>
+					</div>
+				</div>
+				<div className="quizzes__container">
+					<ActivityHeader
+						svg={"true"}
+						label={"Completed"}
+					/>
+					{/* {quizzesCompleted.map((quiz, index) => {
             return <QuizCard
               index={index}
               quiz={quiz}
@@ -191,10 +150,10 @@ const Completed = () => {
               deployHandler={deployHandler}
             />
           })} */}
-        </div>
-      </div>
-    </>
-  );
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default Completed;

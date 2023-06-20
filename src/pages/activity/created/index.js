@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setStatus } from "../../../reducers/user";
-import { getUserProfile, updateUserStatus } from "../../../services/user";
+import { setStatus, setUserImageUrl } from "../../../reducers/user";
+import { getUserProfile, getUserProfileImage, updateUserStatus } from "../../../services/user";
 import { getOwnedQuiz, getQuizCoverImage, deployQuiz } from "../../../services/quiz";
 
 
@@ -18,8 +18,7 @@ import BottomButton from "../../../components/button/bottom";
 
 const Created = () => {
 
-  const user = useSelector((state) => state.user);
-  const [profileImageUrl, setProfileImageUrl] = useState("")
+  const user = useSelector((state) => state.user.authUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,26 +34,10 @@ const Created = () => {
   }
 
   async function handleEditStatus() {
-    const response = await updateUserStatus(user.authUser.token, editstatus);
+    const response = await updateUserStatus(user.token, editstatus);
     dispatch(setStatus(response.data.status));
     handleClose();
   }
-
-  useEffect(() => {
-  	async function onGetProfileImage() {
-  		try {
-        const res = await getUserProfile(user.authUser.token)
-  			const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
-  			const url = URL.createObjectURL(blob)
-  			setProfileImageUrl(res.data.byteLength === 0 ? null : url)
-  		} catch (error) {
-        showNotify(null, "Something went wrong?", error.response.data.message)
-  		}
-  	}
-
-  	onGetProfileImage()
-  }, [user])
-
 
   async function setImageCoverQuizzes(quizzes){
     let initializedQuiz = quizzes
@@ -68,12 +51,20 @@ const Created = () => {
     }
     return initializedQuiz
   }
+
+  async function onGetQuizzes() {
+    const response = await getOwnedQuiz(user.token)
+    const initializedQuiz = await setImageCoverQuizzes(response.data)
+    setQuizzesCreated(initializedQuiz);
+  }
   useEffect(() => {
-    async function onGetQuizzes() {
-      const response = await getOwnedQuiz(user.authUser.token)
-      const initializedQuiz = await setImageCoverQuizzes(response.data)
-      setQuizzesCreated(initializedQuiz);
-    }
+    async function fetchProfileImage() {
+			await getUserProfileImage(user.token, (url) => {
+				dispatch(setUserImageUrl(url));
+			});
+		}
+		fetchProfileImage();
+
     onGetQuizzes();
   }, []);
 
@@ -121,7 +112,7 @@ const Created = () => {
       return
     }
     try{
-      const response = await deployQuiz(quizId, user.authUser.token)
+      const response = await deployQuiz(quizId, user.token)
       showNotify("true", "Deployed!", "Your quiz is now available for everyone to play!", ()=> {
         navigate('/quiz/' + response.data._id)
       })
@@ -144,7 +135,7 @@ const Created = () => {
       <ModalStatus
           show={show}
           handleClose={handleClose}
-          status={user.authUser.status}
+          status={user.status}
           setEditStatus={setEditStatus}
           handleEditStatus={handleEditStatus}
         />
@@ -159,13 +150,13 @@ const Created = () => {
         <div className="profile__container">
           <div className="profile__image">
             <img
-              src={profileImageUrl || onErrorProfileImageUrl}
+              src={user.imageUrl || onErrorProfileImageUrl}
               alt="profile"
             />
           </div>
           <div className="profile__info">
-            <p className="profile__info__fullname">{user.authUser.fullname}</p>
-            <p className="profile__info__status">{user.authUser.status.length < 1 ? "Think nothing..." : user.authUser.status}</p>
+            <p className="profile__info__fullname">{user.fullname}</p>
+            <p className="profile__info__status">{user.status.length < 1 ? "Think nothing..." : user.status}</p>
             <div className="profile__info__settings">
               <button onClick={() => handleClickNavigate("/user/edit")}>
                 Edit Profile
@@ -181,6 +172,7 @@ const Created = () => {
           />
           {quizzesCreated.map((quiz, index) => {
             return <QuizCard
+            key={quiz.name + index}
               index={index}
               quiz={quiz}
               editHandler={editHandler}
