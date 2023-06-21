@@ -49,6 +49,12 @@ const EditQuiz = () => {
 		});
 	}
 
+	function handlerHideCorrectAnswer(){
+		setQuiz((current) => {
+			return { ...current, hideCorrectAnswer: !current.hideCorrectAnswer };
+		})
+	}
+
 	function setQuizDescription(e) {
 		const quizDescription = e.target.value;
 		setQuiz((current) => {
@@ -211,14 +217,14 @@ const EditQuiz = () => {
 		}
 
 		let finalQuestionList = questionList
-		for(let question of finalQuestionList) {
-			if(question.type === "fill-choice") {
-				for(let answer of question.answer) {
+		for (let question of finalQuestionList) {
+			if (question.type === "fill-choice") {
+				for (let answer of question.answer) {
 					delete answer?.checked
 					delete answer?.explain
 				}
-			}else if(question.type === 'single-choice' || question.type === 'multiple-choice') {
-				for(let answer of question.answer) {
+			} else if (question.type === 'single-choice' || question.type === 'multiple-choice') {
+				for (let answer of question.answer) {
 					delete answer?.matchString
 					delete answer?.type
 				}
@@ -313,12 +319,12 @@ const EditQuiz = () => {
 		if (oldQuestionType == questionType) return;
 		newQuestion[selectedQuestion].type = questionType;
 		if (questionType == "fill-choice") {
-			for(let answer of newQuestion[selectedQuestion].answer){
+			for (let answer of newQuestion[selectedQuestion].answer) {
 				answer.type = "contains";
 				answer.matchString = answer.explain;
 			}
-		}else{
-			for(let answer of newQuestion[selectedQuestion].answer){
+		} else {
+			for (let answer of newQuestion[selectedQuestion].answer) {
 				answer.explain = answer?.explain || answer?.matchString || "";
 				answer.checked = false;
 			}
@@ -399,10 +405,10 @@ const EditQuiz = () => {
 
 	function adjustTextareaHeight() {
 		var textarea = document.getElementById("questionTextArea");
-		if(!textarea)return
+		if (!textarea) return
 		textarea.style.height = "100px"; // Reset height to allow scrollHeight calculation
 		textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
-		for(let index = 0; index < questionList[selectedQuestion].answer.length; index++){
+		for (let index = 0; index < questionList[selectedQuestion].answer.length; index++) {
 			var textarea = document.getElementById(`answer-text-area-${index}`);
 			textarea.style.height = "auto"; // Reset height to allow scrollHeight calculation
 			textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
@@ -436,6 +442,7 @@ const EditQuiz = () => {
 		const saveQuiz = {};
 		saveQuiz._id = quiz?._id;
 		saveQuiz.name = quiz.name;
+		saveQuiz.hideCorrectAnswer = quiz.hideCorrectAnswer;
 		saveQuiz.description = quiz.description;
 		saveQuiz.points = quiz.points;
 		saveQuiz.duration = quiz.duration;
@@ -584,7 +591,7 @@ const EditQuiz = () => {
 
 	async function uploadQuestionImageFile(e) {
 		const file = e.target.files[0];
-		if(!file)return
+		if (!file) return
 		const formData = new FormData();
 		formData.append("questionId", selectedQuestion);
 		formData.append("question-image", file);
@@ -646,7 +653,7 @@ const EditQuiz = () => {
 		imageUrl: null,
 		index: null,
 	});
-	function handlerShowModelConfirmDeleteImage(imageUrl, index)  {
+	function handlerShowModelConfirmDeleteImage(imageUrl, index) {
 		setModalConfirmDeleteImage({
 			show: true,
 			title: "Delete question image",
@@ -657,8 +664,8 @@ const EditQuiz = () => {
 	function handlerCloseModelConfirmDeleteImage() {
 		setModalConfirmDeleteImage({
 			show: false,
-		title: null,
-		imageUrl: null,
+			title: null,
+			imageUrl: null,
 			index: null,
 		})
 	}
@@ -752,35 +759,54 @@ const EditQuiz = () => {
 										onInput={resizeDescription}
 									></textarea>
 								</div>
-								<div className="quiz__duration">
-									<div className="title">
-										{svgMap.timer_white}
-										Durations
-									</div>
-									<div className="form">
-										<div className="field">
-											<input
-												type="text"
-												value={
-													quiz.duration.hours == null ? "" : quiz.duration.hours
-												}
-												onChange={onChangeHours}
-												placeholder="0"
-											/>
-											Hours
+								<div className='edit-detail-action-fixed'>
+									<div className="quiz__duration">
+										<div className="title">
+											{svgMap.timer_white}
+											Durations
 										</div>
-										<div className="field">
-											<input
-												type="text"
-												value={
-													quiz.duration.minutes == null
-														? ""
-														: quiz.duration.minutes
-												}
-												onChange={onChangeMinutes}
-												placeholder="1"
-											/>
-											Minutes
+										<div className="form">
+											<div className="field">
+												<input
+													type="text"
+													value={
+														quiz.duration.hours == null ? "" : quiz.duration.hours
+													}
+													onChange={onChangeHours}
+													placeholder="0"
+												/>
+												Hours
+											</div>
+											<div className="field">
+												<input
+													type="text"
+													value={
+														quiz.duration.minutes == null
+															? ""
+															: quiz.duration.minutes
+													}
+													onChange={onChangeMinutes}
+													placeholder="1"
+												/>
+												Minutes
+											</div>
+										</div>
+									</div>
+									<div className="quiz__duration">
+										<div className="title">
+											<label class="switch">
+												<input class="chk" type="checkbox" checked={!quiz?.hideCorrectAnswer} onChange={handlerHideCorrectAnswer} />
+												<span class="slider"></span>
+												
+											</label>
+											<div className='title-show-correct-ans'>
+													Show Correct Answer
+												</div>
+										</div>
+										<div className="form">
+											<div className='switch_label'>
+												Enable it will show correct answer on reveal page.
+											</div>
 										</div>
 									</div>
 								</div>

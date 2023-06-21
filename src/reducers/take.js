@@ -27,9 +27,12 @@ const quizSlice = createSlice({
 				)
 				console.log(state.quiz.answers[state.quiz.selectedQuestionId].selectedIds)
 			}
+		},
+		setFillChoice: (state, action) => {
+			state.quiz.answers[state.quiz.selectedQuestionId].matchString = action.payload
 		}
 	},
 })
 
 export default quizSlice.reducer
-export const { setTakingQuiz, setSelectedQuestionId, setSelectedChoiceId, setSelectedMultipleChoice } = quizSlice.actions
+export const { setTakingQuiz, setSelectedQuestionId, setSelectedChoiceId, setSelectedMultipleChoice, setFillChoice } = quizSlice.actions

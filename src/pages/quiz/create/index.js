@@ -60,6 +60,13 @@ const CreateQuiz = () => {
 		});
 	}
 
+	function handlerHideCorrectAnswer(){
+		setQuiz((current) => {
+			return { ...current, hideCorrectAnswer: !current.hideCorrectAnswer };
+		})
+		console.log(quiz.hideCorrectAnswer)
+	}
+
 	function validateDuration(duration) {
 		// Check if `hours` and `minutes` are not null
 		if (duration.hours !== null && duration.minutes !== null) {
@@ -436,6 +443,7 @@ const CreateQuiz = () => {
 		const saveQuiz = {};
 		saveQuiz._id = quiz?._id;
 		saveQuiz.name = quiz.name;
+		saveQuiz.hideCorrectAnswer = quiz.hideCorrectAnswer;
 		saveQuiz.description = quiz.description;
 		saveQuiz.points = quiz.points;
 		saveQuiz.duration = quiz.duration;
@@ -730,35 +738,54 @@ const CreateQuiz = () => {
 										onInput={resizeDescription}
 									></textarea>
 								</div>
-								<div className="quiz__duration">
-									<div className="title">
-										{svgMap.timer_white}
-										Durations
-									</div>
-									<div className="form">
-										<div className="field">
-											<input
-												type="text"
-												value={
-													quiz.duration.hours == null ? "" : quiz.duration.hours
-												}
-												onChange={onChangeHours}
-												placeholder="0"
-											/>
-											Hours
+								<div className='edit-detail-action-fixed'>
+									<div className="quiz__duration">
+										<div className="title">
+											{svgMap.timer_white}
+											Durations
 										</div>
-										<div className="field">
-											<input
-												type="text"
-												value={
-													quiz.duration.minutes == null
-														? ""
-														: quiz.duration.minutes
-												}
-												onChange={onChangeMinutes}
-												placeholder="1"
-											/>
-											Minutes
+										<div className="form">
+											<div className="field">
+												<input
+													type="text"
+													value={
+														quiz.duration.hours == null ? "" : quiz.duration.hours
+													}
+													onChange={onChangeHours}
+													placeholder="0"
+												/>
+												Hours
+											</div>
+											<div className="field">
+												<input
+													type="text"
+													value={
+														quiz.duration.minutes == null
+															? ""
+															: quiz.duration.minutes
+													}
+													onChange={onChangeMinutes}
+													placeholder="1"
+												/>
+												Minutes
+											</div>
+										</div>
+									</div>
+									<div className="quiz__duration">
+										<div className="title">
+											<label class="switch">
+												<input class="chk" type="checkbox" checked={!quiz?.hideCorrectAnswer} onChange={handlerHideCorrectAnswer} />
+												<span class="slider"></span>
+												
+											</label>
+											<div className='title-show-correct-ans'>
+													Show Correct Answer
+												</div>
+										</div>
+										<div className="form">
+											<div className='switch_label'>
+												Enable it will show correct answer on reveal page.
+											</div>
 										</div>
 									</div>
 								</div>

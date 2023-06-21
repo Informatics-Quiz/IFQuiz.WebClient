@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Reducers
 import { setUserImageUrl } from "../../../reducers/user";
-import { setSelectedQuestionId, setTakingQuiz, setSelectedChoiceId, setSelectedMultipleChoice } from "../../../reducers/take";
+import { setSelectedQuestionId, setTakingQuiz, setSelectedChoiceId, setSelectedMultipleChoice, setFillChoice } from "../../../reducers/take";
 
 // Services
 import { getUserProfileImage } from "../../../services/user";
@@ -26,6 +26,8 @@ import Notify from "../../../components/notify";
 import { getQuestionImage, updateTakeQuizAnswers } from "../../../services/quiz";
 import { useRef } from "react";
 import { getImageFromResponse } from "../../../utils/functions/image.blob";
+import InputTextAreaChoice from "../../../components/input/text-area-choice";
+import FillChoice from "../../../components/choice/fill";
 
 
 export default function TakeQuiz() {
@@ -81,20 +83,29 @@ export default function TakeQuiz() {
 
 	}, [])
 
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setTimerLabel(getTimerLabel(quiz?.copyof?.expiredAt, () => {
-				showNotify('success', 'Time is up!', 'We will redirect you to result page.', () => {
-					dispatch(setTakingQuiz(null))
-					navigate('/activity/completed')
-				})
-			}))
-		}, 1000);
 
-		return () => {
-			clearInterval(intervalId); // call once
+	useEffect(() => {
+		let intervalId = null;
+	  
+		const handleTimerComplete = () => {
+		  updateAnswersAndSelctedQuestionId();
+		  showNotify('success', 'Time is up!', 'We will redirect you to the result page.', () => {
+			dispatch(setTakingQuiz(null));
+			navigate('/activity/completed');
+		  });
+		  clearInterval(intervalId);
 		};
-	})
+	  
+		intervalId = setInterval(() => {
+		  setTimerLabel(getTimerLabel(quiz?.copyof?.expiredAt, handleTimerComplete));
+		}, 1000);
+	  
+		return () => {
+		  clearInterval(intervalId);
+		};
+	  }, []);
+
+	const isNowStateIsFillUpdate = useRef(false)
 
 	async function updateAnswersAndSelctedQuestionId() {
 		if (quiz?.copyof?._id && quiz?.answers) {
@@ -118,6 +129,11 @@ export default function TakeQuiz() {
 		dispatch(setSelectedChoiceId(answerId))
 	}
 
+	function handlerFillChoice(fillString){
+		isNowStateIsFillUpdate.current = true
+		dispatch(setFillChoice(fillString))
+	}
+
 	function handlerMultipleChoice(handler, selectId) {
 		const payload = {
 			handler: handler,
@@ -128,6 +144,10 @@ export default function TakeQuiz() {
 
 
 	useEffect(() => {
+		if(isNowStateIsFillUpdate.current){
+			isNowStateIsFillUpdate.current = false
+			return
+		}
 		updateAnswersAndSelctedQuestionId()
 	}, [quiz])
 
@@ -151,11 +171,11 @@ export default function TakeQuiz() {
 	useEffect(() => {
 		if (firstTimeRefreshImage.current) return
 		firstTimeRefreshImage.current = true
-		refreshQuestionImage(quiz.questions[quiz.selectedQuestionId].explanation.imageUrl)
+		refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
 	}, [])
 
 	useEffect(() => {
-		refreshQuestionImage(quiz.questions[quiz.selectedQuestionId].explanation.imageUrl)
+		refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
 	}, [quiz?.selectedQuestionId])
 
 	return (
@@ -212,25 +232,30 @@ export default function TakeQuiz() {
 								</div>
 							) : null}
 							<div className="question">
-								{quiz.questions[quiz.selectedQuestionId].explanation.explain}
+								{quiz?.questions[quiz.selectedQuestionId]?.explanation?.explain}
 							</div>
 
 							{
-								quiz.questions[quiz.selectedQuestionId].type === 'single-choice' ? (
+								quiz?.questions[quiz.selectedQuestionId]?.type === 'single-choice' ? (
 									<SingleChoice
 										choices={quiz.questions[quiz.selectedQuestionId].answer}
 										selectedId={quiz.answers[quiz.selectedQuestionId].selectedId}
 										handlerSelectSingleChoice={handlerSelectSingleChoice}
 									/>
-								) : quiz.questions[quiz.selectedQuestionId].type === 'multiple-choice' ? (
+								) : quiz?.questions[quiz.selectedQuestionId]?.type === 'multiple-choice' ? (
 									<MultipleChoice
 										choices={quiz.questions[quiz.selectedQuestionId].answer}
 										selectedIds={quiz.answers[quiz.selectedQuestionId].selectedIds}
 										handlerMultipleChoice={handlerMultipleChoice}
 									/>
-								) : quiz.questions[quiz.selectedQuestionId].type === 'fill-choice' ? (
+								) : quiz?.questions[quiz.selectedQuestionId]?.type === 'fill-choice' ? (
 									// Fill Choice
-									<></>
+									<FillChoice
+										index={quiz.selectedQuestionId}
+										handlerFillChoice={handlerFillChoice}
+										handlerUpdate={updateAnswersAndSelctedQuestionId}
+										value={quiz.answers[quiz.selectedQuestionId].matchString}
+									/>
 								) : null
 							}
 
