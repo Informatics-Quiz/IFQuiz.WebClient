@@ -8,6 +8,7 @@ export default function QuizCard({
   index,
   quiz,
   editHandler,
+  deleteQuizHandler,
   deployHandler,
   takeQuizHandler,
   enableQuizTimer,
@@ -86,8 +87,16 @@ export default function QuizCard({
               {svgMap.timer_white}
               {timerLabel}
             </div>
-          {editHandler && deployHandler ? (
+          {editHandler && deployHandler && deleteQuizHandler ? (
             <div className="action__button">
+              <button
+                className="action__button__delete"
+                onClick={() => {
+                  deleteQuizHandler(quiz);
+                }}
+              >
+                Delete
+              </button>
               <button
                 className="action__button__edit"
                 onClick={() => {
@@ -97,7 +106,7 @@ export default function QuizCard({
                 Edit
               </button>
               <button
-                className="action__button__delete"
+                className="action__button__deploy"
                 onClick={() => {
                   deployHandler(quiz);
                 }}
@@ -150,8 +159,16 @@ export default function QuizCard({
               {svgMap.timer_white}
               {timerLabel}
             </div>
-          {editHandler && deployHandler ? (
+            {editHandler && deployHandler && deleteQuizHandler ? (
             <div className="action__button">
+              <button
+                className="action__button__delete"
+                onClick={() => {
+                  deleteQuizHandler(quiz);
+                }}
+              >
+                Delete
+              </button>
               <button
                 className="action__button__edit"
                 onClick={() => {
@@ -161,7 +178,7 @@ export default function QuizCard({
                 Edit
               </button>
               <button
-                className="action__button__delete"
+                className="action__button__deploy"
                 onClick={() => {
                   deployHandler(quiz);
                 }}
