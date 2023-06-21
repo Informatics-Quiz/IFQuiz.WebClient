@@ -17,7 +17,8 @@
 	--card-bg: #262626;
 	--font-blue: #3D7FA1;
 	--active-button-color: linear-gradient(180deg, #3D7FA1 0%, #355F75 100%);
-	--success-button-color: linear-gradient(180deg, #73D382 0%, #3EA573 100%);;
+	--success-button-color: linear-gradient(180deg, #73D382 0%, #3EA573 100%);
+	--error-button-color: linear-gradient(180deg, #F05C5C 0%, #A53E3E 100%);
 	--blur-background-color: rgba(6, 6, 6, 0.95);
 	--blur-background-pixel: 10px
 }

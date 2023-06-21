@@ -98,17 +98,28 @@
 	bottom: 3px;
 }
 
-.action__button > button {
+
+
+.action__button__delete {
+	background: var(--error-button-color);
+	border-radius: 5px;
+	font-size: 15px;
+	padding: 4px 20px 4px 20px;
+	margin-left: 9px;
+}
+
+.action__button__edit {
+	background: var(--active-button-color);
 	border-radius: 5px;
 	font-size: 15px;
 	padding: 4px 50px 4px 50px;
 	margin-left: 9px;
 }
 
-.action__button__edit {
-	background: var(--active-button-color);
-}
-
-.action__button__delete {
+.action__button__deploy {
 	background: var(--success-button-color);
+	border-radius: 5px;
+	font-size: 15px;
+	padding: 4px 50px 4px 50px;
+	margin-left: 9px;
 }
