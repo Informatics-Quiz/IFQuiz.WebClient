@@ -1,0 +1,123 @@
+.modal-delete-question-image-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10%;
+}
+
+
+.modal-delete-question-image-container > img {
+    width: 100%;
+}
+
+
+
+.modal-delete-title {
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-delete-descp {
+    font-size: 18px;
+    color: var(--alpha-color);
+}
+
+.modal-delete-header-svg svg {
+    width: 70px;
+    height: 70px;
+}
+
+
+
+
+.modal-delete-question-image-btn button {
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding-top: 2px;
+    padding-left: 16px;
+    padding-right: 16px;
+    transition: .25s;
+}
+
+.modal-delete-question-image-btn button:hover {
+    opacity: 0.8;
+}
+
+.modal-delete-question-image-btn button:active {
+    opacity: 1;
+    transform: scale(0.98);
+}
+
+.error_color {
+    background: var(--error-color);
+}
+
+.active_color {
+    background: var(--active-button-color);
+}
+
+.modal-delete-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+}
+.modal-delete-text-container p {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+.image__modal__confirm {
+    height: 650px;
+    margin-bottom: 20px;
+    animation: fade-in .4s;
+}
+
+.image__modal__confirm > img {
+    height: 100%;
+}
+
+.modal-delete-question-close-text:hover {
+    color: white;
+    opacity: 1;
+}
+
+.modal-delete-question-close-text:active {
+    color: rgba(255, 255, 255, 0.0);
+}
+
+.modal-delete-question-close-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    background: var(--blur-background-color);
+	backdrop-filter: blur(var(--blur-background-pixel));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 300px;
+    color: rgba(255, 255, 255, 0.0);
+    transition: .25s;
+}
+.modal-delete-question-close-text p {
+    font-size: 32px;
+}
+
+.modal-delete-question-image-btn, 
+.modal-delete-header, 
+.modal-delete-question-close-text {
+    animation: fade-in .4s;
+}
+
