@@ -37,6 +37,7 @@ import { ReactComponent as NotFoundSvg } from "../assets/svg/notfound.svg";
 import { ReactComponent as ErrorSvg } from "../assets/svg/error.svg";
 import { ReactComponent as SuccessSvg } from "../assets/svg/succses.svg";
 import { ReactComponent as TimeUpSvg } from "../assets/svg/time_up.svg";
+import { ReactComponent as ImageSvg } from "../assets/svg/image.svg";
 
 
 
@@ -86,5 +87,6 @@ export const svgMap = {
     not_found: <NotFoundSvg />,
     error: <ErrorSvg/>,
     success: <SuccessSvg/>,
-    time_up: <TimeUpSvg/>
+    time_up: <TimeUpSvg/>,
+    image: <ImageSvg/>
 }
