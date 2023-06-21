@@ -4,6 +4,7 @@ import "./index.css";
 export default function ModalConfirmDeleteImage({
 	index,
 	show,
+	title,
 	imageUrl,
 	handleConfirm,
 	handleCancle
@@ -15,7 +16,7 @@ export default function ModalConfirmDeleteImage({
 				<div className="modal-delete-header">
 					<div className="modal-delete-header-svg">{svgMap.trash_bin}</div>
 					<div className="modal-delete-text-container">
-						<p className="modal-delete-title">Delete question image</p>
+						<p className="modal-delete-title">{title}</p>
 						<p className="modal-delete-descp">We just want to confirm.</p>
 					</div>
 				</div>

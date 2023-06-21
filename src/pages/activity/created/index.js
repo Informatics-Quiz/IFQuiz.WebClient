@@ -1,10 +1,10 @@
-import "./style.css";
+import "../global.activity.style.css";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStatus, setUserImageUrl } from "../../../reducers/user";
-import { getUserProfile, getUserProfileImage, updateUserStatus } from "../../../services/user";
+import { getUserProfileImage, updateUserStatus } from "../../../services/user";
 import { getOwnedQuiz, getQuizCoverImage, deployQuiz, deleteQuiz } from "../../../services/quiz";
 
 
@@ -13,9 +13,10 @@ import Navbar from "../../../components/navbar";
 import Notify from "../../../components/notify";
 import QuizCard from "../../../components/quiz-card";
 import { ActivityHeader } from "../../../components/activity-header";
-import { onErrorProfileImageUrl } from "../../../config/constraints";
+import { onErrorProfileImageUrl, onErrorQuizImageUrl } from "../../../config/constraints";
 import BottomButton from "../../../components/button/bottom";
 import { getImageFromResponse } from "../../../utils/functions/image.blob";
+import ModalConfirmDeleteImage from "../../../components/modals/confirm-delete-image";
 
 const Created = () => {
 
@@ -125,16 +126,16 @@ const Created = () => {
 		}
 	}
 
-	async function deleteHandler(quiz) {
-		const quizId = quiz._id
+	async function deleteHandler(quiz_id) {
+		const quizId = quiz_id
 		if (!quizId) {
 			showNotify("not_found", "Something went wrong?", "Quiz not found!")
 			return
 		}
 		try {
 			const res = await deleteQuiz(quizId, user.token)
-			console.log(res)
-			if(res.status === 200){
+			if (res.status === 200) {
+				handlerCloseModelConfirmDeleteImage()
 				showNotify("true", "Deleted successful", "Your quiz is now deleted!", () => {
 					onGetQuizzes()
 				})
@@ -143,6 +144,29 @@ const Created = () => {
 		} catch (error) {
 			showNotify("not_found", "Something went wrong?", error.response.data.message)
 		}
+	}
+
+	const [modalConfirmDeleteImage, setModalConfirmDeleteImage] = useState({
+		show: false,
+		title: null,
+		imageUrl: null,
+		index: null,
+	});
+	function handlerShowModelConfirmDeleteImage(quiz) {
+		setModalConfirmDeleteImage({
+			show: true,
+			title: `Delete quiz (${quiz.name})`,
+			imageUrl: quiz.imageUrl || onErrorQuizImageUrl,
+			index: quiz._id,
+		})
+	}
+	function handlerCloseModelConfirmDeleteImage() {
+		setModalConfirmDeleteImage({
+			show: false,
+			title: null,
+			imageUrl: null,
+			index: null,
+		})
 	}
 
 	return (
@@ -154,6 +178,14 @@ const Created = () => {
 				handleClose={closeNotify}
 				message={notify.message}
 				cb={notify.cb}
+			/>
+			<ModalConfirmDeleteImage
+				index={modalConfirmDeleteImage.index}
+				title={modalConfirmDeleteImage.title}
+				show={modalConfirmDeleteImage.show}
+				imageUrl={modalConfirmDeleteImage.imageUrl}
+				handleConfirm={deleteHandler}
+				handleCancle={handlerCloseModelConfirmDeleteImage}
 			/>
 			<ModalStatus
 				show={show}
@@ -200,7 +232,7 @@ const Created = () => {
 							quiz={quiz}
 							editHandler={editHandler}
 							deployHandler={deployHandler}
-							deleteQuizHandler={deleteHandler}
+							deleteQuizHandler={() => handlerShowModelConfirmDeleteImage(quiz)}
 						/>
 					})}
 				</div>

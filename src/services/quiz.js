@@ -89,6 +89,15 @@ export async function getOwnedQuiz(token) {
 	return res
 }
 
+export async function getQuizRunning(token){
+	const res = await client.get(`quizzes/running`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	return res
+}
+
 
 export async function getQuizCoverImage(imageUrl){
 	const res = await client.get(`/file/get/quiz-cover-image?imageUrl=${imageUrl}`, {

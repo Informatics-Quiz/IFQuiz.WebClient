@@ -23,8 +23,9 @@ import QuestionSelector from "../../../components/question.selector";
 import SingleChoice from "../../../components/choice/single";
 import MultipleChoice from "../../../components/choice/multiple";
 import Notify from "../../../components/notify";
-import { updateTakeQuizAnswers } from "../../../services/quiz";
+import { getQuestionImage, updateTakeQuizAnswers } from "../../../services/quiz";
 import { useRef } from "react";
+import { getImageFromResponse } from "../../../utils/functions/image.blob";
 
 
 export default function TakeQuiz() {
@@ -34,6 +35,7 @@ export default function TakeQuiz() {
 	const user = useSelector((state) => state.user.authUser);
 	const updatingAnswersRef = useRef(false)
 
+	const [selectedQuestionImages, setSelectedQuestionImages] = useState([]);
 	const [timerLabel, setTimerLabel] = useState(getTimerLabel(quiz?.copyof?.expiredAt) || null); // [label, setLabel
 	const [notify, setNotify] = useState({
 		show: false,
@@ -75,11 +77,11 @@ export default function TakeQuiz() {
 			});
 		}
 
-		return ()=> fetchProfileImage(); // call once
+		return () => fetchProfileImage(); // call once
 
 	}, [])
 
-	useEffect(()=> {
+	useEffect(() => {
 		const intervalId = setInterval(() => {
 			setTimerLabel(getTimerLabel(quiz?.copyof?.expiredAt, () => {
 				showNotify('success', 'Time is up!', 'We will redirect you to result page.', () => {
@@ -94,11 +96,11 @@ export default function TakeQuiz() {
 		};
 	})
 
-	async function updateAnswers() {
-
+	async function updateAnswersAndSelctedQuestionId() {
 		if (quiz?.copyof?._id && quiz?.answers) {
 			console.log('updating...', quiz)
 			const res = await updateTakeQuizAnswers(user.token, {
+				selectedQuestionId: quiz.selectedQuestionId,
 				quizId: quiz.copyof._id,
 				answers: quiz.answers
 			})
@@ -114,25 +116,47 @@ export default function TakeQuiz() {
 
 	function handlerSelectSingleChoice(answerId) {
 		dispatch(setSelectedChoiceId(answerId))
-		updateAnswers()
 	}
 
 	function handlerMultipleChoice(handler, selectId) {
-		dispatch(setSelectedMultipleChoice({
+		const payload = {
 			handler: handler,
 			selectId: selectId
-		}))
-		updateAnswers()
-
+		}
+		dispatch(setSelectedMultipleChoice(payload))
 	}
 
 
 	useEffect(() => {
-		if(updatingAnswersRef.current)return
-		updatingAnswersRef.current = true
-		updateAnswers()
+		updateAnswersAndSelctedQuestionId()
 	}, [quiz])
 
+
+	async function refreshQuestionImage(listImageUrl) {
+		if (!listImageUrl) {
+			setSelectedQuestionImages([])
+			return
+		}
+		const newSelectedQuestionImages = []
+		for (const imageUrl of listImageUrl) {
+			const resImage = await getQuestionImage(imageUrl);
+			const renderImage = getImageFromResponse(resImage)
+			newSelectedQuestionImages.push(renderImage)
+		}
+		setSelectedQuestionImages(newSelectedQuestionImages)
+	}
+
+
+	const firstTimeRefreshImage = useRef(false)
+	useEffect(() => {
+		if (firstTimeRefreshImage.current) return
+		firstTimeRefreshImage.current = true
+		refreshQuestionImage(quiz.questions[quiz.selectedQuestionId].explanation.imageUrl)
+	}, [])
+
+	useEffect(() => {
+		refreshQuestionImage(quiz.questions[quiz.selectedQuestionId].explanation.imageUrl)
+	}, [quiz?.selectedQuestionId])
 
 	return (
 		<>
@@ -175,6 +199,18 @@ export default function TakeQuiz() {
 					</div>
 					<div className="block-space-center">
 						<div className="task__take__container">
+							{selectedQuestionImages?.length > 0 ? (
+								<div className='take-explanation-image'>
+									{selectedQuestionImages.map((imageStream, i) => {
+										return <div
+											key={`question-image-${i}`}
+											className="image-item"
+										>
+											<img src={imageStream} alt='question-image'></img>
+										</div>
+									})}
+								</div>
+							) : null}
 							<div className="question">
 								{quiz.questions[quiz.selectedQuestionId].explanation.explain}
 							</div>

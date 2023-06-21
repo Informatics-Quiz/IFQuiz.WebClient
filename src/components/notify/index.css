@@ -1,5 +1,5 @@
 .notify__container {
-    position: absolute;
+    position: fixed;
     z-index: 999999;
     display: flex;
     top: 50%;
@@ -58,7 +58,7 @@
 
 
 .tap__close__label {
-    position: absolute;
+    position: fixed;
     display: flex;
     align-items: center;
     justify-content: center;

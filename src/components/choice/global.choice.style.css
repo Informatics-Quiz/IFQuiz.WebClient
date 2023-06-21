@@ -1,6 +1,7 @@
 .select__choice {
     display: flex;
     align-items: center;
+    padding: 30px;
 }
 
 .select__choice > .grid-choice {
@@ -12,9 +13,10 @@
 }
 
 .select__choice > .grid-choice > button {
-    padding: 5px 0px 4px 0px;
-    width: 450px;
+    padding: 10px 10px 9px 10px;
+    min-width: 450px;
     border-radius: 5px;
+    white-space: pre-wrap;
 }
 
 .selected-choice {

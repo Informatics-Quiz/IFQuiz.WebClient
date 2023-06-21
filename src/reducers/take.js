@@ -25,6 +25,7 @@ const quizSlice = createSlice({
 				state.quiz.answers[state.quiz.selectedQuestionId].selectedIds = state.quiz.answers[state.quiz.selectedQuestionId].selectedIds.filter(
 					id => id !== selectId
 				)
+				console.log(state.quiz.answers[state.quiz.selectedQuestionId].selectedIds)
 			}
 		}
 	},

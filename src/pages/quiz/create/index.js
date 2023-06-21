@@ -214,7 +214,22 @@ const CreateQuiz = () => {
 			}
 		}
 
-		setQuiz({ ...quiz, points: totalPoints });
+		let finalQuestionList = questionList
+		for(let question of finalQuestionList) {
+			if(question.type === "fill-choice") {
+				for(let answer of question.answer) {
+					delete answer?.checked
+					delete answer?.explain
+				}
+			}else if(question.type === 'single-choice' || question.type === 'multiple-choice') {
+				for(let answer of question.answer) {
+					delete answer?.matchString
+					delete answer?.type
+				}
+			}
+		}
+
+		setQuiz({ ...quiz, points: totalPoints, questions: finalQuestionList });
 		return true;
 	}
 
@@ -293,17 +308,20 @@ const CreateQuiz = () => {
 	function changeQuestionType(e) {
 		const questionType = e.target.value;
 		if (!validateQuestionType(questionType)) return;
-		const newQuestion = [...questionList];
+		let newQuestion = [...questionList];
+		const oldQuestionType = newQuestion[selectedQuestion].type;
+		if (oldQuestionType == questionType) return;
 		newQuestion[selectedQuestion].type = questionType;
 		if (questionType == "fill-choice") {
-			newQuestion[selectedQuestion].answer = [
-				{
-					type: "contains",
-					matchString: "",
-				},
-			];
-		} else {
-			newQuestion[selectedQuestion].answer = [{ explain: "", checked: false }];
+			for(let answer of newQuestion[selectedQuestion].answer){
+				answer.type = "contains";
+				answer.matchString = answer.explain;
+			}
+		}else{
+			for(let answer of newQuestion[selectedQuestion].answer){
+				answer.explain = answer?.explain || answer?.matchString || "";
+				answer.checked = false;
+			}
 		}
 		setQuestionList(newQuestion);
 	}
@@ -381,9 +399,17 @@ const CreateQuiz = () => {
 
 	function adjustTextareaHeight() {
 		var textarea = document.getElementById("questionTextArea");
+		if(!textarea)return
 		textarea.style.height = "100px"; // Reset height to allow scrollHeight calculation
 		textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+		for(let index = 0; index < questionList[selectedQuestion].answer.length; index++){
+			var textarea = document.getElementById(`answer-text-area-${index}`);
+			textarea.style.height = "auto"; // Reset height to allow scrollHeight calculation
+			textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+			console.log(index, textarea.scrollHeight)
+		}
 	}
+
 
 	function resizeDescription() {
 		var textarea = document.getElementById("quizDescriptionTextArea");
@@ -576,13 +602,14 @@ const CreateQuiz = () => {
 
 	const [modalConfirmDeleteImage, setModalConfirmDeleteImage] = useState({
 		show: false,
+		title: null,
 		imageUrl: null,
 		index: null,
 	});
-
 	function handlerShowModelConfirmDeleteImage(imageUrl, index)  {
 		setModalConfirmDeleteImage({
 			show: true,
+			title: "Delete question image",
 			imageUrl: imageUrl,
 			index: index,
 		})
@@ -590,20 +617,29 @@ const CreateQuiz = () => {
 	function handlerCloseModelConfirmDeleteImage() {
 		setModalConfirmDeleteImage({
 			show: false,
-			imageUrl: null,
+		title: null,
+		imageUrl: null,
 			index: null,
 		})
 	}
 
 	useEffect(() => {
 		refreshQuestionImage(questionList[selectedQuestion].explanation.imageUrl)
+		adjustTextareaHeight()
 	}, [selectedQuestion, modalConfirmDeleteImage.show])
 
 	useEffect(() => {
 
 		setQuiz({ ...quiz, questions: questionList });
+		adjustTextareaHeight()
+
 		// eslint-disable-next-line
 	}, [questionList]);
+
+	
+	useEffect(() => {
+		adjustTextareaHeight()
+	}, [editingQuizDetail])
 
 	return (
 		<>
@@ -617,6 +653,7 @@ const CreateQuiz = () => {
 			/>
 			<ModalConfirmDeleteImage
 				index={modalConfirmDeleteImage.index}
+				title={modalConfirmDeleteImage.title}
 				show={modalConfirmDeleteImage.show}
 				imageUrl={modalConfirmDeleteImage.imageUrl}
 				handleConfirm={removeQuestionImages}
@@ -918,6 +955,7 @@ const CreateQuiz = () => {
 										(data, index) => {
 											return (
 												<InputTextAreaChoice
+													key={`input-text-area-choice-${index}`}
 													index={index}
 													checked={data.checked}
 													onChange={changeAnswerTextSelectChoice}

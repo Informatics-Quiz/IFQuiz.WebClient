@@ -210,7 +210,26 @@ const EditQuiz = () => {
 			}
 		}
 
-		setQuiz({ ...quiz, points: totalPoints });
+		let finalQuestionList = questionList
+		for(let question of finalQuestionList) {
+			if(question.type === "fill-choice") {
+				for(let answer of question.answer) {
+					delete answer?.checked
+					delete answer?.explain
+				}
+			}else if(question.type === 'single-choice' || question.type === 'multiple-choice') {
+				for(let answer of question.answer) {
+					delete answer?.matchString
+					delete answer?.type
+				}
+
+			}
+		}
+		console.log(finalQuestionList)
+
+
+
+		setQuiz({ ...quiz, points: totalPoints, questions: finalQuestionList });
 		return true;
 	}
 
@@ -289,17 +308,20 @@ const EditQuiz = () => {
 	function changeQuestionType(e) {
 		const questionType = e.target.value;
 		if (!validateQuestionType(questionType)) return;
-		const newQuestion = [...questionList];
+		let newQuestion = [...questionList];
+		const oldQuestionType = newQuestion[selectedQuestion].type;
+		if (oldQuestionType == questionType) return;
 		newQuestion[selectedQuestion].type = questionType;
 		if (questionType == "fill-choice") {
-			newQuestion[selectedQuestion].answer = [
-				{
-					type: "contains",
-					matchString: "",
-				},
-			];
-		} else {
-			newQuestion[selectedQuestion].answer = [{ explain: "", checked: false }];
+			for(let answer of newQuestion[selectedQuestion].answer){
+				answer.type = "contains";
+				answer.matchString = answer.explain;
+			}
+		}else{
+			for(let answer of newQuestion[selectedQuestion].answer){
+				answer.explain = answer?.explain || answer?.matchString || "";
+				answer.checked = false;
+			}
 		}
 		setQuestionList(newQuestion);
 	}
@@ -377,9 +399,17 @@ const EditQuiz = () => {
 
 	function adjustTextareaHeight() {
 		var textarea = document.getElementById("questionTextArea");
+		if(!textarea)return
 		textarea.style.height = "100px"; // Reset height to allow scrollHeight calculation
 		textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+		for(let index = 0; index < questionList[selectedQuestion].answer.length; index++){
+			var textarea = document.getElementById(`answer-text-area-${index}`);
+			textarea.style.height = "auto"; // Reset height to allow scrollHeight calculation
+			textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+			console.log(index, textarea.scrollHeight)
+		}
 	}
+
 
 	function resizeDescription() {
 		var textarea = document.getElementById("quizDescriptionTextArea");
@@ -540,8 +570,8 @@ const EditQuiz = () => {
 				showNotify(null, "Something went wrong?", error.response.data.message);
 			}
 		}
-
 		onGetQuiz();
+
 	}, [id, dispatch]);
 
 
@@ -596,23 +626,30 @@ const EditQuiz = () => {
 	useEffect(() => {
 		setQuiz({ ...quiz, questions: questionList });
 		refreshQuestionImage(questionList[selectedQuestion].explanation.imageUrl)
+		adjustTextareaHeight()
 		// eslint-disable-next-line
 	}, [questionList]);
 
 	useEffect(() => {
 		refreshQuestionImage(questionList[selectedQuestion].explanation.imageUrl)
+		adjustTextareaHeight()
 	}, [selectedQuestion])
+
+	useEffect(() => {
+		adjustTextareaHeight()
+	}, [editingQuizDetail])
 
 
 	const [modalConfirmDeleteImage, setModalConfirmDeleteImage] = useState({
 		show: false,
+		title: null,
 		imageUrl: null,
 		index: null,
 	});
-
 	function handlerShowModelConfirmDeleteImage(imageUrl, index)  {
 		setModalConfirmDeleteImage({
 			show: true,
+			title: "Delete question image",
 			imageUrl: imageUrl,
 			index: index,
 		})
@@ -620,7 +657,8 @@ const EditQuiz = () => {
 	function handlerCloseModelConfirmDeleteImage() {
 		setModalConfirmDeleteImage({
 			show: false,
-			imageUrl: null,
+		title: null,
+		imageUrl: null,
 			index: null,
 		})
 	}
@@ -639,6 +677,7 @@ const EditQuiz = () => {
 			/>
 			<ModalConfirmDeleteImage
 				index={modalConfirmDeleteImage.index}
+				title={modalConfirmDeleteImage.title}
 				show={modalConfirmDeleteImage.show}
 				imageUrl={modalConfirmDeleteImage.imageUrl}
 				handleConfirm={removeQuestionImages}
@@ -846,7 +885,7 @@ const EditQuiz = () => {
 									id="if-select"
 									name="points"
 									onChange={changeQuestionPoints}
-									value={quiz.questions[selectedQuestion].points}
+									value={quiz?.questions[selectedQuestion]?.points || 1}
 								>
 									<option value={1}>1 Points</option>
 									<option value={2}>2 Points</option>
@@ -936,6 +975,7 @@ const EditQuiz = () => {
 										(data, index) => {
 											return (
 												<InputTextAreaChoice
+													key={`input-text-area-choice-${index}`}
 													index={index}
 													checked={data.checked}
 													onChange={changeAnswerTextSelectChoice}
