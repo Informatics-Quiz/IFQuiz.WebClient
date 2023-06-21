@@ -3,8 +3,8 @@ import '../global.style.css'
 import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
 
 import React, { useState, useEffect, useRef } from "react";
-import { uploadQuiz } from "../../../services/quiz";
-import { uploadQuizCoverImage } from "../../../services/upload";
+import { getQuestionImage, uploadQuiz } from "../../../services/quiz";
+import { uploadQuestionImage, uploadQuizCoverImage } from "../../../services/upload";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,8 @@ import InputTextAreaChoice from "../../../components/input/text-area-choice";
 import Notify from "../../../components/notify";
 import { onErrorQuizImageUrl, svgMap } from "../../../config/constraints";
 import BottomButton from "../../../components/button/bottom";
+import { getImageFromResponse } from '../../../utils/functions/image.blob';
+import ModalConfirmDeleteImage from '../../../components/modals/confirm-delete-image';
 
 const CreateQuiz = () => {
 	const user = useSelector((state) => state.user.authUser);
@@ -21,6 +23,7 @@ const CreateQuiz = () => {
 
 	const [editingQuizDetail, setEditingQuizDetail] = useState(false);
 	const [selectedQuestion, setSelectedQuestion] = useState(0);
+	const [selectedQuestionImages, setSelectedQuestionImages] = useState([]);
 	const emptyQuestion = {
 		type: "single-choice",
 		points: 1,
@@ -378,7 +381,7 @@ const CreateQuiz = () => {
 
 	function adjustTextareaHeight() {
 		var textarea = document.getElementById("questionTextArea");
-		textarea.style.height = "370px"; // Reset height to allow scrollHeight calculation
+		textarea.style.height = "100px"; // Reset height to allow scrollHeight calculation
 		textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
 	}
 
@@ -522,7 +525,82 @@ const CreateQuiz = () => {
 		setQuiz(newQuiz);
 	}
 
+	async function removeQuestionImages(index) {
+		const newQuestion = [...questionList];
+		newQuestion[selectedQuestion].explanation.imageUrl.splice(index, 1);
+		setQuestionList(newQuestion);
+		handlerCloseModelConfirmDeleteImage();
+	}
+
+	async function uploadQuestionImageFile(e) {
+		const file = e.target.files[0];
+		if (!file) return
+		const formData = new FormData();
+		formData.append("questionId", selectedQuestion);
+		formData.append("question-image", file);
+
+		try {
+
+			const res = await uploadQuestionImage(user.token, formData);
+			console.log(res.status)
+			if (res.status === 201) {
+				const newQuestion = [...questionList];
+				if (!newQuestion[res.data.questionId].explanation.imageUrl) {
+					newQuestion[res.data.questionId].explanation.imageUrl = [res.data.imageUrl]
+				} else {
+					newQuestion[res.data.questionId].explanation.imageUrl.push(res.data.imageUrl)
+				}
+				refreshQuestionImage(newQuestion[res.data.questionId].explanation.imageUrl)
+				setQuestionList(newQuestion);
+			}
+		} catch (error) {
+			console.log(error)
+			// notify("Something went wrong?", error.response.data.message)
+		}
+	}
+
+	async function refreshQuestionImage(listImageUrl) {
+		if (!listImageUrl) {
+			setSelectedQuestionImages([])
+			return
+		}
+		const newSelectedQuestionImages = []
+		for (const imageUrl of listImageUrl) {
+			const resImage = await getQuestionImage(imageUrl);
+			const renderImage = getImageFromResponse(resImage)
+			newSelectedQuestionImages.push(renderImage)
+		}
+		setSelectedQuestionImages(newSelectedQuestionImages)
+	}
+
+
+	const [modalConfirmDeleteImage, setModalConfirmDeleteImage] = useState({
+		show: false,
+		imageUrl: null,
+		index: null,
+	});
+
+	function handlerShowModelConfirmDeleteImage(imageUrl, index)  {
+		setModalConfirmDeleteImage({
+			show: true,
+			imageUrl: imageUrl,
+			index: index,
+		})
+	}
+	function handlerCloseModelConfirmDeleteImage() {
+		setModalConfirmDeleteImage({
+			show: false,
+			imageUrl: null,
+			index: null,
+		})
+	}
+
 	useEffect(() => {
+		refreshQuestionImage(questionList[selectedQuestion].explanation.imageUrl)
+	}, [selectedQuestion, modalConfirmDeleteImage.show])
+
+	useEffect(() => {
+
 		setQuiz({ ...quiz, questions: questionList });
 		// eslint-disable-next-line
 	}, [questionList]);
@@ -536,6 +614,13 @@ const CreateQuiz = () => {
 				handleClose={closeNotify}
 				message={notify.message}
 				cb={notify.cb}
+			/>
+			<ModalConfirmDeleteImage
+				index={modalConfirmDeleteImage.index}
+				show={modalConfirmDeleteImage.show}
+				imageUrl={modalConfirmDeleteImage.imageUrl}
+				handleConfirm={removeQuestionImages}
+				handleCancle={handlerCloseModelConfirmDeleteImage}
 			/>
 
 			<Navbar />
@@ -670,7 +755,7 @@ const CreateQuiz = () => {
 							</div>
 							<div className="items">
 								{questionList.map((question, i) => (
-									<div className="item">
+									<div key={`${question.type}-div-${i}`} className="item">
 										<button
 											key={`${question.type}-button-${i}`}
 											onClick={() => setSelectedQuestion(i)}
@@ -718,6 +803,21 @@ const CreateQuiz = () => {
 					/>
 					<div className="question__content">
 						<div className="settings">
+							<div className='item'>
+								<div className="header">
+									{svgMap.image}
+									<div className="label">Image</div>
+								</div>
+								<label htmlFor="file-upload" className="custom-file-upload">
+									Upload
+								</label>
+								<input
+									id="file-upload"
+									type="file"
+									accept="image/*"
+									onChange={uploadQuestionImageFile}
+								/>
+							</div>
 							<div className="item">
 								<div className="header">
 									{svgMap.points}
@@ -752,6 +852,21 @@ const CreateQuiz = () => {
 								</select>
 							</div>
 						</div>
+
+						{selectedQuestionImages.length > 0 ? (
+							<div className='question__explanation__image'>
+								{selectedQuestionImages.map((imageStream, i) => {
+									return <div
+										key={`question-image-${i}`}
+										className='image__item'
+										onClick={() => handlerShowModelConfirmDeleteImage(imageStream, i)}
+									>
+										<img src={imageStream} alt='question-image'></img>
+										<div className='remove__label'>CLICK TO DELETE</div>
+									</div>
+								})}
+							</div>
+						) : null}
 						<textarea
 							name="explain"
 							id="questionTextArea"
