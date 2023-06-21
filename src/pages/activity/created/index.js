@@ -15,6 +15,7 @@ import QuizCard from "../../../components/quiz-card";
 import { ActivityHeader } from "../../../components/activity-header";
 import { onErrorProfileImageUrl } from "../../../config/constraints";
 import BottomButton from "../../../components/button/bottom";
+import { getImageFromResponse } from "../../../utils/functions/image.blob";
 
 const Created = () => {
 
@@ -44,9 +45,11 @@ const Created = () => {
     for(let quiz of initializedQuiz){
       if(quiz.imageUrl !== null && quiz.imageUrl !== ""){
         const res = await getQuizCoverImage(quiz.imageUrl)
-        const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
-  			const url = URL.createObjectURL(blob)
-        quiz.imageUrl = res.data.byteLength === 0 ? null : url
+				quiz.imageUrl = getImageFromResponse(res)
+
+        // const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
+  			// const url = URL.createObjectURL(blob)
+        // quiz.imageUrl = res.data.byteLength === 0 ? null : url
       }
     }
     return initializedQuiz
