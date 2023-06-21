@@ -123,3 +123,12 @@ export async function updateTakeQuizAnswers(token, requestBody){
 
 	return res.data
 }
+
+export async function deleteQuiz(quizId, token) {
+	const res = await client.delete(`/quizzes/${quizId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	return res
+}
