@@ -97,6 +97,13 @@ export async function getQuizCoverImage(imageUrl){
 	return res
 }
 
+export async function getQuestionImage(imageUrl){
+	const res = await client.get(`/file/get/question-image?imageUrl=${imageUrl}`, {
+		responseType: 'arraybuffer',
+	})
+	return res
+}
+
 export async function takeQuiz(deployedQuizId, token){
 	const res = await client.get(`/quizzes/take?quizId=${deployedQuizId}`, {
 		headers: {

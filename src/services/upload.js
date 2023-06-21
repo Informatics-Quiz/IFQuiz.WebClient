@@ -18,3 +18,12 @@ export async function uploadQuizCoverImage(token, postData) {
 	})
 	return res
 }
+
+export async function uploadQuestionImage(token, postData) {
+	const res = await client.post('/file/upload/question-image', postData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})
+	return res
+}
