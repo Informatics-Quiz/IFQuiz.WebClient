@@ -37,16 +37,16 @@ export default function QuizCard({
 
 	const [taskTotalDone, setTaskTotalDone] = useState(0)
 	useEffect(() => {
-
+		console.log('I do once')
 		if (userAnswers) {
 			setTaskTotalDone(current => 0)
 			for (const answer of userAnswers) {
-				if (answer?.selectedId) {
+				if(answer?.selectedId !== undefined && answer?.selectedId !== null){
 					setTaskTotalDone(current => current + 1)
 					continue
 				}
 
-				if (answer?.selectedIds?.length > 0) {
+				if (answer?.selectedIds?.length !== undefined && answer?.selectedIds?.length !== null && answer?.selectedIds?.length > 0) {
 					setTaskTotalDone(current => current + 1)
 					continue
 				}

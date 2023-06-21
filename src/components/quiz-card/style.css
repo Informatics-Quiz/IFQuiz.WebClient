@@ -112,7 +112,7 @@
 	background: var(--active-button-color);
 	border-radius: 5px;
 	font-size: 15px;
-	padding: 4px 50px 4px 50px;
+	padding: 4px 20px 4px 20px;
 	margin-left: 9px;
 }
 
@@ -120,6 +120,6 @@
 	background: var(--success-button-color);
 	border-radius: 5px;
 	font-size: 15px;
-	padding: 4px 50px 4px 50px;
+	padding: 4px 20px 4px 20px;
 	margin-left: 9px;
 }
