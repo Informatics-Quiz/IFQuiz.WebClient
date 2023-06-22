@@ -89,6 +89,24 @@ export async function getOwnedQuiz(token) {
 	return res
 }
 
+export async function getCompletedQuizzes(token){
+	const res = await client.get(`/quizzes/completed`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	return res
+}
+
+export async function getCompletedQuiz(quizId, token){
+	const res = await client.get(`/quizzes/completed?quizId=${quizId}`,{
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	return res
+}
+
 export async function getQuizRunning(token){
 	const res = await client.get(`quizzes/running`, {
 		headers: {

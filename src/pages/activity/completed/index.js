@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStatus, setUserImageUrl } from "../../../reducers/user";
 import { getUserProfile, getUserProfileImage, updateUserStatus } from "../../../services/user";
-import { getOwnedQuiz, getQuizCoverImage, deployQuiz } from "../../../services/quiz";
+import { getOwnedQuiz, getQuizCoverImage, deployQuiz, getCompletedQuizzes } from "../../../services/quiz";
 
 
 import ModalStatus from "../../../components/modals/edit-status";
@@ -44,21 +44,28 @@ const Completed = () => {
 	async function setImageCoverQuizzes(quizzes) {
 		let initializedQuiz = quizzes
 		for (let quiz of initializedQuiz) {
-			if (quiz.imageUrl !== null && quiz.imageUrl !== "") {
-				const res = await getQuizCoverImage(quiz.imageUrl)
-				quiz.imageUrl = getImageFromResponse(res)
+			if (quiz.copyof.imageUrl !== null && quiz.copyof.imageUrl !== "") {
+				const res = await getQuizCoverImage(quiz.copyof.imageUrl)
+				quiz.copyof.imageUrl = getImageFromResponse(res)
 			}
 		}
 		return initializedQuiz
 	}
 
 	async function onGetQuizzes() {
-		const response = await getOwnedQuiz(user.token)
+		const response = await getCompletedQuizzes(user.token)
 		const initializedQuiz = await setImageCoverQuizzes(response.data)
 		setQuizzesCompleted(initializedQuiz);
 	}
 
 	useEffect(() => {
+		async function fetchProfileImage() {
+			await getUserProfileImage(user.token, (url) => {
+				dispatch(setUserImageUrl(url));
+			});
+		}
+		fetchProfileImage();
+
 		onGetQuizzes();
 	}, []);
 
@@ -90,7 +97,9 @@ const Completed = () => {
 		})
 	}
 
-
+	function watchScoreHandler(quizId){
+		navigate(`/score/${quizId}`)
+	}
 
 	return (
 		<>
@@ -141,14 +150,18 @@ const Completed = () => {
 						svg={"true"}
 						label={"Completed"}
 					/>
-					{/* {quizzesCompleted.map((quiz, index) => {
-            return <QuizCard
-              index={index}
-              quiz={quiz}
-              editHandler={editHandler}
-              deployHandler={deployHandler}
-            />
-          })} */}
+					{quizzesCompleted.map((quiz, index) => {
+						return <QuizCard
+							takeQuizHandler={()=>{
+								watchScoreHandler(quiz._id)
+							}}
+							key={quiz.copyof.name + index}
+							score={quiz.score}
+							index={index}
+							quiz={quiz.copyof}
+							userAnswers={quiz.answers}
+						/>
+					})}
 				</div>
 			</div>
 		</>

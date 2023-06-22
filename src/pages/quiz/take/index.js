@@ -86,37 +86,38 @@ export default function TakeQuiz() {
 
 	useEffect(() => {
 		let intervalId = null;
-	  
+
 		const handleTimerComplete = () => {
-		  updateAnswersAndSelctedQuestionId();
-		  showNotify('success', 'Time is up!', 'We will redirect you to the result page.', () => {
-			dispatch(setTakingQuiz(null));
-			navigate('/activity/completed');
-		  });
-		  clearInterval(intervalId);
+			updateAnswersAndSelctedQuestionId();
+			showNotify('success', 'Time is up!', 'We will redirect you to the result page.', () => {
+				dispatch(setTakingQuiz(null));
+				navigate('/activity/completed');
+			});
+			clearInterval(intervalId);
 		};
-	  
+
 		intervalId = setInterval(() => {
-		  setTimerLabel(getTimerLabel(quiz?.copyof?.expiredAt, handleTimerComplete));
+			setTimerLabel(getTimerLabel(quiz?.copyof?.expiredAt, handleTimerComplete));
 		}, 1000);
-	  
+
 		return () => {
-		  clearInterval(intervalId);
+			clearInterval(intervalId);
 		};
-	  }, []);
+	}, []);
 
 	const isNowStateIsFillUpdate = useRef(false)
-
+	const isUpdating = useRef(false)
 	async function updateAnswersAndSelctedQuestionId() {
 		if (quiz?.copyof?._id && quiz?.answers) {
-			console.log('updating...', quiz)
+			console.log('updateting...')
 			const res = await updateTakeQuizAnswers(user.token, {
 				selectedQuestionId: quiz.selectedQuestionId,
 				quizId: quiz.copyof._id,
 				answers: quiz.answers
 			})
 			if (res?.quiz) {
-				console.log('updated', res.quiz)
+				console.log('updated')
+				isUpdating.current = false
 			}
 		}
 	}
@@ -126,15 +127,18 @@ export default function TakeQuiz() {
 	}
 
 	function handlerSelectSingleChoice(answerId) {
+		isUpdating.current = true
 		dispatch(setSelectedChoiceId(answerId))
 	}
 
-	function handlerFillChoice(fillString){
+	function handlerFillChoice(fillString) {
+		isUpdating.current = true
 		isNowStateIsFillUpdate.current = true
 		dispatch(setFillChoice(fillString))
 	}
 
 	function handlerMultipleChoice(handler, selectId) {
+		isUpdating.current = true
 		const payload = {
 			handler: handler,
 			selectId: selectId
@@ -144,11 +148,13 @@ export default function TakeQuiz() {
 
 
 	useEffect(() => {
-		if(isNowStateIsFillUpdate.current){
+		if (isNowStateIsFillUpdate.current) {
+			isUpdating.current = false
 			isNowStateIsFillUpdate.current = false
 			return
 		}
 		updateAnswersAndSelctedQuestionId()
+
 	}, [quiz])
 
 
@@ -166,6 +172,14 @@ export default function TakeQuiz() {
 		setSelectedQuestionImages(newSelectedQuestionImages)
 	}
 
+	function adjustTextareaHeight() {
+		var textarea = document.getElementById(`answer-text-area-${quiz?.selectedQuestionId}`);
+		if (!textarea) return
+		textarea.style.height = "auto"; // Reset height to allow scrollHeight calculation
+		textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+	}
+
+
 
 	const firstTimeRefreshImage = useRef(false)
 	useEffect(() => {
@@ -176,6 +190,7 @@ export default function TakeQuiz() {
 
 	useEffect(() => {
 		refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
+		adjustTextareaHeight()
 	}, [quiz?.selectedQuestionId])
 
 	return (
@@ -217,6 +232,25 @@ export default function TakeQuiz() {
 							{timerLabel}
 						</div>
 					</div>
+					{isUpdating.current === true ? (
+						<div className="save-answer-info-container">
+							<div className="loader"></div>
+							<div className="save-label-info">
+								Saving your answer...
+							</div>
+						</div>
+
+					) : (
+						<div className="save-answer-info-container">
+							<div class="loader-eye">
+								<span></span>
+							</div>
+							<div className="save-label-info">
+								Watching
+							</div>
+						</div>
+					)}
+
 					<div className="block-space-center">
 						<div className="task__take__container">
 							{selectedQuestionImages?.length > 0 ? (

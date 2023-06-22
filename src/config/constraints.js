@@ -40,6 +40,7 @@ import { ReactComponent as TimeUpSvg } from "../assets/svg/time_up.svg";
 import { ReactComponent as ImageSvg } from "../assets/svg/image.svg";
 import { ReactComponent as TaskDoneSvg } from "../assets/svg/task_done.svg";
 import { ReactComponent as TrueWhiteSvg } from "../assets/svg/true_white.svg";
+import { ReactComponent as DateSvg } from '../assets/svg/date.svg'
 
 
 
@@ -91,5 +92,6 @@ export const svgMap = {
     time_up: <TimeUpSvg/>,
     image: <ImageSvg/>,
     task_done: <TaskDoneSvg/>,
-    true_white: <TrueWhiteSvg/>
+    true_white: <TrueWhiteSvg/>,
+    date: <DateSvg/>
 }
