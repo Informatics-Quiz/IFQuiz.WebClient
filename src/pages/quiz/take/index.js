@@ -23,7 +23,7 @@ import QuestionSelector from "../../../components/question.selector";
 import SingleChoice from "../../../components/choice/single";
 import MultipleChoice from "../../../components/choice/multiple";
 import Notify from "../../../components/notify";
-import { getQuestionImage, updateTakeQuizAnswers } from "../../../services/quiz";
+import { getQuestionImage, submitQuiz, updateTakeQuizAnswers } from "../../../services/quiz";
 import { useRef } from "react";
 import { getImageFromResponse } from "../../../utils/functions/image.blob";
 import InputTextAreaChoice from "../../../components/input/text-area-choice";
@@ -83,15 +83,20 @@ export default function TakeQuiz() {
 
 	}, [])
 
-
 	useEffect(() => {
 		let intervalId = null;
 
 		const handleTimerComplete = () => {
-			updateAnswersAndSelctedQuestionId();
-			showNotify('success', 'Time is up!', 'We will redirect you to the result page.', () => {
-				dispatch(setTakingQuiz(null));
-				navigate('/activity/completed');
+			showNotify('success', 'Time is up!', 'We will redirect you to the result page.', async () => {
+				try {
+					const completedQuiz = await submitQuiz(user.token, quiz?.copyof?._id)
+					dispatch(setTakingQuiz(null));
+					navigate(`/score/${completedQuiz._id}`);
+				} catch (e) {
+					dispatch(setTakingQuiz(null));
+					navigate('/activity/completed');
+				}
+
 			});
 			clearInterval(intervalId);
 		};
@@ -105,11 +110,12 @@ export default function TakeQuiz() {
 		};
 	}, []);
 
+
 	const isNowStateIsFillUpdate = useRef(false)
 	const isUpdating = useRef(false)
 	async function updateAnswersAndSelctedQuestionId() {
 		if (quiz?.copyof?._id && quiz?.answers) {
-			console.log('updateting...')
+			console.log('updateting...', quiz?.answers)
 			const res = await updateTakeQuizAnswers(user.token, {
 				selectedQuestionId: quiz.selectedQuestionId,
 				quizId: quiz.copyof._id,
@@ -154,7 +160,6 @@ export default function TakeQuiz() {
 			return
 		}
 		updateAnswersAndSelctedQuestionId()
-
 	}, [quiz])
 
 

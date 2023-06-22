@@ -29,7 +29,10 @@ export default function FillChoice({
                 onChange={(e)=> {
                     handlerFillChoice(e.target.value)
                 }}
-                onAbort={handlerUpdate}
+                onAbort={()=>{
+                    console.log('my bad mrfk')
+                    handlerUpdate()
+                }}
                 id={`answer-text-area-${index}`}
                 placeholder="Answer here... "
             ></textarea>

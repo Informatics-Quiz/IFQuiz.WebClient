@@ -98,6 +98,18 @@ export async function getCompletedQuizzes(token){
 	return res
 }
 
+export async function submitQuiz(token, quizId){
+	const res = await client.post(`/quizzes/take/submit`, {
+		quizId: quizId
+	},{
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+
+	return res.data
+}
+
 export async function getCompletedQuiz(quizId, token){
 	const res = await client.get(`/quizzes/completed?quizId=${quizId}`,{
 		headers: {
