@@ -41,7 +41,12 @@ import { ReactComponent as ImageSvg } from "../assets/svg/image.svg";
 import { ReactComponent as TaskDoneSvg } from "../assets/svg/task_done.svg";
 import { ReactComponent as TrueWhiteSvg } from "../assets/svg/true_white.svg";
 import { ReactComponent as DateSvg } from '../assets/svg/date.svg'
-
+import { ReactComponent as TrueGreen } from '../assets/svg/true_green.svg';
+import { ReactComponent as GreenBoxSvg } from '../assets/svg/green_box.svg';
+import { ReactComponent as RedBoxSvg } from '../assets/svg/red_box.svg';
+import { ReactComponent as GreenCircle } from '../assets/svg/green_circle.svg';
+import { ReactComponent as RedCircle } from '../assets/svg/red_circle.svg';
+import { ReactComponent as SelectedIconSvg } from '../assets/svg/selected_icon.svg';
 
 
 export const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
@@ -62,6 +67,16 @@ export const choiceTypeEnum = {
     FILL_CHOICE: "fill-choice",
 }
 
+export const fillChoiceEnum = {
+    IS_EXACTLY: "is-exactly",
+    CONTAINS: "contains",
+}
+
+export const explanationAnswerTypeMap = {
+    'single-choice': "Allows selecting only one option.",
+    'multiple-choice': "Allows selecting multiple options.",
+    'fill-choice': `Requires filling in missing information. it can have subtypes\nLike \"Is Exactly\" and \"Contains\" for determining matching criteria.`,
+}
 
 export const svgMap = {
     home: <HomeSvg />,
@@ -106,5 +121,11 @@ export const svgMap = {
     image: <ImageSvg/>,
     task_done: <TaskDoneSvg/>,
     true_white: <TrueWhiteSvg/>,
-    date: <DateSvg/>
+    date: <DateSvg/>,
+    true_green: <TrueGreen/>,
+    green_box: <GreenBoxSvg/>,
+    red_box: <RedBoxSvg/>,
+    green_circle: <GreenCircle/>,
+    red_circle: <RedCircle/>,
+    selected_icon: <SelectedIconSvg/>
 }

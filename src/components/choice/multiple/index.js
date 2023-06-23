@@ -1,4 +1,5 @@
 
+import { svgMap } from '../../../config/constraints';
 import '../global.choice.style.css'
 export default function MultipleChoice({ showCorrectAnswer, choices, selectedIds, handlerMultipleChoice }) {
 
@@ -13,15 +14,20 @@ export default function MultipleChoice({ showCorrectAnswer, choices, selectedIds
                         return conditionLeft ? (
                             <button
                                 key={index}
-                                className={(showCorrectAnswer && choice.checked) ? 'correct-choice' : isSelected ? "selected-choice" : "un-selected-choice"}
-                                onClick={isSelected ? ()=> {
-                                    if(!handlerMultipleChoice)return
+                                className={
+                                    showCorrectAnswer ? ((choice.checked ? 'correct-choice' : 'un-correct-choice') + (isSelected ? ' border-selected-choice' : '')) : isSelected ? "selected-choice" : "un-selected-choice"
+                                }
+                                onClick={isSelected ? () => {
+                                    if (!handlerMultipleChoice) return
                                     handlerMultipleChoice('unselect', index)
-                                } : ()=> {
-                                    if(!handlerMultipleChoice)return
+                                } : () => {
+                                    if (!handlerMultipleChoice) return
                                     handlerMultipleChoice('select', index)
                                 }}
                             >
+                                <div className='choice-select-svg'>
+                                    {showCorrectAnswer && (isSelected ? svgMap.selected_icon : null)}
+                                </div>
                                 {choice.explain}
                             </button>
                         ) : null
@@ -36,15 +42,20 @@ export default function MultipleChoice({ showCorrectAnswer, choices, selectedIds
                         return conditionLeft ? (
                             <button
                                 key={index}
-                                className={(showCorrectAnswer && choice.checked) ? 'correct-choice' : isSelected ? "selected-choice" : "un-selected-choice"}
-                                onClick={isSelected ? ()=> {
-                                    if(!handlerMultipleChoice)return
+                                className={
+                                    showCorrectAnswer ? ((choice.checked ? 'correct-choice' : 'un-correct-choice') + (isSelected ? ' border-selected-choice' : '')) : isSelected ? "selected-choice" : "un-selected-choice"
+                                }
+                                onClick={isSelected ? () => {
+                                    if (!handlerMultipleChoice) return
                                     handlerMultipleChoice('unselect', index)
-                                } : ()=> {
-                                    if(!handlerMultipleChoice)return
+                                } : () => {
+                                    if (!handlerMultipleChoice) return
                                     handlerMultipleChoice('select', index)
                                 }}
                             >
+                                <div className='choice-select-svg'>
+                                    {showCorrectAnswer && (isSelected ? svgMap.selected_icon : null)}
+                                </div>
                                 {choice.explain}
                             </button>
                         ) : null

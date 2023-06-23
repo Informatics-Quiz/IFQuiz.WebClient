@@ -1,6 +1,6 @@
 // Resources
 import "./style.css";
-import { onErrorProfileImageUrl, svgMap } from "../../../config/constraints";
+import { choiceTypeMap, explanationAnswerTypeMap, onErrorProfileImageUrl, svgMap } from "../../../config/constraints";
 
 // React Router | Components | Redux
 import { useNavigate } from "react-router";
@@ -186,17 +186,38 @@ export default function TakeQuiz() {
 
 
 
+	const [isLoading, setIsLoading] = useState(false)
+	const timeoutRef = useRef(null);
+	function loading(func) {
+		console.log('loading')
+		setIsLoading(current => true)
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+		func()
+		timeoutRef.current = setTimeout(() => {
+			setIsLoading(false);
+			console.log('loaded');
+		}, 600);
+	}
+
 	const firstTimeRefreshImage = useRef(false)
 	useEffect(() => {
-		if (firstTimeRefreshImage.current) return
-		firstTimeRefreshImage.current = true
-		refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
+		loading(() => {
+			if (firstTimeRefreshImage.current) return
+			firstTimeRefreshImage.current = true
+			refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
+		})
 	}, [])
 
 	useEffect(() => {
-		refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
-		adjustTextareaHeight()
+		loading(()=>{
+			refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
+			adjustTextareaHeight()
+		})
 	}, [quiz?.selectedQuestionId])
+
+
 
 	return (
 		<>
@@ -234,7 +255,9 @@ export default function TakeQuiz() {
 							<div className="icon">
 								{svgMap.timer_blue}
 							</div>
-							{timerLabel}
+							<div className="timer_label">
+								{timerLabel}
+							</div>
 						</div>
 					</div>
 					{isUpdating.current === true ? (
@@ -256,50 +279,71 @@ export default function TakeQuiz() {
 						</div>
 					)}
 
-					<div className="block-space-center">
-						<div className="task__take__container">
-							{selectedQuestionImages?.length > 0 ? (
-								<div className='take-explanation-image'>
-									{selectedQuestionImages.map((imageStream, i) => {
-										return <div
-											key={`question-image-${i}`}
-											className="image-item"
-										>
-											<img src={imageStream} alt='question-image'></img>
-										</div>
-									})}
-								</div>
-							) : null}
-							<div className="question">
-								{quiz?.questions[quiz.selectedQuestionId]?.explanation?.explain}
+					{isLoading ? (
+						<>
+							<div className="loading-container">
+								<div class="loader-content"></div>
 							</div>
+						</>
+					) : (
+						<div className="block-space-center">
+							<div className="task__take__container">
+								{selectedQuestionImages?.length > 0 ? (
+									<div className='take-explanation-image'>
+										{selectedQuestionImages.map((imageStream, i) => {
+											return <div
+												key={`question-image-${i}`}
+												className="image-item"
+											>
+												<img src={imageStream} alt='question-image'></img>
+											</div>
+										})}
+									</div>
+								) : null}
+								<div className="question">
+									<div className="qustion-icon-svg">
+										{svgMap.question}
+									</div>
+									<div className="question-explanation-text">
+										{quiz?.questions[quiz.selectedQuestionId]?.explanation?.explain}
+									</div>
+								</div>
+								<div className='question__property'>
+									<div className="property">
+										<div className="icon">
+											{svgMap.category}
+										</div>
+										{choiceTypeMap[quiz?.questions[quiz.selectedQuestionId]?.type]}
+									</div>
+								</div>
+								<div className="fill-explanation-icon-text">{explanationAnswerTypeMap[quiz?.questions[quiz.selectedQuestionId]?.type]}</div>
+								{
+									quiz?.questions[quiz.selectedQuestionId]?.type === 'single-choice' ? (
+										<SingleChoice
+											choices={quiz.questions[quiz.selectedQuestionId].answer}
+											selectedId={quiz.answers[quiz.selectedQuestionId].selectedId}
+											handlerSelectSingleChoice={handlerSelectSingleChoice}
+										/>
+									) : quiz?.questions[quiz.selectedQuestionId]?.type === 'multiple-choice' ? (
+										<MultipleChoice
+											choices={quiz.questions[quiz.selectedQuestionId].answer}
+											selectedIds={quiz.answers[quiz.selectedQuestionId].selectedIds}
+											handlerMultipleChoice={handlerMultipleChoice}
+										/>
+									) : quiz?.questions[quiz.selectedQuestionId]?.type === 'fill-choice' ? (
+										// Fill Choice
+										<FillChoice
+											index={quiz.selectedQuestionId}
+											handlerFillChoice={handlerFillChoice}
+											handlerUpdate={updateAnswersAndSelctedQuestionId}
+											value={quiz.answers[quiz.selectedQuestionId].matchString}
+										/>
+									) : null
+								}
 
-							{
-								quiz?.questions[quiz.selectedQuestionId]?.type === 'single-choice' ? (
-									<SingleChoice
-										choices={quiz.questions[quiz.selectedQuestionId].answer}
-										selectedId={quiz.answers[quiz.selectedQuestionId].selectedId}
-										handlerSelectSingleChoice={handlerSelectSingleChoice}
-									/>
-								) : quiz?.questions[quiz.selectedQuestionId]?.type === 'multiple-choice' ? (
-									<MultipleChoice
-										choices={quiz.questions[quiz.selectedQuestionId].answer}
-										selectedIds={quiz.answers[quiz.selectedQuestionId].selectedIds}
-										handlerMultipleChoice={handlerMultipleChoice}
-									/>
-								) : quiz?.questions[quiz.selectedQuestionId]?.type === 'fill-choice' ? (
-									// Fill Choice
-									<FillChoice
-										index={quiz.selectedQuestionId}
-										handlerFillChoice={handlerFillChoice}
-										handlerUpdate={updateAnswersAndSelctedQuestionId}
-										value={quiz.answers[quiz.selectedQuestionId].matchString}
-									/>
-								) : null
-							}
-
+							</div>
 						</div>
-					</div>
+					)}
 
 				</div>
 			) : null}

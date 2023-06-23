@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { getTimerLabel } from "../../../utils/functions/timer";
 import { anonymousFullName, onErrorQuizImageUrl, svgMap } from "../../../config/constraints";
 import { useDebugValue } from "react";
-import { setReveal } from "../../../reducers/reveal";
+import { setReveal, setSelectedRevealQuestionId } from "../../../reducers/reveal";
 
 export default function Score() {
 	const user = useSelector((state) => state.user.authUser);
@@ -161,6 +161,7 @@ export default function Score() {
 
 
 	function navigteToReveal(quiz, answers){
+		dispatch(setSelectedRevealQuestionId(0))
 		dispatch(setReveal({
 			quiz: quiz,
 			answers: answers,

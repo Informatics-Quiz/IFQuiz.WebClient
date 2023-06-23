@@ -21,6 +21,7 @@
 }
 
 .question__selection {
+  position: fixed;
 	display: flex;
 	flex-direction: column;
 	max-width: 257px;
@@ -64,58 +65,54 @@
 }
 
 .question__timer {
+  position: fixed;
 	display: flex;
 	align-items: center;
+  justify-content: center;
 	font-size: 50px;
 	color: var(--font-blue);
-	margin-top: -60px;
+	right: 0;
 	width: 252px;
+}
+.task__take__container > .fill-explanation-icon-text{
+  width: 100%;
+  margin-left: -6px;
+  white-space: pre-wrap;
+	animation: fade-in 0.3s;
+}
+.task__take__container > .question__property {
+  width: 100%;
+	animation: fade-in 0.3s;
+
+}
+.timer_label {
+  display: flex;
+  width: 202px;
+  align-items: center;
 }
 
 .question__timer > .icon {
+  position: absolute;
 	width: 45px;
 	height: 45px;
 	margin-right: 15px;
+  left: -30px;
 }
 
-@media (max-width: 768px) {
-	.question__timer > .icon {
-		width: 35px; /* Adjust the value as needed */
-		margin-right: 10px; /* Adjust the value as needed */
-	}
-}
-
-@media (max-width: 480px) {
-	.question__timer > .icon {
-		width: 25px; /* Adjust the value as needed */
-		margin-right: 5px; /* Adjust the value as needed */
-	}
-}
-
-@media (max-width: 768px) {
-	.question__timer {
-		width: 190px;
-		font-size: 30px;
-	}
-}
-
-@media (max-width: 480px) {
-	.question__timer {
-		width: 100px;
-		font-size: 20px;
-	}
-}
 
 .icon > svg {
 	width: 100%;
 	height: 100%;
 }
 
+
 .block-space-center {
 	position: absolute;
 	margin-top: 8%;
 	left: 50%;
 	transform: translateX(-50%);
+	animation: fade-in 0.3s;
+
 }
 
 .task__take__container {
@@ -124,48 +121,30 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+  animation: fade-in .2;
 }
 
 .task__take__container > .question {
 	display: flex;
-	text-align: center;
-	align-items: center;
-	justify-content: center;
 	width: 100%;
 	font-size: 20px;
 	margin-bottom: 50px;
 	margin-top: 30px;
 	white-space: pre-wrap;
+  font-weight: 500;
+	animation: fade-in 0.3s;
 }
 
-/* Media Queries */
-
-@media (max-width: 1024px) {
-	.question__selection {
-		max-width: 200px;
-	}
-
-	.question__selection > .header {
-		font-size: 20px;
-	}
-
-	.question__selection > .task > button {
-		width: 30px;
-		height: 30px;
-		font-size: 16px;
-	}
-
-	.question__timer {
-		font-size: 40px;
-	}
+.qustion-icon-svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
 }
-
-/* Add more media queries as necessary for different screen sizes */
-
-
-
-
-
+.qustion-icon-svg > svg {
+  width: 100%;
+  height: 100%;
+  margin-top: 6px;
+}
 
 
 .save-answer-info-container {

@@ -640,7 +640,6 @@ const CreateQuiz = () => {
 
 		setQuiz({ ...quiz, questions: questionList });
 		adjustTextareaHeight()
-
 		// eslint-disable-next-line
 	}, [questionList]);
 

@@ -8,7 +8,6 @@
     overflow: hidden;
     height: 35px;
     padding: 4px 8px 4px 8px;
-    transition: .1s;
 }
 
 .type_btn:active, .type_btn_big:active {

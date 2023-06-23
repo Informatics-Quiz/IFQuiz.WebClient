@@ -1,32 +1,74 @@
 .select__choice {
-    display: flex;
-    align-items: center;
-    padding: 30px;
+	display: flex;
+	align-items: center;
+	padding: 30px;
+	animation: fade-in 0.3s;
+	
 }
 
 .select__choice > .grid-choice {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 10px;
-    margin-right: 50px;
-    vertical-align: top;
+	display: grid;
+	grid-template-columns: auto;
+	grid-gap: 10px;
+	margin-right: 50px;
+	vertical-align: top;
 }
 
 .select__choice > .grid-choice > button {
-    padding: 10px 10px 9px 10px;
-    min-width: 450px;
-    border-radius: 5px;
-    white-space: pre-wrap;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 20px 9px 20px;
+	min-width: 500px;
+	border-radius: 5px;
+	white-space: pre-wrap;
+}
+
+.choice-select-svg {
+	position: absolute;
+	right: -18px;
+    bottom: -8px;
+	width: 30px;
+}
+
+.choice-select-svg > svg {
+	width: 100%;
+	height: 100%;
 }
 
 .selected-choice {
-    background: var(--active-button-color);
+	background: var(--active-button-color);
 }
 
 .un-selected-choice {
-    background: var(--button-un-active-color);
+	background: var(--button-un-active-color);
 }
 
 .correct-choice {
-    background: var(--success-button-color);
+	background: var(--success-button-color);
+	color: white;
+	font-weight: 500;
+	text-shadow: 2px 1px 3px rgba(0,0,0,1);
+	animation: pop-infinite 0.5s infinite alternate;
+}
+
+.un-correct-choice {
+	background: var(--error-button-color);
+}
+
+.border-selected-choice {
+	/* Define your styles for the border-selected-choice class */
+	/* For example: */
+	border: 3px solid rgb(255, 255, 255);
+	padding: 10px;
+}
+
+@keyframes pop-infinite {
+	0% {
+		opacity: 0.95;
+	}
+	100% {
+		opacity: 1;
+	}
 }
