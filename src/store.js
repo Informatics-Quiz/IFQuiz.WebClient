@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './reducers/user'
 import takeReducer from './reducers/take'
+import revealReducer from './reducers/reveal'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
 
@@ -12,6 +13,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
 	user: userReducer,
 	take: takeReducer,
+	reveal: revealReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

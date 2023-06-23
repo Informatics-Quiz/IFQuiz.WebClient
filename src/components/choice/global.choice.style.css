@@ -26,3 +26,7 @@
 .un-selected-choice {
     background: var(--button-un-active-color);
 }
+
+.correct-choice {
+    background: var(--success-button-color);
+}

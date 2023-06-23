@@ -11,17 +11,19 @@ import { useSelector } from "react-redux";
 import { getTimerLabel } from "../../../utils/functions/timer";
 import { anonymousFullName, onErrorQuizImageUrl, svgMap } from "../../../config/constraints";
 import { useDebugValue } from "react";
+import { setReveal } from "../../../reducers/reveal";
 
 export default function Score() {
 	const user = useSelector((state) => state.user.authUser);
-
+	const reveal = useSelector((state) => state.reveal)
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const { revealId } = useParams();
 	const [quiz, setQuiz] = useState(null);
 	const [timerLabel, setTimerLabel] = useState(null);
 
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+
 
 	async function setImageCoverQuiz(quiz) {
 		let initializedQuiz = quiz;
@@ -81,6 +83,7 @@ export default function Score() {
 
 	};
 	const [taskTotalDone, setTaskTotalDone] = useState(0)
+	const [totalQuizPoints, setTotalQuizPoints] = useState(0)
 
 	useEffect(() => {
 		if (quiz?.answers) {
@@ -100,6 +103,13 @@ export default function Score() {
 					setTaskTotalDone(current => current + 1)
 					continue
 				}
+			}
+		}
+
+		if(quiz?.questions){
+			setTotalQuizPoints(current => 0)
+			for(const question of quiz?.questions){
+				setTotalQuizPoints(current => current + question?.points)
 			}
 		}
 	}, [quiz?.answers])
@@ -131,10 +141,10 @@ export default function Score() {
 
 	const [dateDone, setDateDone] = useState(null)
 
-	useEffect(()=> {
+	useEffect(() => {
 
 		function getDateDone() {
-			if(!quiz)return
+			if (!quiz) return
 			const dateTime = new Date(quiz.copyof.expiredAt);
 			const formattedDateTime = dateTime.toLocaleString('en-US', {
 				day: '2-digit',
@@ -148,7 +158,16 @@ export default function Score() {
 
 		return () => getDateDone()
 	})
-	
+
+
+	function navigteToReveal(quiz, answers){
+		dispatch(setReveal({
+			quiz: quiz,
+			answers: answers,
+			selectedId: 0
+		}))
+		navigate(`/quiz/reveal`)
+	}
 
 
 
@@ -181,7 +200,7 @@ export default function Score() {
 								</p>
 								<p className="total__task">
 									{svgMap.task_done}
-									{taskTotalDone}/{quiz.copyof.questions.length} Tasks
+									{taskTotalDone} of {quiz.copyof.questions.length} Tasks
 								</p>
 								{quiz.copyof.hideCorrectAnswer ? (
 									<p className="hide__show__correct__answer">
@@ -201,41 +220,38 @@ export default function Score() {
 							</div>
 						</div>
 					</div>
-					{quiz.copyof.hideCorrectAnswer ? (
-
-						<button
-							className="take__quiz__button"
-							disabled={true}
-							onClick={() => navigateToTakeQuiz(quiz.copyof._id)}
-						>
+					<div className="score__result">
+						<div className="score__svg">
 							{svgMap.points}
-							{`${quiz?.score} Scores`}
-						</button>
-
-					) : (
-						<button
-							className="take__quiz__button"
-							disabled={true}
-							onClick={() => navigateToTakeQuiz(quiz.copyof._id)}
-						>
-							{svgMap.show}
-							Reveal Quiz
-						</button>
-					)}
-
-					<div className="timer__detail__container">
-						{quiz.copyof.hideCorrectAnswer ? (
-							<p>
-								This quiz is not show correct answers.
-								You can see the correct answers by asking the quiz owner. 
-							</p>
-						) : (
-							<p>
-								This quiz provides accurate answers, so you have to wait until
-								the quiz duration is finished to see the correct answers.
-							</p>
-						)}
+						</div>
+						<div className="score__description">
+							{`${quiz?.score} of ${totalQuizPoints} Points`}
+						</div>
 					</div>
+
+					<div className="bottom__it">
+						<div className="footer_detail_container">
+							{!quiz.copyof.hideCorrectAnswer ? (
+								<button
+									className="reveal__quiz__button"
+									onClick={() => navigteToReveal(quiz?.copyof, quiz?.answers)}
+								>
+									{svgMap.show}
+									Reveal Quiz
+								</button>
+							):null}
+							{quiz.copyof.hideCorrectAnswer ? (
+								<div className="footer__socre">
+									This quiz is not show correct answer <div className="footer__score__focus">{svgMap.hide} if you want to see ask quiz owned.</div>
+								</div>
+							) : (
+								<div className="footer__socre">
+									This quiz provides accurate answers, you can see the correct answers click on the <div className="footer__score__focus">{svgMap.show} Reveal Quiz</div>
+								</div>
+							)}
+						</div>
+					</div>
+
 				</div>
 			) : null}
 		</>

@@ -1,4 +1,21 @@
-.question__selection > .task > button {
+.question__reveal__selection{
+    display: flex;
+}
+.question__reveal__selection > .task {
+	margin-top: 10px;
+    display: grid;
+	grid-template-columns: auto auto auto auto auto;
+	grid-gap: 10px;
+}
+
+.question__reveal__selection > .task > button {
+	width: 40px;
+	height: 40px;
+	font-size: 20px;
+	border-radius: 3px;
+}
+
+.question__reveal__selection > .task > button {
     width: 40px;
     height: 40px;
     font-size: 20px;

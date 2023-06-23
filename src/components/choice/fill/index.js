@@ -1,11 +1,5 @@
 import "../global.choice.style.css";
 
-import { svgMap } from "../../../config/constraints";
-import { useRef } from "react";
-import { useState } from "react";
-import { current } from "@reduxjs/toolkit";
-import { useEffect } from "react";
-
 export default function FillChoice({
     index,
     handlerFillChoice,
@@ -26,15 +20,17 @@ export default function FillChoice({
                 type="text"
                 onInput={adjustTextareaHeight}
                 value={value}
+                disabled={!handlerFillChoice && !handlerFillChoice}
                 onChange={(e)=> {
+                    if(!handlerFillChoice)return
                     handlerFillChoice(e.target.value)
                 }}
                 onAbort={()=>{
-                    console.log('my bad mrfk')
+                    if(!handlerUpdate)return
                     handlerUpdate()
                 }}
                 id={`answer-text-area-${index}`}
-                placeholder="Answer here... "
+                placeholder={handlerFillChoice && handlerFillChoice && "Answer here... "}
             ></textarea>
         </div>
     );

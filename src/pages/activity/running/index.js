@@ -60,6 +60,7 @@ const Running = () => {
 		try {
 			const response = await getQuizRunning(user.token)
 			const initializedQuiz = await setImageCoverQuizzes(response.data)
+			initializedQuiz.reverse()
 			setQuizzesRunning(initializedQuiz);
 		} catch (e) {
 			showNotify("error", "Something went wrong?", e.response.data.message, () => {

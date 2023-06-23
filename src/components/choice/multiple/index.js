@@ -1,6 +1,7 @@
 
 import '../global.choice.style.css'
-export default function MultipleChoice({ choices, selectedIds, handlerMultipleChoice }) {
+export default function MultipleChoice({ showCorrectAnswer, choices, selectedIds, handlerMultipleChoice }) {
+
     return (
         <div className="select__choice">
 
@@ -12,10 +13,12 @@ export default function MultipleChoice({ choices, selectedIds, handlerMultipleCh
                         return conditionLeft ? (
                             <button
                                 key={index}
-                                className={isSelected ? "selected-choice" : "un-selected-choice"}
+                                className={(showCorrectAnswer && choice.checked) ? 'correct-choice' : isSelected ? "selected-choice" : "un-selected-choice"}
                                 onClick={isSelected ? ()=> {
+                                    if(!handlerMultipleChoice)return
                                     handlerMultipleChoice('unselect', index)
                                 } : ()=> {
+                                    if(!handlerMultipleChoice)return
                                     handlerMultipleChoice('select', index)
                                 }}
                             >
@@ -33,10 +36,12 @@ export default function MultipleChoice({ choices, selectedIds, handlerMultipleCh
                         return conditionLeft ? (
                             <button
                                 key={index}
-                                className={isSelected ? "selected-choice" : "un-selected-choice"}
+                                className={(showCorrectAnswer && choice.checked) ? 'correct-choice' : isSelected ? "selected-choice" : "un-selected-choice"}
                                 onClick={isSelected ? ()=> {
+                                    if(!handlerMultipleChoice)return
                                     handlerMultipleChoice('unselect', index)
                                 } : ()=> {
+                                    if(!handlerMultipleChoice)return
                                     handlerMultipleChoice('select', index)
                                 }}
                             >

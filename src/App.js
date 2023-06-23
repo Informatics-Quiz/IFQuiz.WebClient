@@ -35,7 +35,6 @@ function App() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/login/email" element={<LoginEmail />} />
-				<Route path="RevealQuiz" element={<RevealQuiz />} />
 				<Route path="/activity" element={<ActivitySelection/>} />
 				<Route path="/activity/created" element={<Created/>} />
 				<Route path="/activity/running" element={<Running/>} />
@@ -44,6 +43,7 @@ function App() {
 				<Route path="/user/edit" element={isAuthenticated ? <EditUserProfile /> : <Navigate to="/login" />} />
 				<Route path="/quiz/find" element={<FindQuiz />} />
 				<Route path="/quiz/create" element={<CreateQuiz />} />
+				<Route path="/quiz/reveal" element={<RevealQuiz />} />
 				<Route path="/quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
 				<Route path="/quiz/edit/:id" element={isAuthenticated ? <EditQuiz /> : <Navigate to="/login" />} />
 				<Route path="/quiz/take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />

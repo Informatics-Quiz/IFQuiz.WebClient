@@ -48,13 +48,22 @@ const Completed = () => {
 				const res = await getQuizCoverImage(quiz.copyof.imageUrl)
 				quiz.copyof.imageUrl = getImageFromResponse(res)
 			}
+			// initialized score
+			quiz.totalScore = 0
+			for (let question of quiz?.copyof?.questions) {
+				quiz.totalScore += question.points
+			}
 		}
+
+
+		
 		return initializedQuiz
 	}
 
 	async function onGetQuizzes() {
 		const response = await getCompletedQuizzes(user.token)
 		const initializedQuiz = await setImageCoverQuizzes(response.data)
+		initializedQuiz.reverse()
 		setQuizzesCompleted(initializedQuiz);
 	}
 
@@ -150,6 +159,7 @@ const Completed = () => {
 						svg={"true"}
 						label={"Completed"}
 					/>
+					
 					{quizzesCompleted.map((quiz, index) => {
 						return <QuizCard
 							takeQuizHandler={()=>{
@@ -157,6 +167,7 @@ const Completed = () => {
 							}}
 							key={quiz.copyof.name + index}
 							score={quiz.score}
+							totalQuizScore={quiz.totalScore}
 							index={index}
 							quiz={quiz.copyof}
 							userAnswers={quiz.answers}

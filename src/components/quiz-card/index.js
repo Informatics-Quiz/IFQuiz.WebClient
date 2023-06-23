@@ -10,6 +10,7 @@ export default function QuizCard({
 	score,
 	quiz,
 	editHandler,
+	totalQuizScore,
 	userAnswers,
 	deleteQuizHandler,
 	deployHandler,
@@ -20,7 +21,8 @@ export default function QuizCard({
 
 
 	function getDurationLabel() {
-		if (score) {
+
+		if (score !== undefined && score !== null) {
 			const dateTime = new Date(quiz.expiredAt);
 			const formattedDateTime = dateTime.toLocaleString('en-US', {
 				day: '2-digit',
@@ -109,13 +111,13 @@ export default function QuizCard({
 					</div>
 					<div className="total__task">
 						{userAnswers ? svgMap.task_done : svgMap.task}
-						{userAnswers ? `${taskTotalDone}/` : null}{(quiz.questions.length)} Tasks
+						{userAnswers ? `${taskTotalDone} of ` : null}{(quiz.questions.length)} Tasks
 
 					</div>
-					{score ? (
+					{(score !== null && score !== undefined) ? (
 						<div className="join__code">
 							{svgMap.points}
-							{score} Scores
+							{`${score} of ${totalQuizScore}`} Points
 						</div>
 					) : quiz.codeJoin ? (
 						<div className="join__code">
@@ -134,7 +136,7 @@ export default function QuizCard({
 							Show Correct Answers
 						</div>
 					)}
-					{score ? (<div className="timer__info">
+					{(score !== null && score !== undefined) ? (<div className="timer__info">
 						{svgMap.date}
 						{timerLabel}
 					</div>) : (

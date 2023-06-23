@@ -59,6 +59,8 @@ const Created = () => {
 	async function onGetQuizzes() {
 		const response = await getOwnedQuiz(user.token)
 		const initializedQuiz = await setImageCoverQuizzes(response.data)
+		initializedQuiz.reverse()
+
 		setQuizzesCreated(initializedQuiz);
 	}
 	useEffect(() => {

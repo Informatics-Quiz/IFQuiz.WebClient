@@ -50,6 +50,19 @@ export const anonymousFullName = "Anonymous User";
 export const anonymousQuizName = "Anonymous Quiz";
 export const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+export const choiceTypeMap = {
+    'single-choice': "Single Choice",
+    'multiple-choice': "Multiple Choice",
+    'fill-choice': "Fill Choice",
+}
+
+export const choiceTypeEnum = {
+    SINGLE_CHOICE: "single-choice",
+    MULTIPLE_CHOICE: "multiple-choice",
+    FILL_CHOICE: "fill-choice",
+}
+
+
 export const svgMap = {
     home: <HomeSvg />,
     book: <BookSvg />,
