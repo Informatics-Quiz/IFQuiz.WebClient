@@ -121,7 +121,7 @@ export default function TakeQuiz() {
 				quizId: quiz.copyof._id,
 				answers: quiz.answers
 			})
-			if (res?.quiz) {
+			if (res?.answers) {
 				console.log('updated')
 				isUpdating.current = false
 			}
