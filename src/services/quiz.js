@@ -9,6 +9,15 @@ export async function uploadQuiz(token, requestBody) {
 	return res
 }
 
+export async function updateQuiz(token, quiz, quizId){
+	const res = await client.put(`/quizzes/${quizId}`, quiz, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})
+	return res
+}
+
 export async function deployQuiz(quizId, token){
 	const res = await client.post('/quizzes/deploy',{
 		quizId: quizId

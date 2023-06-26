@@ -3,7 +3,7 @@ import '../global.style.css'
 import { ReactComponent as DeleteSvg } from "../../../assets/svg/delete.svg";
 
 import React, { useState, useEffect } from "react";
-import { getQuestionImage, getQuizCoverImage, uploadQuiz } from "../../../services/quiz";
+import { getQuestionImage, getQuizCoverImage, updateQuiz } from "../../../services/quiz";
 import { uploadQuestionImage, uploadQuizCoverImage } from "../../../services/upload";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -449,8 +449,8 @@ const EditQuiz = () => {
 		saveQuiz.questions = quiz.questions;
 
 		try {
-			const res = await uploadQuiz(user.token, saveQuiz);
-			if (res.status === 201) {
+			const res = await updateQuiz(user.token, saveQuiz, saveQuiz._id);
+			if (res.status === 200) {
 				setQuiz(res.data);
 				if (!quizImageFile) {
 					showNotify("success", "Success", "Quiz saved successfully.", () => {
@@ -599,6 +599,7 @@ const EditQuiz = () => {
 		try {
 
 			const res = await uploadQuestionImage(user.token, formData);
+			console.log(res)
 			if (res.status === 201) {
 				const newQuestion = [...questionList];
 				if (!newQuestion[res.data.questionId].explanation.imageUrl) {
