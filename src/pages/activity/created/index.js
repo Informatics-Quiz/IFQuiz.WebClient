@@ -17,6 +17,7 @@ import { onErrorProfileImageUrl, onErrorQuizImageUrl } from "../../../config/con
 import BottomButton from "../../../components/button/bottom";
 import { getImageFromResponse } from "../../../utils/functions/image.blob";
 import ModalConfirmDeleteImage from "../../../components/modals/confirm-delete-image";
+import DatePicker from "../../../components/date.picker";
 
 const Created = () => {
 
@@ -111,7 +112,13 @@ const Created = () => {
 		navigate('/quiz/edit/' + quizId)
 	}
 
+
+	const [deployDateTime, setDeployDateTime] = useState({
+		show: true,
+		deployAt: null
+	})
 	async function deployHandler(quiz) {
+		
 		const quizId = quiz._id
 		if (!quizId) {
 			showNotify("not_found", "Something went wrong?", "Quiz not found!")
@@ -180,6 +187,10 @@ const Created = () => {
 				handleClose={closeNotify}
 				message={notify.message}
 				cb={notify.cb}
+			/>
+			<DatePicker
+				show={deployDateTime.show}
+				setHandler={setDeployDateTime}
 			/>
 			<ModalConfirmDeleteImage
 				index={modalConfirmDeleteImage.index}
