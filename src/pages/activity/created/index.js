@@ -18,6 +18,7 @@ import BottomButton from "../../../components/button/bottom";
 import { getImageFromResponse } from "../../../utils/functions/image.blob";
 import ModalConfirmDeleteImage from "../../../components/modals/confirm-delete-image";
 import DatePicker from "../../../components/date.picker";
+import { current } from "@reduxjs/toolkit";
 
 const Created = () => {
 
@@ -114,21 +115,38 @@ const Created = () => {
 
 
 	const [deployDateTime, setDeployDateTime] = useState({
-		show: true,
-		deployAt: null
+		show: false,
+		quizId: null,
 	})
-	async function deployHandler(quiz) {
-		
+	async function setDeployDateTimeHandler(quiz) {
 		const quizId = quiz._id
-		if (!quizId) {
-			showNotify("not_found", "Something went wrong?", "Quiz not found!")
+		setDeployDateTime(current => {
+			return {...current, show: true, quizId: quizId}
+		})
+	}
+	async function deployHandler(deployData) {
+
+		const { quizId, date, time } = deployData
+		const dateObj = new Date(date);
+		const timeArr = time.split(":");
+		dateObj.setHours(parseInt(timeArr[0], 10), parseInt(timeArr[1], 10));
+		
+		const reqeustDeployData = {
+			quizId: quizId,
+			deployAt: dateObj
+		}
+
+		if (!reqeustDeployData.quizId || !reqeustDeployData.deployAt) {
+			showNotify("not_found", "Something went wrong?", "Data not found or invalid!")
 			return
 		}
+
 		try {
-			const response = await deployQuiz(quizId, user.token)
-			showNotify("true", "Deployed!", "Your quiz is now available for everyone to play!", () => {
-				navigate('/quiz/' + response.data._id)
+			const response = await deployQuiz(reqeustDeployData, user.token)
+			setDeployDateTime(current => {
+				return {...current, show: false, quizId: null}
 			})
+			showNotify("true", "Deployed!", "Your quiz is scheduled for deploy")
 
 		} catch (error) {
 			showNotify("not_found", "Something went wrong?", error.response.data.message)
@@ -190,7 +208,10 @@ const Created = () => {
 			/>
 			<DatePicker
 				show={deployDateTime.show}
+				quizId={deployDateTime.quizId}
+				showNotify={showNotify}
 				setHandler={setDeployDateTime}
+				deployHandler={deployHandler}
 			/>
 			<ModalConfirmDeleteImage
 				index={modalConfirmDeleteImage.index}
@@ -244,7 +265,7 @@ const Created = () => {
 							index={index}
 							quiz={quiz}
 							editHandler={editHandler}
-							deployHandler={deployHandler}
+							deployHandler={setDeployDateTimeHandler}
 							deleteQuizHandler={() => handlerShowModelConfirmDeleteImage(quiz)}
 						/>
 					})}

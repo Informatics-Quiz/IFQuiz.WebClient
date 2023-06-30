@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeployedQuizById, getQuizCoverImage, takeQuiz } from "../../../services/quiz";
 import { useDispatch } from "react-redux";
@@ -13,7 +13,6 @@ import { anonymousFullName, onErrorQuizImageUrl, svgMap } from "../../../config/
 
 export default function Quiz() {
 	const user = useSelector((state) => state.user.authUser);
-
 
 	const { id } = useParams();
 	const [quiz, setQuiz] = useState(null);

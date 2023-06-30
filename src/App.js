@@ -26,7 +26,6 @@ import Score from './pages/quiz/score'
 
 function App() {
 	const isAuthenticated = useSelector((state) => state.user.authUser) === null ? false : true
-
 	return (
 		<div className="App">
 			<Routes>

@@ -4,9 +4,6 @@
     flex-direction: column;
     z-index: 999;
     display: flex;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     justify-content: center;
     align-items: center;
     transition: .26s;
@@ -14,10 +11,10 @@
     height: 100%;
     background: var(--blur-background-color);
 	backdrop-filter: blur(var(--blur-background-pixel));
-    animation: slide-top-no-transform .3s;
+    animation: fade-in .3s;
 }
 .bg-focus p {
-    margin-top: 30px;
+    margin-top: 30%;
     font-size: 32px;
     color: white;
     opacity: 0;
@@ -29,8 +26,39 @@
 }
 
 .date-picker-container {
-    background: red;
-    width: 300px;
-    height: 300px;
+    position: fixed;
     z-index: 1000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: slide-top-no-transform .3s;
+    border-radius: 5px;
+}
+
+.date-confirm-content {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+.date-period-content {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 20px;
+}
+.margin-right-8px {
+    margin-right: 8px;
+}
+
+.picker-button {
+    transition: .3s;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.active-button {
+    background: var(--active-button-color);
+}
+
+.unactive-button {
+    background: var(--button-un-active-color);
 }

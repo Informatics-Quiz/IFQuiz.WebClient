@@ -184,6 +184,43 @@
 	animation-iteration-count: infinite;
 }
 
+.register__container input[type="date"] {
+    padding: 19px;
+    font-size: 16px;
+    border: 1px solid var(--field-input-border-color);
+    outline: none;
+    border-radius: 5px;
+}
+
+.input__with__label {
+    margin: 0;
+    padding: 0;
+}
+.input__with__label p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1vw;
+}
+
+input[type="date"] {
+	height: 18%;
+    padding: 19px;
+    font-size: 16px;
+    border: 1px solid var(--field-input-border-color);
+    outline: none;
+    border-radius: 5px;
+	color: black;
+}
+input[type="time"] {
+	height: 18%;
+    padding: 19px;
+    font-size: 16px;
+    border: 1px solid var(--field-input-border-color);
+    outline: none;
+    border-radius: 5px;
+	color: black;
+}
+
 /*  LOADING SCREEN */
 .loading-container {
 	position: absolute;

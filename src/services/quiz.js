@@ -18,15 +18,12 @@ export async function updateQuiz(token, quiz, quizId){
 	return res
 }
 
-export async function deployQuiz(quizId, token){
-	const res = await client.post('/quizzes/deploy',{
-		quizId: quizId
-	}, {
+export async function deployQuiz(deployData, token){
+	const res = await client.post('/quizzes/deploy', deployData, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		}
 	})
-
 	return res
 }
 

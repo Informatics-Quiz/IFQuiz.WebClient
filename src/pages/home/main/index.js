@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,7 @@ import Navbar from "../../../components/navbar";
 import Notify from "../../../components/notify";
 import QuizCard from "../../../components/quiz-card";
 import { onErrorProfileImageUrl } from "../../../config/constraints";
+import { current } from "@reduxjs/toolkit";
 
 const Home = () => {
 
@@ -54,7 +55,7 @@ const Home = () => {
 	async function onGetQuizzes() {
 		const response = await getDeployedQuizzes(user.token)
 		const initializedQuiz = await setImageCoverQuizzes(response.data)
-		setQuizzes(initializedQuiz);
+		setQuizzes(current => initializedQuiz);
 	}
 
 	useEffect(() => {
@@ -140,6 +141,7 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
+		
 				<div className="quizzes__container">
 					{quizzes.map((quiz, index) => {
 						return <QuizCard
@@ -154,6 +156,7 @@ const Home = () => {
 						/>
 					})}
 				</div>
+
 			</div>
 		</>
 	);
