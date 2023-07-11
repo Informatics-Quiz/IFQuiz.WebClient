@@ -14,6 +14,7 @@ import Notify from "../../../components/notify";
 import QuizCard from "../../../components/quiz-card";
 import { onErrorProfileImageUrl } from "../../../config/constraints";
 import { current } from "@reduxjs/toolkit";
+import { ActivityHeader } from "../../../components/activity-header";
 
 const Home = () => {
 
@@ -141,8 +142,11 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-		
 				<div className="quizzes__container">
+					<ActivityHeader
+						svg={"logo"}
+						label={"Openning"}
+					/>
 					{quizzes.map((quiz, index) => {
 						return <QuizCard
 							key={index}
