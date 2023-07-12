@@ -106,6 +106,16 @@ const Deployed = () => {
 		navigate(`/score/${quizId}`)
 	}
 
+
+	function gotoSummarizedQuiz(quiz){
+		if(quiz._id === undefined || quiz.success === false){
+			showNotify("error", "Error", "This quiz is still running", null)
+			return
+		}
+		console.log(quiz._id)
+		// navigate(`/summarized/${quizId}`)
+	}
+
 	return (
 		<>
 			<Notify
@@ -160,6 +170,7 @@ const Deployed = () => {
 						return <DeployedQuizCard
 							index={index}
 							quiz={quiz}
+							gotoSummarizedHandler= {gotoSummarizedQuiz}
 						/>
 					})}
 				</div>

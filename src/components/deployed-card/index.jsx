@@ -6,6 +6,7 @@ import { anonymousFullName, onErrorQuizImageUrl, svgMap } from "../../config/con
 
 export default function DeployedQuizCard({
 	index,
+	gotoSummarizedHandler, 
 	quiz
 }) {
 
@@ -31,7 +32,7 @@ export default function DeployedQuizCard({
 	return (
 		<div
 			className="quiz__card"
-			onClick={() => { }}
+			onClick={() => { gotoSummarizedHandler(quiz)}}
 		>
 			<div className="quiz__image">
 				<img src={quiz.imageUrl || onErrorQuizImageUrl} alt="quiz-image"></img>
@@ -55,6 +56,10 @@ export default function DeployedQuizCard({
 					<div className="join__code">
 						{svgMap.points}
 						{quiz.points} Points
+					</div>
+					<div className="join_code">
+						{quiz.success ? svgMap.summarized : svgMap.red_circle} 
+						{quiz.success ? "Summarized" : "Running"}
 					</div>
 				</div>
 			</div>

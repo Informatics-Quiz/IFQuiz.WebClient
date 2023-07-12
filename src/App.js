@@ -23,6 +23,7 @@ import Completed from "./pages/activity/completed"
 import EditQuiz from "./pages/quiz/edit"
 import Score from './pages/quiz/score'
 import Deployed from './pages/activity/deployed/index.jsx'
+import Summary from './pages/quiz/summary/summary'
 
 
 function App() {
@@ -48,7 +49,9 @@ function App() {
 				<Route path="/quiz/:id" element={isAuthenticated ? <Quiz /> : <Navigate to="/login" />} />
 				<Route path="/quiz/edit/:id" element={isAuthenticated ? <EditQuiz /> : <Navigate to="/login" />} />
 				<Route path="/quiz/take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />
-				<Route path="/score/:revealId" element={isAuthenticated ? <Score /> : <Navigate to="/login" />} />
+				<Route path="/score/:revealId" element={isAuthenticated ? <Score /> : <Navigate to="/login" />} />4
+				<Route path="/summarized" element={<Summary/>} />
+				
 			</Routes>
 		</div>
 	)
