@@ -3,7 +3,6 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import { getTimerLabel } from "../../utils/functions/timer";
 import { anonymousFullName, onErrorQuizImageUrl, svgMap } from "../../config/constraints";
-import { current } from "@reduxjs/toolkit";
 
 export default function QuizCard({
 	index,

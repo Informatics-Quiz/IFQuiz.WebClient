@@ -47,6 +47,9 @@ import { ReactComponent as RedBoxSvg } from '../assets/svg/red_box.svg';
 import { ReactComponent as GreenCircle } from '../assets/svg/green_circle.svg';
 import { ReactComponent as RedCircle } from '../assets/svg/red_circle.svg';
 import { ReactComponent as SelectedIconSvg } from '../assets/svg/selected_icon.svg';
+import { ReactComponent as Summarized } from "../assets/svg/summarized.svg"; 
+import { ReactComponent as Deployed } from "../assets/svg/deployed.svg";
+import { ReactComponent as Participants } from "../assets/svg/participants.svg";
 
 
 export const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
@@ -127,5 +130,8 @@ export const svgMap = {
     red_box: <RedBoxSvg/>,
     green_circle: <GreenCircle/>,
     red_circle: <RedCircle/>,
-    selected_icon: <SelectedIconSvg/>
+    selected_icon: <SelectedIconSvg/>,
+    summarized: <Summarized/>,
+    deployed: <Deployed/>,
+    participants: <Participants/>
 }

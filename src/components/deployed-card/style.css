@@ -1,0 +1,125 @@
+.first__card {
+	display: flex;
+	background: var(--card-bg);
+	border-radius: 5px;
+	margin-right: 2vw;
+	height: 195px;
+	width: 70vw;
+	margin-top: 0;
+	transition: .26s;
+}
+
+.quiz__card {
+	display: flex;
+	background: var(--card-bg);
+	border-radius: 5px;
+	margin-right: 2vw;
+	height: 195px;
+	width: 70vw;
+	margin-top: 20px;
+	transition: .26s;
+}
+
+
+.quiz__image {
+	margin-right: 1vw;
+}
+.quiz__image img {
+	height: 195px;
+	width: 298px;
+	object-fit: cover;
+	border-radius: 5px;
+}
+
+.quiz__info {
+	margin-top: 9px;
+}
+
+.quiz__info p {
+	margin:0;
+	padding: 0;
+}
+
+.quiz__title {
+	font-weight: bold;
+	font-size: 24px;
+	width: 970px;
+	padding-bottom: 10px;
+	white-space: nowrap; 
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.quiz__description {
+	font-size: 0.75vw;
+	height: 102px;
+	width: 800px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+
+.quiz__deep__info {
+	position: relative;
+	display: flex;
+	margin-top: 18px;
+}
+
+
+.quiz__deep__info div {
+	display: flex;
+	justify-content: center;
+	margin-right: 15px;
+	align-items: center;
+}
+
+.quiz__deep__info div svg {
+	width: 18px;
+	height: 18px;
+	margin-right: 5px;
+}
+
+
+
+
+.quiz__card:hover, .first__card:hover {
+    transform: scale(1.01);
+}
+
+.quiz__card:active, .first__card:active {
+    opacity: 0.4;
+    transform: scale(0.99);
+}
+
+
+.action__button {
+	position: absolute;
+	right: 0;
+	bottom: 3px;
+}
+
+
+
+.action__button__delete {
+	background: var(--error-button-color);
+	border-radius: 5px;
+	font-size: 15px;
+	padding: 4px 20px 4px 20px;
+	margin-left: 9px;
+}
+
+.action__button__edit {
+	background: var(--active-button-color);
+	border-radius: 5px;
+	font-size: 15px;
+	padding: 4px 20px 4px 20px;
+	margin-left: 9px;
+}
+
+.action__button__deploy {
+	background: var(--success-button-color);
+	border-radius: 5px;
+	font-size: 15px;
+	padding: 4px 20px 4px 20px;
+	margin-left: 9px;
+}

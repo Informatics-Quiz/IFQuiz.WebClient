@@ -56,6 +56,15 @@ export async function getDeployedQuizzes(token) {
 	return res
 }
 
+export async function getSummarizedQuizzes(token){
+	const res = await client.get('/quizzes/summarized', {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		} 
+	})
+	return res
+}
+
 export async function getQuizById(id) {
 	const res = await client.get(`/quizzes/${id}`)
 	return res

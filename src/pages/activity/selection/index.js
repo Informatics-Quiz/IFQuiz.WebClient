@@ -40,6 +40,10 @@ const ActivitySelection = () => {
                     {svgMap.true}
                     <div className="label">Completed</div>
                 </div>
+                <div className="item" onClick={() => { navigate("deployed") }}>
+                    {svgMap.deployed}
+                    <div className="label">Deployed</div>
+                </div>
             </div>
         </div>
     </>
