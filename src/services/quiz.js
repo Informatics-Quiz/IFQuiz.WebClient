@@ -143,6 +143,17 @@ export async function getQuizRunning(token){
 	return res
 }
 
+export async function getSummarizedQuiz(id, token){
+
+	const res = await client.get(`quizzes/summarized/quiz/${id}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+
+	return res
+}
+
 
 export async function getQuizCoverImage(imageUrl){
 	const res = await client.get(`/file/get/quiz-cover-image?imageUrl=${imageUrl}`, {

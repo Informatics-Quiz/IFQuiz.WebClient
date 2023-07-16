@@ -50,6 +50,7 @@ import { ReactComponent as SelectedIconSvg } from '../assets/svg/selected_icon.s
 import { ReactComponent as Summarized } from "../assets/svg/summarized.svg"; 
 import { ReactComponent as Deployed } from "../assets/svg/deployed.svg";
 import { ReactComponent as Participants } from "../assets/svg/participants.svg";
+import { ReactComponent as SortArrow } from "../assets/svg/sort_arrow.svg";
 
 
 export const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
@@ -133,5 +134,6 @@ export const svgMap = {
     selected_icon: <SelectedIconSvg/>,
     summarized: <Summarized/>,
     deployed: <Deployed/>,
-    participants: <Participants/>
+    participants: <Participants/>,
+    sortArrow: <SortArrow/>
 }

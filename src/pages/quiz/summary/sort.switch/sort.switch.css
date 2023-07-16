@@ -1,0 +1,25 @@
+.sort__switch {
+	cursor: pointer;
+    display: flex;
+	justify-content: end;
+	right: 0;
+	top: 0;
+	transition: .3s;
+    align-items: center;
+}
+.sort__switch:active {
+	opacity: .1;
+}
+.sort__type {
+	margin-right: 0.2rem;
+	color: #C8C8C8;
+	font-size: 0.875rem;
+}
+.sort__svg {
+	width: 0.875rem;
+	height: 0.875rem;
+}
+.sort__svg > svg {
+	width: 100%;
+    margin-top: 0.05rem;
+}

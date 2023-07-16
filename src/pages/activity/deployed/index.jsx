@@ -51,15 +51,12 @@ const Deployed = () => {
 			}
 		}
 
-
-		
 		return initializedQuiz
 	}
 
 	async function onGetQuizzes() {
 		const response = await getSummarizedQuizzes(user.token)
 		const initializedQuiz = await setImageCoverQuizzes(response.data)
-		initializedQuiz.reverse()
 		setQuizzesCompleted(initializedQuiz);
 	}
 
@@ -109,11 +106,10 @@ const Deployed = () => {
 
 	function gotoSummarizedQuiz(quiz){
 		if(quiz._id === undefined || quiz.success === false){
-			showNotify("error", "Error", "This quiz is still running", null)
+			showNotify("thinking", "Something went wrong.", "This quiz is still running", null)
 			return
 		}
-		console.log(quiz._id)
-		// navigate(`/summarized/${quizId}`)
+		navigate(`/summarized/${quiz._id}`)
 	}
 
 	return (

@@ -50,8 +50,7 @@ function App() {
 				<Route path="/quiz/edit/:id" element={isAuthenticated ? <EditQuiz /> : <Navigate to="/login" />} />
 				<Route path="/quiz/take" element={isAuthenticated ? <TakeQuiz /> : <Navigate to="/login" />} />
 				<Route path="/score/:revealId" element={isAuthenticated ? <Score /> : <Navigate to="/login" />} />4
-				<Route path="/summarized" element={<Summary/>} />
-				
+				<Route path="/summarized/:id" element={isAuthenticated ? <Summary/> : <Navigate to="/login" /> } />
 			</Routes>
 		</div>
 	)
