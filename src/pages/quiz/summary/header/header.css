@@ -1,5 +1,6 @@
 .summary__header {
 	display: flex;
+    flex-direction: column;
 }
 .summary__image {
 	width: 1.875rem;

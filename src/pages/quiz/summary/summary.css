@@ -1,22 +1,27 @@
 .summarized__container {
 	padding: 1rem 2rem 1rem 2rem;
 }
+
 .summarized__header {
 	display: flex;
 	flex-direction: column;
 }
+
 .summarized__header__title {
 	font-weight: bold;
 	font-size: 2rem;
 }
+
 .summarized__header__description {
 	color: #c9d1d9;
 	font-size: 1.125rem;
 }
+
 .summarized__content {
 	margin-top: 1.81rem;
 	display: flex;
 }
+
 .participants__summary {
 	width: 45.25rem;
 	height: 59.625rem;
@@ -24,20 +29,25 @@
 	padding: 0 0.5rem 0 0.5rem;
 	border-radius: 0.3125rem;
 	background: rgba(38, 38, 38, 0.30);
+	margin: 0 0.75rem 0 0;
 }
+
 .participants__summary__instructor {
 	display: flex;
 	align-items: center;
 }
 
 .participants__summary__container {
-	position: relative;
+	display: flex;
+	flex-direction: column;
 }
+
 .participants__summary__list {
 	display: flex;
 	flex-direction: column;
 
 }
+
 .participants__summary__list__item {
 	cursor: pointer;
 	margin-bottom: 0.5rem;
@@ -48,51 +58,122 @@
 	background: #222;
 	transition: .3s;
 }
+
 .participants__summary__list__item:active {
 	opacity: .1;
 }
+
 .participants__summary__list__prof__image {
 	width: 1.125rem;
 	height: 1.125rem;
 	flex-shrink: 0;
 	margin-right: 0.3rem;
 }
-.participants__summary__list__prof__image > img {
+
+.participants__summary__list__prof__image>img {
 	object-fit: cover;
 	width: 100%;
 	height: 100%;
 	border-radius: 50%;
 }
+
 .participants__summary__list__prof__name {
 	width: 15.625rem;
 	font-size: 0.9375rem;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	background-color: red;
 	margin-right: 0.9rem;
+	background: green;
 }
+
 .participants__summary__list__other__info__grid {
 	display: flex;
 }
+
 .participants__summary__list__other__info {
 	display: flex;
 	align-items: center;
+	justify-content: start;
+	background: rebeccapurple;
 	padding-left: 0.25rem;
 	padding-right: 0.25rem;
 }
+
 .participants__summary__list__other__info__svg {
 	width: 1.125rem;
 	height: 1.12269rem;
-	flex-shrink: 0;;
+	flex-shrink: 0;
 	margin-right: 0.3rem;
 }
-.participants__summary__list__other__info__svg > svg {
+
+.participants__summary__list__other__info__svg>svg {
 	width: 100%;
 	height: 100%;
 }
+
 .participants__summary__list__other__info__description {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.summarized_second_container {
+	display: flex;
+	flex-direction: column;
+}
+
+
+.top-summarized-container {
+	border-radius: 0.3125rem;
+	background: rgba(38, 38, 38, 0.30);
+	padding: 0 0.5rem 0 0.5rem;
+}
+
+.left-summarized {
+	display: flex;
+	flex-direction: column;
+	margin-top: 1.2rem;
+}
+
+.three_item_average {
+	display: flex;
+}
+
+
+.avg_header {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.average_item {
+	margin-right: 3rem;
+}
+
+.avg_header_title {
+	color: #FFF;
+	font-size: 1.375rem;
+	font-weight: bold;
+}
+
+.avg_header_svg {
+	position: absolute;
+	width: 0.625rem;
+	height: 0.625rem;
+	top: .45rem;
+	right: -.8rem;
+}
+.avg_header_svg > svg {
+	width: 100%;
+	height: 100%;
+}
+.avg_result {
+	color: #C9D1D9;
+font-size: 2rem;
+}
+
+.crop__grid {
+	display: flex;
+	justify-content: space-evenly;
+	background: black;
 }

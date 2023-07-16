@@ -2,8 +2,7 @@
 	cursor: pointer;
     display: flex;
 	justify-content: end;
-	right: 0;
-	top: 0;
+	background: red;
 	transition: .3s;
     align-items: center;
 }

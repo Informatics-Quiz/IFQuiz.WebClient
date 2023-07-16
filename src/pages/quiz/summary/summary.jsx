@@ -11,14 +11,14 @@ import SortSwtich from "./sort.switch/sort.swtich";
 import { svgMap } from "../../../config/constraints";
 
 export default function Summary() {
-	const user = useSelector((state) => state.user.authUser);
+	// const user = useSelector((state) => state.user.authUser);
 	const [summarizedQuizData, setSummarizedQuizData] = useState(null);
 
 	const { id } = useParams();
 	const navigate = useNavigate();
-	if (!id) {
-		navigate("/activity/deployed");
-	}
+	// if (!id) {
+	// 	navigate("/activity/deployed");
+	// }
 
 	// Notify
 	const [notify, setNotify] = useState({
@@ -49,17 +49,17 @@ export default function Summary() {
 	useEffect(() => {
 		async function onGetQuiz() {
 			try {
-				const res = await getSummarizedQuiz(id, user.token);
-				setSummarizedQuizData((current) => res.data);
+				// const res = await getSummarizedQuiz(id, user.token);
+				// setSummarizedQuizData((current) => res.data);
 			} catch (error) {
-				showNotify(
-					null,
-					"Something went wrong?",
-					error.response.data.message,
-					() => {
-						navigate("/activity/deployed");
-					}
-				);
+				// showNotify(
+				// 	null,
+				// 	"Something went wrong?",
+				// 	error.response.data.message,
+				// 	() => {
+				// 		navigate("/activity/deployed");
+				// 	}
+				// );
 			}
 		}
 
@@ -81,12 +81,12 @@ export default function Summary() {
 				message={notify.message}
 				cb={notify.cb}
 			/>
-			<Navbar />
+			{/* <Navbar /> */}
 
 			<div className="summarized__container">
 				<div className="summarized__header">
 					<div className="summarized__header__title">
-						{summarizedQuizData?.name}‘s Summary
+						{summarizedQuizData?.name || "Not found"}‘s Summary
 					</div>
 					<div className="summarized__header__description">
 						Analysis your quiz result with all participants that
@@ -127,37 +127,40 @@ export default function Summary() {
 									<div className="participants__summary__list__prof__name">
 										Jakkrit Choapron
 									</div>
-									<div className="participants__summary__list__other__info">
-										<div className="participants__summary__list__other__info__svg">
-											{svgMap.task}
+									<div className="crop__grid">
+										<div className="participants__summary__list__other__info">
+											<div className="participants__summary__list__other__info__svg">
+												{svgMap.task}
+											</div>
+											<div className="participants__summary__list__other__info__description">
+												{800}/{1000} Tasks
+											</div>
 										</div>
-										<div className="participants__summary__list__other__info__description">
-											{30}/{1000} Tasks
+										<div className="participants__summary__list__other__info">
+											<div className="participants__summary__list__other__info__svg">
+												{svgMap.green_circle}
+											</div>
+											<div className="participants__summary__list__other__info__description">
+												{0} C
+											</div>
 										</div>
-									</div>
-									<div className="participants__summary__list__other__info">
-										<div className="participants__summary__list__other__info__svg">
-											{svgMap.green_circle}
+										<div className="participants__summary__list__other__info">
+											<div className="participants__summary__list__other__info__svg">
+												{svgMap.red_circle}
+											</div>
+											<div className="participants__summary__list__other__info__description">
+												{3000} C
+											</div>
 										</div>
-										<div className="participants__summary__list__other__info__description">
-											{30} C
+										<div className="participants__summary__list__other__info">
+											<div className="participants__summary__list__other__info__svg">
+												{svgMap.points}
+											</div>
+											<div className="participants__summary__list__other__info__description">
+												{3000} Points
+											</div>
 										</div>
-									</div>
-									<div className="participants__summary__list__other__info">
-										<div className="participants__summary__list__other__info__svg">
-											{svgMap.red_circle}
-										</div>
-										<div className="participants__summary__list__other__info__description">
-											{1} C
-										</div>
-									</div>
-									<div className="participants__summary__list__other__info">
-										<div className="participants__summary__list__other__info__svg">
-											{svgMap.points}
-										</div>
-										<div className="participants__summary__list__other__info__description">
-											{1} Points
-										</div>
+
 									</div>
 								</div>
 								<div className="participants__summary__list__item">
@@ -172,13 +175,13 @@ export default function Summary() {
 									<div className="participants__summary__list__prof__name">
 										Jakkrit Choapron
 									</div>
-									<div className="participants__summary__list__other__info__grid">
+									<div className="crop__grid">
 										<div className="participants__summary__list__other__info">
 											<div className="participants__summary__list__other__info__svg">
 												{svgMap.task}
 											</div>
 											<div className="participants__summary__list__other__info__description">
-												{1}/{1000} Tasks
+												{0}/{1000} Tasks
 											</div>
 										</div>
 										<div className="participants__summary__list__other__info">
@@ -186,7 +189,7 @@ export default function Summary() {
 												{svgMap.green_circle}
 											</div>
 											<div className="participants__summary__list__other__info__description">
-												{1} C
+												{0} C
 											</div>
 										</div>
 										<div className="participants__summary__list__other__info">
@@ -194,7 +197,7 @@ export default function Summary() {
 												{svgMap.red_circle}
 											</div>
 											<div className="participants__summary__list__other__info__description">
-												{1} C
+												{3000} C
 											</div>
 										</div>
 										<div className="participants__summary__list__other__info">
@@ -202,13 +205,73 @@ export default function Summary() {
 												{svgMap.points}
 											</div>
 											<div className="participants__summary__list__other__info__description">
-												{10} Points
+												{3000} Points
 											</div>
 										</div>
+
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
+					<div className="summarized_second_container">
+						<div className="top-summarized-container">
+							<SummaryHeader
+								svgName={"summarized"}
+								title={"Overall Summary"}
+								description={"Analysis quiz for all students result."}
+							/>
+							<div className="left-summarized">
+								<div className="three_item_average">
+									<div className="average_item">
+										<div className="avg_header">
+											<div className="avg_header_title">
+												AVG POINTS
+											</div>
+											<div className="avg_header_svg">
+												{svgMap.questionGrey}
+											</div>
+										</div>
+										<div className="avg_result">
+											50.2/100
+										</div>
+									</div>
+									<div className="average_item">
+										<div className="avg_header">
+											<div className="avg_header_title">
+												QUIZ DIFFICULTY
+											</div>
+											<div className="avg_header_svg">
+												{svgMap.questionGrey}
+											</div>
+										</div>
+										<div className="avg_result">
+											HARD
+										</div>
+									</div>
+									<div className="average_item">
+										<div className="avg_header">
+											<div className="avg_header_title">
+												TIME PRESSURE
+											</div>
+											<div className="avg_header_svg">
+												{svgMap.questionGrey}
+											</div>
+										</div>
+										<div className="avg_result">
+											LOW
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="right-summarized">
+
+							</div>
+						</div>
+						<div className="bottom-summarized-container">
+
+						</div>
+
 					</div>
 				</div>
 			</div>
