@@ -52,6 +52,8 @@ import { ReactComponent as Deployed } from "../assets/svg/deployed.svg";
 import { ReactComponent as Participants } from "../assets/svg/participants.svg";
 import { ReactComponent as SortArrow } from "../assets/svg/sort_arrow.svg";
 import { ReactComponent as QuestionGrey } from "../assets/svg/question_gray.svg";
+import { ReactComponent as BlueReg } from "../assets/svg/blue_reg.svg";
+import { ReactComponent as OrangeReg } from "../assets/svg/orange_reg.svg";
 
 
 export const onErrorProfileImageUrl = "https://media.discordapp.net/attachments/1115338683671908462/1118152638756827166/image.png"
@@ -137,5 +139,7 @@ export const svgMap = {
     deployed: <Deployed/>,
     participants: <Participants/>,
     sortArrow: <SortArrow/>,
-    questionGrey: <QuestionGrey/>
+    questionGrey: <QuestionGrey/>,
+    blueReg: <BlueReg/>,
+    orangeReg: <OrangeReg/>,
 }

@@ -263,6 +263,75 @@ export default function Summary() {
 										</div>
 									</div>
 								</div>
+								<div className="avg-prog-percent-container">
+									<div className="avg-prog-left-content">
+										<div id="fixed-width-avg-pass" className="average_item">
+											<div className="avg_header">
+												<div className="avg_header_title">
+													AVG PASS
+												</div>
+												<div className="avg_header_svg">
+													{svgMap.questionGrey}
+												</div>
+											</div>
+										</div>
+										<div className="avg-pass-instructor">
+											<Instructor
+												svgName={"blueReg"}
+												description={"PASS"}
+											/>
+											<Instructor
+												svgName={"orangeReg"}
+												description={"NOT PASS"}
+											/>
+										</div>
+										<div className="progress-bar-percent">
+											<div className="prog-per-left-side">
+												30%
+											</div>
+											<div className="prog-per-right-side">
+												70%
+											</div>
+										</div>
+									</div>
+									<div className="average_item">
+										<div className="avg_header">
+											<div className="avg_header_title">
+											HIGHEST POINTS
+											</div>
+											<div className="avg_header_svg">
+												{svgMap.questionGrey}
+											</div>
+										</div>
+										{/* @TODO */}
+									</div>
+								</div>
+								{/* <div className="avg-prog-percent-container">
+									<div className="avg_header">
+										<div className="avg_header_title">
+											AVG FISNISHED
+										</div>
+										<div className="avg-pass-instructor">
+											<Instructor
+												svgName={"blueReg"}
+												description={"FINISHED"}
+											/>
+											<Instructor
+												svgName={"orangeReg"}
+												description={"NOT FINISHED"}
+											/>
+										</div>
+										<div className="progress-bar-percent">
+											<div className="prog-per-left-side">
+												30%
+											</div>
+											<div className="prog-per-right-side">
+												70%
+											</div>
+										</div>
+									</div>
+								</div> */}
+
 							</div>
 							<div className="right-summarized">
 

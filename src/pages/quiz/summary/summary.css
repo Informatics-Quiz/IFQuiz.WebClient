@@ -78,7 +78,7 @@
 }
 
 .participants__summary__list__prof__name {
-	width: 15.625rem;
+	width: 13.625rem;
 	font-size: 0.9375rem;
 	white-space: nowrap;
 	overflow: hidden;
@@ -138,14 +138,16 @@
 
 .three_item_average {
 	display: flex;
+	margin-bottom: 1.2rem;
 }
 
 
 .avg_header {
 	position: relative;
 	display: flex;
-	align-items: center;
+	flex-direction: column;
 }
+
 .average_item {
 	margin-right: 3rem;
 }
@@ -176,4 +178,50 @@ font-size: 2rem;
 	display: flex;
 	justify-content: space-evenly;
 	background: black;
+}
+
+.avg-pass-instructor {
+	display: flex;
+	margin-bottom: 0.3rem;
+}
+
+.avg-prog-percent-container {
+	display: flex;
+	margin-bottom: 2rem;
+}
+
+.progress-bar-percent {
+	width: 370px;
+	background: red;
+	display: flex;
+	height: 1.2rem;
+}
+.prog-per-left-side, .prog-per-right-side {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	font-weight: bold;
+	font-size: 0.75rem;
+}
+
+.prog-per-left-side {
+	width: 30%;
+	background: #34495E;
+	justify-content: end;
+	padding-right: 0.35rem;
+}
+.prog-per-right-side {
+	width: 70%;
+	background: #E67E22;
+	justify-content: start;
+	padding-left: 0.35rem;
+}
+
+.avg-prog-left-content {
+	display: flex;
+	flex-direction: column;
+	margin-right: 2.5rem;
+}
+#fixed-width-avg-pass {
+	width: 6.9375rem;
 }
