@@ -9,6 +9,9 @@ import SummaryHeader from "./header/header";
 import Instructor from "./instructor/instructor";
 import SortSwtich from "./sort.switch/sort.swtich";
 import { svgMap } from "../../../config/constraints";
+import TitleValue from "./title.value/title.value";
+import UserValue from "./user.value/user.value";
+import AnalysisPercent from "./analysis.percent/analysis.percent";
 
 export default function Summary() {
 	// const user = useSelector((state) => state.user.authUser);
@@ -160,7 +163,6 @@ export default function Summary() {
 												{3000} Points
 											</div>
 										</div>
-
 									</div>
 								</div>
 								<div className="participants__summary__list__item">
@@ -208,7 +210,6 @@ export default function Summary() {
 												{3000} Points
 											</div>
 										</div>
-
 									</div>
 								</div>
 							</div>
@@ -219,91 +220,83 @@ export default function Summary() {
 							<SummaryHeader
 								svgName={"summarized"}
 								title={"Overall Summary"}
-								description={"Analysis quiz for all students result."}
+								description={
+									"Analysis quiz for all students result."
+								}
 							/>
 							<div className="left-summarized">
 								<div className="three_item_average">
+									<TitleValue
+										title={"AVG POINTS"}
+										value={"50.2/100"}
+									/>
+									<TitleValue
+										title={"QUIZ DIFFICULTY"}
+										value={"HARD"}
+									/>
+									<TitleValue
+										title={"TIME PRESSURE"}
+										value={"LOW"}
+									/>
+								</div>
+								<div className="avg-prog-percent-container">
+									<AnalysisPercent
+										name={"AVG PASS"}
+										values={
+											[
+												{
+													color: "#34495E",
+													description: "PASS",
+													percent: "30%",
+												},
+												{
+													color: "#E67E22",
+													description: "NOT PASS",
+													percent: "70%",
+												}
+											]
+										}
+									/>
 									<div className="average_item">
-										<div className="avg_header">
-											<div className="avg_header_title">
-												AVG POINTS
-											</div>
-											<div className="avg_header_svg">
-												{svgMap.questionGrey}
-											</div>
-										</div>
-										<div className="avg_result">
-											50.2/100
-										</div>
-									</div>
-									<div className="average_item">
-										<div className="avg_header">
-											<div className="avg_header_title">
-												QUIZ DIFFICULTY
-											</div>
-											<div className="avg_header_svg">
-												{svgMap.questionGrey}
-											</div>
-										</div>
-										<div className="avg_result">
-											HARD
-										</div>
-									</div>
-									<div className="average_item">
-										<div className="avg_header">
-											<div className="avg_header_title">
-												TIME PRESSURE
-											</div>
-											<div className="avg_header_svg">
-												{svgMap.questionGrey}
-											</div>
-										</div>
-										<div className="avg_result">
-											LOW
-										</div>
+
+										<TitleValue
+											title={"HIGHEST POINTS"}
+										/>
+										<UserValue
+											fullname={"Jakkrit Chaopron"}
+											profileUrl={"https://images.summitmedia-digital.com/cosmo/images/2023/01/08/gyj-2-1673113544.jpg"}
+											value={"60 Points"}
+										/>
 									</div>
 								</div>
 								<div className="avg-prog-percent-container">
-									<div className="avg-prog-left-content">
-										<div id="fixed-width-avg-pass" className="average_item">
-											<div className="avg_header">
-												<div className="avg_header_title">
-													AVG PASS
-												</div>
-												<div className="avg_header_svg">
-													{svgMap.questionGrey}
-												</div>
-											</div>
-										</div>
-										<div className="avg-pass-instructor">
-											<Instructor
-												svgName={"blueReg"}
-												description={"PASS"}
-											/>
-											<Instructor
-												svgName={"orangeReg"}
-												description={"NOT PASS"}
-											/>
-										</div>
-										<div className="progress-bar-percent">
-											<div className="prog-per-left-side">
-												30%
-											</div>
-											<div className="prog-per-right-side">
-												70%
-											</div>
-										</div>
-									</div>
+									<AnalysisPercent
+										name={"AVG FISNISHED"}
+										values={
+											[
+												{
+													color: "#34495E",
+													description: "FINISHED",
+													percent: "95%",
+												},
+												{
+													color: "#E67E22",
+													description: "NOT FINISHED",
+													percent: "5%",
+												}
+											]
+										}
+									/>
 									<div className="average_item">
-										<div className="avg_header">
-											<div className="avg_header_title">
-											HIGHEST POINTS
-											</div>
-											<div className="avg_header_svg">
-												{svgMap.questionGrey}
-											</div>
-										</div>
-										{/* @TODO */}
+
+										<TitleValue
+											title={"LOWEST POINTS"}
+										/>
+										<UserValue
+											fullname={"Jakkrit Chaopron"}
+											profileUrl={"https://media.discordapp.net/attachments/1023711125017219103/1131511361483059200/image.png"}
+											value={"5 Points"}
+										/>
 									</div>
 								</div>
 								{/* <div className="avg-prog-percent-container">
@@ -331,16 +324,10 @@ export default function Summary() {
 										</div>
 									</div>
 								</div> */}
-
 							</div>
-							<div className="right-summarized">
-
-							</div>
+							<div className="right-summarized"></div>
 						</div>
-						<div className="bottom-summarized-container">
-
-						</div>
-
+						<div className="bottom-summarized-container"></div>
 					</div>
 				</div>
 			</div>

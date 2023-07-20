@@ -2,7 +2,6 @@
 	cursor: pointer;
     display: flex;
 	justify-content: end;
-	background: red;
 	transition: .3s;
     align-items: center;
 }
