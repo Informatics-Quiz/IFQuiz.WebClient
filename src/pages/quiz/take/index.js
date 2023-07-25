@@ -35,7 +35,6 @@ export default function TakeQuiz() {
 	const navigate = useNavigate();
 	const quiz = useSelector((state) => state.take.quiz);
 	const user = useSelector((state) => state.user.authUser);
-	const updatingAnswersRef = useRef(false)
 
 	const [selectedQuestionImages, setSelectedQuestionImages] = useState([]);
 	const [timerLabel, setTimerLabel] = useState(getTimerLabel(quiz?.copyof?.expiredAt) || null); // [label, setLabel
@@ -211,7 +210,7 @@ export default function TakeQuiz() {
 	}, [])
 
 	useEffect(() => {
-		loading(()=>{
+		loading(() => {
 			refreshQuestionImage(quiz?.questions[quiz.selectedQuestionId]?.explanation?.imageUrl)
 			adjustTextareaHeight()
 		})
@@ -258,6 +257,14 @@ export default function TakeQuiz() {
 							<div className="timer_label">
 								{timerLabel}
 							</div>
+						</div>
+					</div>
+					<div className="update-answer-content">
+						<div className="interaction-btn-div">
+							<button className="update-answer-btn" disabled={isUpdating.current} onClick={()=> {
+								isUpdating.current = true
+								updateAnswersAndSelctedQuestionId()
+							}}>UPDATE ANSWER</button>
 						</div>
 					</div>
 					{isUpdating.current === true ? (

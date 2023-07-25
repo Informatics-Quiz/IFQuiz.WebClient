@@ -1,0 +1,28 @@
+.prof_detail {
+    display: flex;
+    align-items: center;
+    margin: 2.25rem 0 2.25rem 0;
+}
+
+.prof_image {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-right: .87rem;
+}
+
+.prof_image > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.prof_content_fullname {
+    font-size: 1.375rem;
+}
+
+.prof_content_email {
+    color: #C9D1D9;
+    font-size: 1.125rem;
+}
+

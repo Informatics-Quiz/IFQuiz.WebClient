@@ -281,3 +281,37 @@
     height: 35px;
   }
 }
+
+.interaction-btn-div {
+  margin-top: 10px;
+  display: flex;
+  text-align: end;
+}
+
+.update-answer-content {
+  color: var(--alpha-color);
+  position: fixed;
+  bottom: 80px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  justify-content: flex-end;
+  align-items: end;
+}
+
+.key-div {
+  background: var(--done-task-button-color);
+  color: var(--font-blue) ;
+  border-radius: 3px;
+  padding: 0 5px 0 5px;
+}
+
+.update-answer-btn {
+  background: var(--active-button-color);
+  color: white;
+  padding: 0 8px 0 8px;
+  border-radius: 3px;
+  font-size: 20px;
+  font-weight: bold;
+}

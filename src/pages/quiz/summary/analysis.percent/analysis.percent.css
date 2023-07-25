@@ -32,12 +32,10 @@
 	width: 30%;
 	background: #34495E;
 	justify-content: end;
-	padding-right: 0.35rem;
 }
 .prog-per-right-side {
 	width: 70%;
 	background: #E67E22;
 	justify-content: start;
-	padding-left: 0.35rem;
 }
 

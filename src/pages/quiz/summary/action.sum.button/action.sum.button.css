@@ -1,0 +1,20 @@
+.action_sum_button {
+    cursor: pointer;
+    text-align: center;
+    font-size: 1rem;
+    background: #5E5E5E;
+    border-radius: 0.3125rem;
+    margin: 0.5rem;
+    max-width: 10.5rem;
+    min-height: 2.5rem;
+    transition: .25s;
+}
+
+.action_sum_button:hover {
+    opacity: 1;
+}
+
+.action_sum_button:active {
+    background: var(--active-button-color);
+    transform: scale(0.95);
+}

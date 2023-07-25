@@ -4,6 +4,7 @@ import './analysis.percent.css';
 import '../title.value/title.value.css'
 
 export default function AnalysisPercent({ name, description , values }) {
+	console.log(`${values[0].percent}%`)
 	return (
 		<div className="avg-prog-left-content">
 			<div className="average_item">
@@ -16,8 +17,8 @@ export default function AnalysisPercent({ name, description , values }) {
                 <Instructor color={values[1].color} description={values[1].description} />
 			</div>
 			<div className="progress-bar-percent">
-				<div className="prog-per-left-side" style={{width: values[0].percent}}>{values[0].percent}</div>
-				<div className="prog-per-right-side" style={{width: values[1].percent}}>{values[1].percent}</div>
+				<div className="prog-per-left-side" style={{width: `${values[0].percent}%`}}>{values[0].percent}%</div>
+				<div className="prog-per-right-side" style={{width: `${values[1].percent}%`}}>{values[1].percent}%</div>
 			</div>
 		</div>
 	);

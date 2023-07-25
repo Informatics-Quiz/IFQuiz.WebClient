@@ -18,3 +18,8 @@
 	display: flex;
 	flex-direction: column;
 }
+.anm_user_cant_analysis {
+	color: var(--alpha-color);
+	font-size: 0.8rem;
+	white-space: pre-line;
+}

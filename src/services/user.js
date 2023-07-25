@@ -50,3 +50,15 @@ export async function updateUserStatus(token, status) {
 	})
 	return res
 }
+
+export async function getParticipantsProfileImage(token, imageUrl){
+	const res = await client.get(`/file/get/participants-profile-image/${imageUrl}`, {
+		responseType: 'arraybuffer',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	const blob = new Blob([res.data], { type: res.headers['Content-Type'] })
+	const url = URL.createObjectURL(blob)
+	return url
+}
